@@ -1,18 +1,21 @@
-import 'package:compose/compose.dart';
 import 'package:flutter/widgets.dart';
 
-abstract class BaseStatelessWidget extends StatelessWidget {
-  final List<Component> components = [];
+import 'composable.dart';
 
+abstract class ComposableStatelessWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    var components = prepareCompose(context);
+    assert(components != null, "prepareCompose must not return null");
     return ListView.builder(
         itemCount: components.length,
         itemBuilder: (context, index) {
-          var component = components[index];
+          Composable component = components[index];
           return component.build(context);
         });
   }
 
-  void compose();
+  List<Composable> prepareCompose(BuildContext context) {
+    return null;
+  }
 }

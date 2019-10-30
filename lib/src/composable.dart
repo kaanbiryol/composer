@@ -1,5 +1,6 @@
 import 'package:flutter/widgets.dart';
 
-abstract class Component {
+abstract class Composable<T> {
+  T viewModel;
   Widget build(BuildContext context);
 }
