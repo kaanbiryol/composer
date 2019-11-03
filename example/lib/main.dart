@@ -12,25 +12,24 @@ class MyApp extends StatelessWidget {
         appBar: AppBar(
           title: Text("Composable Demo"),
         ),
-        body: StatelessWidgetTest(),
+        body: TestPageWidget(),
       ),
     );
   }
 }
 
-class StatelessWidgetTest extends ComposableStatelessWidget {
+class TestPageWidget extends ComposedWidget {
   ButtonComponent flatButtonComponent;
 
   @override
   List<Composable> prepareCompose(BuildContext context) {
     var viewModel = ButtonComponentViewModel(text: "NO", onPressed: onPressed);
-    flatButtonComponent = ButtonComponent(viewModel);
+    flatButtonComponent = ButtonComponent(ComposableValueNotifier(viewModel));
     return [flatButtonComponent];
   }
 
   void onPressed() {
     var viewModel = ButtonComponentViewModel(text: "YES", onPressed: onPressed);
-    notifyComposable<ButtonComponent, ButtonComponentViewModel>(
-        flatButtonComponent, viewModel);
+    flatButtonComponent.viewModel.value = viewModel;
   }
 }

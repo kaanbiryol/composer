@@ -1,7 +1,7 @@
 import 'package:flutter/widgets.dart';
 import 'composable.dart';
 
-abstract class ComposableStatelessWidget extends StatelessWidget {
+abstract class ComposedWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var components = prepareCompose(context);
@@ -16,9 +16,5 @@ abstract class ComposableStatelessWidget extends StatelessWidget {
 
   List<Composable> prepareCompose(BuildContext context) {
     return null;
-  }
-
-  void notifyComposable<C, T>(Composable<T> composable, T viewModel) {
-    composable.onChanged(viewModel);
   }
 }

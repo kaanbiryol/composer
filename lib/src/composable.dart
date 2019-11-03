@@ -1,13 +1,15 @@
 import 'package:flutter/widgets.dart';
 
-abstract class ComposableValueNotifier extends ValueNotifier<Composable> {
-  ComposableValueNotifier(Composable value) : super(value);
+class ComposableValueNotifier<T> extends ValueNotifier {
+  ComposableValueNotifier(value) : super(value);
 }
 
 abstract class Composable<T> extends Widget {
-  T viewModel;
-  ValueChanged<T> onChanged;
+  ComposableValueNotifier<T> viewModel;
 }
+
+abstract class ComposableStatelessWidget<T> extends StatelessWidget
+    implements Composable<T> {}
 
 abstract class ComposableStatefulWidget<T> extends StatefulWidget
     implements Composable<T> {}
@@ -18,13 +20,11 @@ abstract class ComposableState<T extends ComposableStatefulWidget, V>
 
   @override
   void initState() {
-    viewModel = widget.viewModel;
-    widget.onChanged = onChanged;
+    widget.viewModel.addListener(viewModelNotifier);
     super.initState();
   }
 
-  void onChanged(V viewModel) {
-    widget.viewModel = viewModel;
+  void viewModelNotifier() {
     setState(() {});
   }
 }

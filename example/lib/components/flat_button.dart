@@ -1,8 +1,6 @@
 import 'package:compose/compose.dart';
 import 'package:flutter/material.dart';
 
-typedef ViewModelHandler<T> = void Function(T viewModel);
-
 class ButtonComponentViewModel {
   String text;
   VoidCallback onPressed;
@@ -20,17 +18,15 @@ class ButtonComponent
   @override
   _ButtonComponentState createState() => _ButtonComponentState();
 
-  ButtonComponentViewModel viewModel;
-
   @override
-  var onChanged;
+  ComposableValueNotifier<ButtonComponentViewModel> viewModel;
 }
 
 class _ButtonComponentState
     extends ComposableState<ButtonComponent, ButtonComponentViewModel> {
   @override
   Widget build(BuildContext context) {
-    final viewModel = widget.viewModel;
+    final viewModel = widget.viewModel.value;
     return FlatButton(
       onPressed: viewModel.onPressed,
       child: Text(viewModel.text),
