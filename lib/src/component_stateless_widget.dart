@@ -14,7 +14,5 @@ abstract class ComposedWidget extends StatelessWidget {
         });
   }
 
-  List<Composable> prepareCompose(BuildContext context) {
-    return null;
-  }
+  List<Composable> prepareCompose(BuildContext context);
 }

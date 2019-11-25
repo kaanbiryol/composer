@@ -26,7 +26,6 @@ class TestPageWidget extends ComposedWidget {
   List<Composable> prepareCompose(BuildContext context) {
     var viewModel = ButtonComponentViewModel(text: "NO", onPressed: onPressed);
     flatButtonComponent = ButtonComponent(viewModel);
-
     var keyValueViewModel =
         KeyValueComponentViewModel(key: "Key", value: "Value");
     var keyValueComponent =

@@ -13,7 +13,7 @@ abstract class ComposableStatelessWidget<T> extends StatelessWidget
   T get componentModel => _componentModel.value;
 
   @override
-  void set componentModel(T componentModel) {
+  set componentModel(T componentModel) {
     throw "can't notify component model. use ComposableStatefulWidget instead!";
   }
 }
