@@ -1,7 +1,8 @@
 import 'package:compose/compose.dart';
-import 'package:example/components/flat_button.dart';
-import 'package:example/components/key_value_row.dart';
 import 'package:flutter/material.dart';
+import 'components/stateful/flat_button.dart';
+import 'components/stateful/text_field.dart';
+import 'components/stateless/key_value_row.dart';
 
 void main() => runApp(MyApp());
 
@@ -30,7 +31,11 @@ class TestPageWidget extends ComposedWidget {
         KeyValueComponentViewModel(key: "Key", value: "Value");
     var keyValueComponent =
         KeyValueRowComponent(componentModel: keyValueViewModel);
-    return [flatButtonComponent, keyValueComponent];
+
+    var textFieldComponentViewModel = TextFieldComponentModel(2);
+    var textFieldComponent = TextFieldComponent(textFieldComponentViewModel);
+
+    return [flatButtonComponent, keyValueComponent, textFieldComponent];
   }
 
   void onPressed() {
