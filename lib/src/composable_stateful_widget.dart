@@ -1,23 +1,36 @@
 import 'package:flutter/widgets.dart';
-
 import '../compose.dart';
 
 abstract class ComposableStatefulWidget<T> extends StatefulWidget
     implements Composable<T> {
-  const ComposableStatefulWidget({Key key}) : super(key: key);
-}
+  final ComponentModel<T> _componentModel;
 
-abstract class ComposableState<T extends ComposableStatefulWidget, V>
-    extends State<T> {
-  V viewModel;
+  ComposableStatefulWidget(T componentModel, {Key key})
+      : this._componentModel = ComponentModel(componentModel),
+        super(key: key);
 
   @override
+  T get componentModel => _componentModel.value;
+  @override
+  set componentModel(T componentModel) =>
+      _componentModel.value = componentModel;
+}
+
+abstract class ComposableState<T extends ComposableStatefulWidget>
+    extends State<T> {
+  @override
   void initState() {
-    widget.viewModel.addListener(viewModelNotifier);
+    widget._componentModel.addListener(componentModelNotifier);
     super.initState();
   }
 
-  void viewModelNotifier() {
+  void componentModelNotifier() {
     setState(() {});
+  }
+
+  @override
+  void dispose() {
+    widget._componentModel.removeListener(componentModelNotifier);
+    super.dispose();
   }
 }

@@ -3,5 +3,17 @@ import '../compose.dart';
 
 abstract class ComposableStatelessWidget<T> extends StatelessWidget
     implements Composable<T> {
-  const ComposableStatelessWidget({ComponentModel notifier, Key key});
+  final ComponentModel<T> _componentModel;
+
+  ComposableStatelessWidget(T componentModel, {Key key})
+      : this._componentModel = ComponentModel(componentModel),
+        super(key: key);
+
+  @override
+  T get componentModel => _componentModel.value;
+
+  @override
+  void set componentModel(T componentModel) {
+    throw "can't notify component model. use ComposableStatefulWidget instead!";
+  }
 }

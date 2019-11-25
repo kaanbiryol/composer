@@ -13,20 +13,17 @@ class ButtonComponentViewModel {
 
 class ButtonComponent
     extends ComposableStatefulWidget<ButtonComponentViewModel> {
-  ButtonComponent(this.viewModel, {Key key}) : super(key: key);
+  ButtonComponent(ButtonComponentViewModel componentModel, {Key key})
+      : super(componentModel, key: key);
 
   @override
   _ButtonComponentState createState() => _ButtonComponentState();
-
-  @override
-  ComponentModel<ButtonComponentViewModel> viewModel;
 }
 
-class _ButtonComponentState
-    extends ComposableState<ButtonComponent, ButtonComponentViewModel> {
+class _ButtonComponentState extends ComposableState<ButtonComponent> {
   @override
   Widget build(BuildContext context) {
-    final viewModel = widget.viewModel.value;
+    final viewModel = widget.componentModel;
     return FlatButton(
       onPressed: viewModel.onPressed,
       child: Text(viewModel.text),

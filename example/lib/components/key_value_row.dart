@@ -10,17 +10,16 @@ class KeyValueComponentViewModel {
 
 class KeyValueRowComponent<KeyValueComponentViewModel>
     extends ComposableStatelessWidget {
-  KeyValueRowComponent({this.viewModel, Key key}) : super(key: key);
-  @override
-  final ComponentModel viewModel;
+  KeyValueRowComponent({KeyValueComponentViewModel componentModel, Key key})
+      : super(componentModel, key: key);
 
   @override
   Widget build(BuildContext context) {
     return Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
-          Text(viewModel.value.key),
-          Text(viewModel.value.value),
+          Text(componentModel.key),
+          Text(componentModel.value),
         ]);
   }
 }
