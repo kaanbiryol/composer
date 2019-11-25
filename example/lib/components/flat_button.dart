@@ -13,13 +13,13 @@ class ButtonComponentViewModel {
 
 class ButtonComponent
     extends ComposableStatefulWidget<ButtonComponentViewModel> {
-  ButtonComponent(this.viewModel, {Key key}) : super();
+  ButtonComponent(this.viewModel, {Key key}) : super(key: key);
 
   @override
   _ButtonComponentState createState() => _ButtonComponentState();
 
   @override
-  ComposableValueNotifier<ButtonComponentViewModel> viewModel;
+  ComponentModel<ButtonComponentViewModel> viewModel;
 }
 
 class _ButtonComponentState

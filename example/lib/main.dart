@@ -1,5 +1,6 @@
 import 'package:compose/compose.dart';
 import 'package:example/components/flat_button.dart';
+import 'package:example/components/key_value_row.dart';
 import 'package:flutter/material.dart';
 
 void main() => runApp(MyApp());
@@ -24,8 +25,13 @@ class TestPageWidget extends ComposedWidget {
   @override
   List<Composable> prepareCompose(BuildContext context) {
     var viewModel = ButtonComponentViewModel(text: "NO", onPressed: onPressed);
-    flatButtonComponent = ButtonComponent(ComposableValueNotifier(viewModel));
-    return [flatButtonComponent];
+    flatButtonComponent = ButtonComponent(ComponentModel(viewModel));
+
+    var keyValueViewModel =
+        KeyValueComponentViewModel(key: "Key", value: "Value");
+    var keyValueComponent =
+        KeyValueRowComponent(viewModel: ComponentModel(keyValueViewModel));
+    return [flatButtonComponent, keyValueComponent];
   }
 
   void onPressed() {
