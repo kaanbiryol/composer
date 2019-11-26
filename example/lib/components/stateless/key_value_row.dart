@@ -23,4 +23,3 @@ class KeyValueRowComponent<KeyValueComponentViewModel>
         ]);
   }
 }
-

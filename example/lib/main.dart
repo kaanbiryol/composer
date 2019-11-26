@@ -24,6 +24,12 @@ class TestPageWidget extends ComposedWidget {
   ButtonComponent flatButtonComponent;
 
   @override
+  bool setupTraits() {
+    seperatorStyle = SeperatorStyle.none;
+    return true;
+  }
+
+  @override
   List<Composable> prepareCompose(BuildContext context) {
     var viewModel = ButtonComponentViewModel(text: "NO", onPressed: onPressed);
     flatButtonComponent = ButtonComponent(viewModel);
