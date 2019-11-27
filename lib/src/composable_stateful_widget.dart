@@ -19,6 +19,7 @@ abstract class ComposableStatefulWidget<T> extends StatefulWidget
 abstract class ComposableState<T extends ComposableStatefulWidget>
     extends State<T> {
   @override
+  @mustCallSuper
   void initState() {
     widget._componentModel.addListener(_componentModelNotifier);
     super.initState();
@@ -29,6 +30,7 @@ abstract class ComposableState<T extends ComposableStatefulWidget>
   }
 
   @override
+  @mustCallSuper
   void dispose() {
     widget._componentModel.removeListener(_componentModelNotifier);
     super.dispose();

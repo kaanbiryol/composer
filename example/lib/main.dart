@@ -14,25 +14,27 @@ class MyApp extends StatelessWidget {
         appBar: AppBar(
           title: Text("Composable Demo"),
         ),
-        body: TestPageWidget(),
+        body: ExamplePage(),
       ),
     );
   }
 }
 
-class TestPageWidget extends ComposedWidget {
-  ButtonComponent flatButtonComponent;
-
+class ExamplePage extends ComposedWidget {
   @override
-  bool setupTraits() {
-    seperatorStyle = SeperatorStyle.none;
-    return true;
+  State<StatefulWidget> createState() {
+    return ExamplePageState();
   }
+}
 
+class ExamplePageState extends ComposedWidgetState {
+  ButtonComponent flatButtonComponent;
+  
   @override
   List<Composable> prepareCompose(BuildContext context) {
     var viewModel = ButtonComponentViewModel(text: "NO", onPressed: onPressed);
     flatButtonComponent = ButtonComponent(viewModel);
+
     var keyValueViewModel =
         KeyValueComponentViewModel(key: "Key", value: "Value");
     var keyValueComponent =
@@ -47,5 +49,11 @@ class TestPageWidget extends ComposedWidget {
   void onPressed() {
     var viewModel = ButtonComponentViewModel(text: "YES", onPressed: onPressed);
     flatButtonComponent.componentModel = viewModel;
+  }
+
+  @override
+  bool setupTraits() {
+    seperatorStyle = SeperatorStyle.none;
+    return true;
   }
 }

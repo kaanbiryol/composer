@@ -3,8 +3,13 @@ import 'package:flutter/widgets.dart';
 import 'composable.dart';
 import 'composed_widget_traits.dart';
 
-abstract class ComposedWidget extends StatelessWidget
+abstract class ComposedWidget extends StatefulWidget {}
+
+abstract class ComposedWidgetState extends State<ComposedWidget>
     with ComposedWidgetTraits {
+  //TODO: prepareCompose
+  List<Composable> _composedWidgets = [];
+
   @override
   Widget build(BuildContext context) {
     var components = prepareCompose(context);
@@ -29,6 +34,7 @@ abstract class ComposedWidget extends StatelessWidget
         });
   }
 
+  //TODO:
   bool setupTraits();
   List<Composable> prepareCompose(BuildContext context);
 }
