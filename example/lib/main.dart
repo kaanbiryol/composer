@@ -29,26 +29,38 @@ class ExamplePage extends ComposedWidget {
 
 class ExamplePageState extends ComposedWidgetState {
   ButtonComponent flatButtonComponent;
-  
+  KeyValueRowComponent keyValueRowComponent;
+
   @override
   List<Composable> prepareCompose(BuildContext context) {
     var viewModel = ButtonComponentViewModel(text: "NO", onPressed: onPressed);
-    flatButtonComponent = ButtonComponent(viewModel);
-
-    var keyValueViewModel =
-        KeyValueComponentViewModel(key: "Key", value: "Value");
-    var keyValueComponent =
-        KeyValueRowComponent(componentModel: keyValueViewModel);
-
-    var textFieldComponentViewModel = TextFieldComponentModel(2);
-    var textFieldComponent = TextFieldComponent(textFieldComponentViewModel);
+    flatButtonComponent = ButtonComponent(viewModel, key: ValueKey("kaan"));
+    var keyValueComponent = makeKeyValue();
+    var textFieldComponent = makeTextField();
 
     return [flatButtonComponent, keyValueComponent, textFieldComponent];
   }
 
+  Composable makeTextField() {
+    var textFieldComponentViewModel = TextFieldComponentModel(2);
+    var textFieldComponent = TextFieldComponent(textFieldComponentViewModel);
+    return textFieldComponent;
+  }
+
+  Composable makeKeyValue() {
+    var keyValueViewModel =
+        KeyValueComponentViewModel(key: "Key", value: "Value");
+    keyValueRowComponent =
+        KeyValueRowComponent(componentModel: keyValueViewModel);
+    return keyValueRowComponent;
+  }
+
   void onPressed() {
-    var viewModel = ButtonComponentViewModel(text: "YES", onPressed: onPressed);
-    flatButtonComponent.componentModel = viewModel;
+    var viewModel =
+        ButtonComponentViewModel(text: "onPressed", onPressed: onPressed);
+    Composable composable = componentWith(ValueKey("kaan"));
+    composable.componentModel = viewModel;
+    // or we can : flatButtonComponent.componentModel = viewModel;
   }
 
   @override

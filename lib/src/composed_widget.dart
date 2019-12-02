@@ -12,10 +12,10 @@ abstract class ComposedWidgetState extends State<ComposedWidget>
 
   @override
   Widget build(BuildContext context) {
-    var components = prepareCompose(context);
+    _composedWidgets = prepareCompose(context);
     var traits = setupTraits();
     assert(traits != false, "must setupTraits()");
-    assert(components != null, "prepareCompose must not return null");
+    assert(_composedWidgets != null, "prepareCompose must not return null");
     return ListView.separated(
         separatorBuilder: (context, index) {
           if (seperatorStyle == SeperatorStyle.none) {
@@ -27,9 +27,9 @@ abstract class ComposedWidgetState extends State<ComposedWidget>
           }
           return Divider(height: 2);
         },
-        itemCount: components.length,
+        itemCount: _composedWidgets.length,
         itemBuilder: (context, index) {
-          Composable component = components[index];
+          Composable component = _composedWidgets[index];
           return component;
         });
   }
@@ -37,4 +37,8 @@ abstract class ComposedWidgetState extends State<ComposedWidget>
   //TODO:
   bool setupTraits();
   List<Composable> prepareCompose(BuildContext context);
+
+  Composable componentWith(Key key) {
+    return _composedWidgets.firstWhere((component) => component.key == key);
+  }
 }

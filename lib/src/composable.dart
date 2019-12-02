@@ -1,6 +1,7 @@
 import 'package:flutter/widgets.dart';
 
 abstract class Composable<T> extends Widget {
+  
   T get componentModel;
   set componentModel(T componentModel);
 }
