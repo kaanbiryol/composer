@@ -65,7 +65,12 @@ class ExamplePageState extends ComposedWidgetState {
 
   @override
   bool setupTraits() {
+    ThemeManager(myTheme, myTheme);
     seperatorStyle = SeperatorStyle.none;
     return true;
   }
+}
+
+class Manager extends ThemeManager {
+  Manager(ThemeData light, ThemeData dark) : super(light, dark);
 }

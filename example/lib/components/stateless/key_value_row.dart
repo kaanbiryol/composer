@@ -15,10 +15,14 @@ class KeyValueRowComponent<KeyValueComponentViewModel>
 
   @override
   Widget build(BuildContext context) {
+    //TODO: move to viewModel?
+    var data = ThemeData(
+        textTheme: TextTheme(body1: TextStyle(backgroundColor: Colors.red)));
     return Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
-          Text(componentModel.key),
+          Text(componentModel.key,
+              style: ThemeManager.theme().textTheme.body1),
           Text(componentModel.value),
         ]);
   }
