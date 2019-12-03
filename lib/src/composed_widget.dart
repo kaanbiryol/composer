@@ -20,7 +20,6 @@ abstract class ComposedWidgetState extends State<ComposedWidget>
     assert(_composedWidgets != null, "prepareCompose must not return null");
     return Column(
       children: <Widget>[
-        
         Expanded(
           child: ListView.separated(
               separatorBuilder: (context, index) {
@@ -41,13 +40,13 @@ abstract class ComposedWidgetState extends State<ComposedWidget>
         ),
         Container(
           color: Colors.red,
-          child: buildBottomComposables(),
+          child: _buildBottomComposables(),
         )
       ],
     );
   }
 
-  Widget buildBottomComposables() {
+  Widget _buildBottomComposables() {
     switch (bottomComposableAxis) {
       case BottomComposableAxis.horizontal:
         return Row(children: _bottomWidgets);
@@ -64,8 +63,15 @@ abstract class ComposedWidgetState extends State<ComposedWidget>
   //TODO:
   bool setupTraits();
   List<Composable> prepareCompose(BuildContext context);
-  List<Composable> prepareBottom(BuildContext context) {
-    return [];
+  List<Composable> prepareBottom(BuildContext context) => [];
+
+  bool validate() {
+    for (final composedWidget in _composedWidgets) {
+      if (composedWidget.validate() == false) {
+        return false;
+      }
+    }
+    return true;
   }
 
   Composable componentWith(Key key) {

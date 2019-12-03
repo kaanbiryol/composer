@@ -1,6 +1,7 @@
+import 'package:compose/compose.dart';
 import 'package:flutter/widgets.dart';
 
-abstract class Composable<T> extends Widget {
+abstract class Composable<T> extends Widget implements Validateable {
   T get componentModel;
   set componentModel(T componentModel);
 }

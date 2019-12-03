@@ -16,4 +16,7 @@ abstract class ComposableStatelessWidget<T> extends StatelessWidget
   set componentModel(T componentModel) {
     throw "can't notify component model. use ComposableStatefulWidget instead!";
   }
+
+  @override
+  bool validate() => true;
 }

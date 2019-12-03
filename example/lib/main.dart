@@ -56,10 +56,11 @@ class ExamplePageState extends ComposedWidgetState {
   }
 
   void onPressed() {
-    var viewModel =
-        ButtonComponentViewModel(text: "onPressed", onPressed: onPressed);
-    Composable composable = componentWith(ValueKey("kaan"));
-    composable.componentModel = viewModel;
+    // var viewModel =
+    //     ButtonComponentViewModel(text: "onPressed", onPressed: onPressed);
+    // Composable composable = componentWith(ValueKey("kaan"));
+    // composable.componentModel = viewModel;
+    validate();
     // or we can : flatButtonComponent.componentModel = viewModel;
   }
 

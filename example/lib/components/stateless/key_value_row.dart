@@ -21,8 +21,7 @@ class KeyValueRowComponent<KeyValueComponentViewModel>
     return Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
-          Text(componentModel.key,
-              style: ThemeManager.theme().textTheme.body1),
+          Text(componentModel.key, style: ThemeManager.theme().textTheme.body1),
           Text(componentModel.value),
         ]);
   }

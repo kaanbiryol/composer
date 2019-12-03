@@ -4,6 +4,7 @@ import '../compose.dart';
 abstract class ComposableStatefulWidget<T> extends StatefulWidget
     implements Composable<T> {
   final ComponentModel<T> _componentModel;
+  ValidateCallback validateCallback;
 
   ComposableStatefulWidget(T componentModel, {Key key})
       : this._componentModel = ComponentModel(componentModel),
@@ -14,6 +15,9 @@ abstract class ComposableStatefulWidget<T> extends StatefulWidget
   @override
   set componentModel(T componentModel) =>
       _componentModel.value = componentModel;
+
+  @override
+  bool validate() => true;
 }
 
 abstract class ComposableState<T extends ComposableStatefulWidget>
