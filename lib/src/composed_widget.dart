@@ -9,34 +9,64 @@ abstract class ComposedWidgetState extends State<ComposedWidget>
     with ComposedWidgetTraits {
   //TODO: prepareCompose
   List<Composable> _composedWidgets = [];
+  List<Composable> _bottomWidgets = [];
 
   @override
   Widget build(BuildContext context) {
     _composedWidgets = prepareCompose(context);
+    _bottomWidgets = prepareBottom(context);
     var traits = setupTraits();
     assert(traits != false, "must setupTraits()");
     assert(_composedWidgets != null, "prepareCompose must not return null");
-    return ListView.separated(
-        separatorBuilder: (context, index) {
-          if (seperatorStyle == SeperatorStyle.none) {
-            return Divider(
-              height: 0,
-              thickness: 0.01,
-              color: Colors.transparent,
-            );
-          }
-          return Divider(height: 2);
-        },
-        itemCount: _composedWidgets.length,
-        itemBuilder: (context, index) {
-          Composable component = _composedWidgets[index];
-          return component;
-        });
+    return Column(
+      children: <Widget>[
+        
+        Expanded(
+          child: ListView.separated(
+              separatorBuilder: (context, index) {
+                if (seperatorStyle == SeperatorStyle.none) {
+                  return Divider(
+                    height: 0,
+                    thickness: 0.01,
+                    color: Colors.transparent,
+                  );
+                }
+                return Divider(height: 2);
+              },
+              itemCount: _composedWidgets.length,
+              itemBuilder: (context, index) {
+                Composable component = _composedWidgets[index];
+                return component;
+              }),
+        ),
+        Container(
+          color: Colors.red,
+          child: buildBottomComposables(),
+        )
+      ],
+    );
+  }
+
+  Widget buildBottomComposables() {
+    switch (bottomComposableAxis) {
+      case BottomComposableAxis.horizontal:
+        return Row(children: _bottomWidgets);
+      case BottomComposableAxis.vertical:
+        return Column(
+          children: _bottomWidgets,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+        );
+      default:
+        return Column(children: _bottomWidgets);
+    }
   }
 
   //TODO:
   bool setupTraits();
   List<Composable> prepareCompose(BuildContext context);
+  List<Composable> prepareBottom(BuildContext context) {
+    return [];
+  }
 
   Composable componentWith(Key key) {
     return _composedWidgets.firstWhere((component) => component.key == key);

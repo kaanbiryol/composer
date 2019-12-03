@@ -64,13 +64,15 @@ class ExamplePageState extends ComposedWidgetState {
   }
 
   @override
+  List<Composable> prepareBottom(BuildContext context) {
+    var viewModel = ButtonComponentViewModel(text: "NO", onPressed: onPressed);
+    flatButtonComponent = ButtonComponent(viewModel, key: ValueKey("kaan"));
+    return [flatButtonComponent];
+  }
+
+  @override
   bool setupTraits() {
-    ThemeManager(myTheme, myTheme);
     seperatorStyle = SeperatorStyle.none;
     return true;
   }
-}
-
-class Manager extends ThemeManager {
-  Manager(ThemeData light, ThemeData dark) : super(light, dark);
 }
