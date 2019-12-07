@@ -18,20 +18,13 @@ class TextFieldComponentModel implements TextFieldComposable {
 }
 
 class TextFieldComponent extends ComposableStatefulWidget<TextFieldComposable> {
-  TextFieldComponent(TextFieldComposable componentModel, {Key key})
-      : super(componentModel, key: key);
+  TextFieldComponent(TextFieldComposable componentModel)
+      : super.validateable(
+            componentModel, GlobalKey<_TextFieldComponentState>());
 
   @override
   State<StatefulWidget> createState() {
     return _TextFieldComponentState();
-  }
-
-  @override
-  bool validate() {
-    print("VALİDTEA");
-    validateCallback(false);
-    componentModel.maximumLength = 200;
-    return false;
   }
 }
 
@@ -45,26 +38,19 @@ class _TextFieldComponentState extends ComposableState<TextFieldComponent> {
   }
 
   void printText() {
-    // if (widget.validate() == false) {
-    //   setState(() {
-    //     widget.componentModel.maximumLength = 20;
-    //   });
-    // }
-
+    validationState.validate();
     print(textController.text);
   }
 
-  void test(bool bulmac) {
-    setState(() {});
+  @override
+  bool validate() {
+    print("ONVALDİATE");
+    return false;
   }
 
   @override
   Widget build(BuildContext context) {
-    print("KAAN" + widget.componentModel.maximumLength.toString());
-    widget.validateCallback = test;
-
     return TextField(
-      maxLength: widget.componentModel.maximumLength,
       controller: textController,
     );
   }

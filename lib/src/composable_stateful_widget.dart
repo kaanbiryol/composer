@@ -4,10 +4,17 @@ import '../compose.dart';
 abstract class ComposableStatefulWidget<T> extends StatefulWidget
     implements Composable<T> {
   final ComponentModel<T> _componentModel;
-  ValidateCallback validateCallback;
+  final GlobalKey<ComposableState> _validationKey;
 
   ComposableStatefulWidget(T componentModel, {Key key})
       : this._componentModel = ComponentModel(componentModel),
+        this._validationKey = null,
+        super(key: key);
+
+  ComposableStatefulWidget.validateable(
+      T componentModel, GlobalKey<ComposableState> key)
+      : this._componentModel = ComponentModel(componentModel),
+        this._validationKey = key,
         super(key: key);
 
   @override
@@ -17,7 +24,11 @@ abstract class ComposableStatefulWidget<T> extends StatefulWidget
       _componentModel.value = componentModel;
 
   @override
-  bool validate() => true;
+  bool validate() {
+    assert(_validationKey != null,
+        "use Widget.validateable() if you wish to validate your component");
+    return _validationKey.currentState.validate();
+  }
 }
 
 abstract class ComposableState<T extends ComposableStatefulWidget>
@@ -38,5 +49,12 @@ abstract class ComposableState<T extends ComposableStatefulWidget>
   void dispose() {
     widget._componentModel.removeListener(_componentModelNotifier);
     super.dispose();
+  }
+
+  ComposableState<ComposableStatefulWidget> get validationState =>
+      widget._validationKey.currentState;
+
+  bool validate() {
+    return false;
   }
 }

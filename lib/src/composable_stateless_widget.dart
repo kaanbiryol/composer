@@ -20,3 +20,5 @@ abstract class ComposableStatelessWidget<T> extends StatelessWidget
   @override
   bool validate() => true;
 }
+
+abstract class ValidWidget<T> extends FormField<T> {}

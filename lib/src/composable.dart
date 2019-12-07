@@ -6,6 +6,9 @@ abstract class Composable<T> extends Widget implements Validateable {
   set componentModel(T componentModel);
 }
 
+abstract class ValidatableComposable extends Composable
+    implements Validateable {}
+
 class ComponentModel<T> extends ValueNotifier {
   ComponentModel(value) : super(value);
 }
