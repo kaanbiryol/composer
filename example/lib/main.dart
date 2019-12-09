@@ -46,6 +46,7 @@ class ExamplePageState extends ComposedWidgetState {
     var textFieldComponent = TextFieldComponent(
       textFieldComponentViewModel,
     );
+    textFieldComponent.validators = [EmptyValidator()];
     return textFieldComponent;
   }
 

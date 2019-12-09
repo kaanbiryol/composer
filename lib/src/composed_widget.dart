@@ -7,7 +7,7 @@ abstract class ComposedWidget extends StatefulWidget {}
 
 abstract class ComposedWidgetState extends State<ComposedWidget>
     with ComposedWidgetTraits {
-  //TODO: prepareCompose
+  //TODO: prepareCompose or set array?
   List<Composable> _composedWidgets = [];
   List<Composable> _bottomWidgets = [];
 
@@ -66,7 +66,10 @@ abstract class ComposedWidgetState extends State<ComposedWidget>
   List<Composable> prepareBottom(BuildContext context) => [];
 
   bool validate() {
-    for (final composedWidget in _composedWidgets) {
+    var validateableComposables = _composedWidgets
+        .where((widget) => widget.validators.isNotEmpty)
+        .toList();
+    for (final composedWidget in validateableComposables) {
       if (composedWidget.validate() == false) {
         return false;
       }

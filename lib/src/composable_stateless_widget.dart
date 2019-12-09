@@ -4,6 +4,7 @@ import '../compose.dart';
 abstract class ComposableStatelessWidget<T> extends StatelessWidget
     implements Composable<T> {
   final ComponentModel<T> _componentModel;
+  final List<Validator> validators = [];
 
   ComposableStatelessWidget(T componentModel, {Key key})
       : this._componentModel = ComponentModel(componentModel),
@@ -18,7 +19,7 @@ abstract class ComposableStatelessWidget<T> extends StatelessWidget
   }
 
   @override
-  bool validate() => true;
+  bool validate() {
+    return true;
+  }
 }
-
-abstract class ValidWidget<T> extends FormField<T> {}

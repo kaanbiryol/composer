@@ -5,6 +5,7 @@ abstract class ComposableStatefulWidget<T> extends StatefulWidget
     implements Composable<T> {
   final ComponentModel<T> _componentModel;
   final GlobalKey<ComposableState> _validationKey;
+  List<Validator> validators = [];
 
   ComposableStatefulWidget(T componentModel, {Key key})
       : this._componentModel = ComponentModel(componentModel),
@@ -26,8 +27,8 @@ abstract class ComposableStatefulWidget<T> extends StatefulWidget
   @override
   bool validate() {
     assert(_validationKey != null,
-        "use Widget.validateable() if you wish to validate your component");
-    return _validationKey.currentState.validate();
+        "use ComposableStatefulWidget.validateable() if you wish to validate your component");
+    return _validationKey.currentState.validate(validators);
   }
 }
 
@@ -54,7 +55,10 @@ abstract class ComposableState<T extends ComposableStatefulWidget>
   ComposableState<ComposableStatefulWidget> get validationState =>
       widget._validationKey.currentState;
 
-  bool validate() {
+  //TODO: might add a generic modifier
+  ComponentModel get model => widget._componentModel;
+
+  bool validate(List<Validator> validators) {
     return false;
   }
 }

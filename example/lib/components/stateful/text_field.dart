@@ -2,19 +2,21 @@ import 'package:compose/compose.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
-typedef ValidateCallback = void Function(bool);
-
 abstract class TextFieldComposable {
   int maximumLength;
+  String errorText;
 }
 
 class TextFieldComponentModel implements TextFieldComposable {
-  @override
-  int maximumLength;
-
   TextFieldComponentModel(int maximumLength) {
     this.maximumLength = maximumLength;
   }
+
+  @override
+  int maximumLength;
+
+  @override
+  String errorText;
 }
 
 class TextFieldComponent extends ComposableStatefulWidget<TextFieldComposable> {
@@ -34,25 +36,34 @@ class _TextFieldComponentState extends ComposableState<TextFieldComponent> {
   @override
   void initState() {
     super.initState();
-    textController.addListener(printText);
-  }
-
-  void printText() {
-    validationState.validate();
-    print(textController.text);
-  }
-
-  @override
-  bool validate() {
-    print("ONVALDİATE");
-    return false;
+    textController.addListener(_textChangedListener);
   }
 
   @override
   Widget build(BuildContext context) {
     return TextField(
+      decoration: InputDecoration(errorText: widget.componentModel.errorText),
       controller: textController,
     );
+  }
+
+  void _textChangedListener() {
+    widget.componentModel.errorText = null;
+    widget.validate();
+    print(textController.text);
+  }
+
+  @override
+  bool validate(List<Validator> validators) {
+    for (var validator in validators) {
+      if (validator.validate(textController.text) == false) {
+        widget.componentModel.errorText = validator.errorText;
+        setState(() {});
+        return false;
+      }
+    }
+    setState(() {});
+    return true;
   }
 
   @override

@@ -4,10 +4,8 @@ import 'package:flutter/widgets.dart';
 abstract class Composable<T> extends Widget implements Validateable {
   T get componentModel;
   set componentModel(T componentModel);
+  final List<Validator> validators = [];
 }
-
-abstract class ValidatableComposable extends Composable
-    implements Validateable {}
 
 class ComponentModel<T> extends ValueNotifier {
   ComponentModel(value) : super(value);
