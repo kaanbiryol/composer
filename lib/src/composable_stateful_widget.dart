@@ -5,17 +5,19 @@ abstract class ComposableStatefulWidget<T> extends StatefulWidget
     implements Composable<T> {
   final ComponentModel<T> _componentModel;
   final GlobalKey<ComposableState> _validationKey;
-  List<Validator> validators = [];
+  final List<Validator> validators;
 
   ComposableStatefulWidget(T componentModel, {Key key})
       : this._componentModel = ComponentModel(componentModel),
         this._validationKey = null,
+        this.validators = [],
         super(key: key);
 
-  ComposableStatefulWidget.validateable(
-      T componentModel, GlobalKey<ComposableState> key)
+  ComposableStatefulWidget.validateable(T componentModel,
+      List<Validator> validators, GlobalKey<ComposableState> key)
       : this._componentModel = ComponentModel(componentModel),
         this._validationKey = key,
+        this.validators = validators,
         super(key: key);
 
   @override
@@ -28,11 +30,11 @@ abstract class ComposableStatefulWidget<T> extends StatefulWidget
   bool validate() {
     assert(_validationKey != null,
         "use ComposableStatefulWidget.validateable() if you wish to validate your component");
-    return _validationKey.currentState.validate(validators);
+    return _validationKey.currentState.validate();
   }
 }
 
-abstract class ComposableState<T extends ComposableStatefulWidget>
+abstract class ComposableState<T extends ComposableStatefulWidget, V>
     extends State<T> {
   @override
   @mustCallSuper
@@ -52,13 +54,12 @@ abstract class ComposableState<T extends ComposableStatefulWidget>
     super.dispose();
   }
 
-  ComposableState<ComposableStatefulWidget> get validationState =>
-      widget._validationKey.currentState;
+  V get widgetModel => widget._componentModel.value;
 
-  //TODO: might add a generic modifier
-  ComponentModel get model => widget._componentModel;
-
-  bool validate(List<Validator> validators) {
-    return false;
+  bool validate() {
+    final validationModel = widgetModel as ViewModelValidateable;
+    bool isValid = validationModel.validate(widget.validators);
+    setState(() {});
+    return isValid;
   }
 }

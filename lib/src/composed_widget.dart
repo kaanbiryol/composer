@@ -7,7 +7,6 @@ abstract class ComposedWidget extends StatefulWidget {}
 
 abstract class ComposedWidgetState extends State<ComposedWidget>
     with ComposedWidgetTraits {
-  //TODO: prepareCompose or set array?
   List<Composable> _composedWidgets = [];
   List<Composable> _bottomWidgets = [];
 

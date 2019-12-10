@@ -20,6 +20,6 @@ abstract class ComposableStatelessWidget<T> extends StatelessWidget
 
   @override
   bool validate() {
-    return true;
+    throw "can't validate statelesswidget use stateful instead!";
   }
 }

@@ -4,10 +4,12 @@ import 'package:flutter/widgets.dart';
 
 abstract class TextFieldComposable {
   int maximumLength;
+  String text;
   String errorText;
 }
 
-class TextFieldComponentModel implements TextFieldComposable {
+class TextFieldComponentModel
+    implements TextFieldComposable, ViewModelValidateable {
   TextFieldComponentModel(int maximumLength) {
     this.maximumLength = maximumLength;
   }
@@ -17,12 +19,28 @@ class TextFieldComponentModel implements TextFieldComposable {
 
   @override
   String errorText;
+
+  @override
+  String text;
+
+  @override
+  bool validate(List<Validator> validators) {
+    for (var validator in validators) {
+      if (validator.validate(text) == false) {
+        errorText = validator.errorText;
+        return false;
+      }
+    }
+    errorText = null;
+    return true;
+  }
 }
 
 class TextFieldComponent extends ComposableStatefulWidget<TextFieldComposable> {
-  TextFieldComponent(TextFieldComposable componentModel)
+  TextFieldComponent(
+      TextFieldComposable componentModel, List<Validator> validators)
       : super.validateable(
-            componentModel, GlobalKey<_TextFieldComponentState>());
+            componentModel, validators, GlobalKey<_TextFieldComponentState>());
 
   @override
   State<StatefulWidget> createState() {
@@ -30,7 +48,8 @@ class TextFieldComponent extends ComposableStatefulWidget<TextFieldComposable> {
   }
 }
 
-class _TextFieldComponentState extends ComposableState<TextFieldComponent> {
+class _TextFieldComponentState
+    extends ComposableState<TextFieldComponent, TextFieldComposable> {
   final textController = TextEditingController();
 
   @override
@@ -42,28 +61,14 @@ class _TextFieldComponentState extends ComposableState<TextFieldComponent> {
   @override
   Widget build(BuildContext context) {
     return TextField(
-      decoration: InputDecoration(errorText: widget.componentModel.errorText),
+      decoration: InputDecoration(errorText: widgetModel.errorText),
       controller: textController,
     );
   }
 
   void _textChangedListener() {
-    widget.componentModel.errorText = null;
-    widget.validate();
-    print(textController.text);
-  }
-
-  @override
-  bool validate(List<Validator> validators) {
-    for (var validator in validators) {
-      if (validator.validate(textController.text) == false) {
-        widget.componentModel.errorText = validator.errorText;
-        setState(() {});
-        return false;
-      }
-    }
-    setState(() {});
-    return true;
+    widgetModel.text = textController.text;
+    validate();
   }
 
   @override

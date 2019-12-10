@@ -20,7 +20,8 @@ class ButtonComponent
   _ButtonComponentState createState() => _ButtonComponentState();
 }
 
-class _ButtonComponentState extends ComposableState<ButtonComponent> {
+class _ButtonComponentState
+    extends ComposableState<ButtonComponent, ButtonComponentViewModel> {
   @override
   Widget build(BuildContext context) {
     final viewModel = widget.componentModel;

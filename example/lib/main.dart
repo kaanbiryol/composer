@@ -43,10 +43,8 @@ class ExamplePageState extends ComposedWidgetState {
 
   Composable makeTextField() {
     var textFieldComponentViewModel = TextFieldComponentModel(2);
-    var textFieldComponent = TextFieldComponent(
-      textFieldComponentViewModel,
-    );
-    textFieldComponent.validators = [EmptyValidator()];
+    var textFieldComponent =
+        TextFieldComponent(textFieldComponentViewModel, [EmptyValidator()]);
     return textFieldComponent;
   }
 
