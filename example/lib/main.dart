@@ -33,13 +33,16 @@ class ExamplePageState extends ComposedWidgetState {
 
   @override
   List<Composable> prepareCompose(BuildContext context) {
-    var viewModel = ButtonComponentViewModel(text: "NO", onPressed: onPressed);
-    flatButtonComponent = ButtonComponent(viewModel, key: ValueKey("kaan"));
-    var keyValueComponent = makeKeyValue();
+    flatButtonComponent = (ButtonComposer()
+          ..handler(onPressed)
+          ..title("Title"))
+        .compose();
     var textFieldComponent = (TextFieldComposer()
           ..maxLength(5)
           ..withValidators([EmptyValidator()]))
         .compose();
+    var keyValueComponent = makeKeyValue();
+
     return [flatButtonComponent, keyValueComponent, textFieldComponent];
   }
 

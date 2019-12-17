@@ -1,7 +1,31 @@
 import 'package:compose/compose.dart';
 import 'package:flutter/material.dart';
 
-class ButtonComponentViewModel {
+abstract class ButtonComposable {
+  String text;
+  VoidCallback onPressed;
+}
+
+class ButtonComposer extends Composer<ButtonComponent>
+    implements ButtonComposable {
+  @override
+  var onPressed;
+
+  @override
+  String text;
+
+  void title(String title) => text = title;
+  void handler(VoidCallback callback) => onPressed = callback;
+
+  @override
+  ButtonComponent compose() {
+    var viewModel = ButtonComponentViewModel(text: text, onPressed: onPressed);
+    //TODO: add key to Composer
+    return ButtonComponent(viewModel, key: ValueKey("kaan"));
+  }
+}
+
+class ButtonComponentViewModel implements ButtonComposable {
   String text;
   VoidCallback onPressed;
 
