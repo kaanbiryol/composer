@@ -8,6 +8,28 @@ abstract class TextFieldComposable {
   String errorText;
 }
 
+class TextFieldComposer extends Composer<TextFieldComponent>
+    implements TextFieldComposable {
+  @override
+  TextFieldComponent compose() {
+    var textFieldComponentViewModel = TextFieldComponentModel(maximumLength);
+    return TextFieldComponent(textFieldComponentViewModel, validators);
+  }
+
+  void maxLength(int length) {
+    maximumLength = length;
+  }
+
+  @override
+  String errorText;
+
+  @override
+  int maximumLength;
+
+  @override
+  String text;
+}
+
 class TextFieldComponentModel
     implements TextFieldComposable, ViewModelValidateable {
   TextFieldComponentModel(int maximumLength) {

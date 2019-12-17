@@ -36,8 +36,10 @@ class ExamplePageState extends ComposedWidgetState {
     var viewModel = ButtonComponentViewModel(text: "NO", onPressed: onPressed);
     flatButtonComponent = ButtonComponent(viewModel, key: ValueKey("kaan"));
     var keyValueComponent = makeKeyValue();
-    var textFieldComponent = makeTextField();
-
+    var textFieldComponent = (TextFieldComposer()
+          ..maxLength(5)
+          ..withValidators([EmptyValidator()]))
+        .compose();
     return [flatButtonComponent, keyValueComponent, textFieldComponent];
   }
 
