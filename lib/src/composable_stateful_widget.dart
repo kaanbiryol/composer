@@ -57,6 +57,8 @@ abstract class ComposableState<T extends ComposableStatefulWidget, V>
   V get widgetModel => widget._componentModel.value;
 
   bool validate() {
+    assert(widgetModel is ViewModelValidateable,
+        "ComponentModel must implement ViewModelValidateable!");
     final validationModel = widgetModel as ViewModelValidateable;
     bool isValid = validationModel.validate(widget.validators);
     setState(() {});

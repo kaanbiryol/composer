@@ -29,7 +29,7 @@ class ExamplePage extends ComposedWidget {
 
 class ExamplePageState extends ComposedWidgetState {
   ButtonComponent flatButtonComponent;
-  KeyValueRowComponent keyValueRowComponent;
+  KeyValueComponent keyValueRowComponent;
 
   @override
   List<Composable> prepareCompose(BuildContext context) {
@@ -41,7 +41,11 @@ class ExamplePageState extends ComposedWidgetState {
           ..maxLength(5)
           ..withValidators([EmptyValidator()]))
         .compose();
-    var keyValueComponent = makeKeyValue();
+    // var keyValueComponent = makeKeyValue();
+    var keyValueComponent = (KeyValueComposer()
+          ..withKey("KEY")
+          ..withValue("VALUE"))
+        .compose();
 
     return [flatButtonComponent, keyValueComponent, textFieldComponent];
   }
@@ -56,8 +60,7 @@ class ExamplePageState extends ComposedWidgetState {
   Composable makeKeyValue() {
     var keyValueViewModel =
         KeyValueComponentViewModel(key: "Key", value: "Value");
-    keyValueRowComponent =
-        KeyValueRowComponent(componentModel: keyValueViewModel);
+    keyValueRowComponent = KeyValueComponent(componentModel: keyValueViewModel);
     return keyValueRowComponent;
   }
 

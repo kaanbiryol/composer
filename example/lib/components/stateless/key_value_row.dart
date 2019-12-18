@@ -1,6 +1,36 @@
 import 'package:compose/compose.dart';
 import 'package:flutter/material.dart';
 
+abstract class KeyValueComposable {
+  String key;
+  String value;
+}
+
+class KeyValueComposer extends Composer<KeyValueComponent>
+    implements KeyValueComposable {
+  @override
+  String key;
+
+  @override
+  String value;
+
+  void withKey(String key) {
+    this.key = key;
+  }
+
+  void withValue(String value) {
+    this.value = value;
+  }
+
+  @override
+  KeyValueComponent compose() {
+    var keyValueViewModel = KeyValueComponentViewModel(key: key, value: value);
+    var keyValueComponent =
+        KeyValueComponent(componentModel: keyValueViewModel);
+    return keyValueComponent;
+  }
+}
+
 class KeyValueComponentViewModel {
   String key;
   String value;
@@ -8,9 +38,9 @@ class KeyValueComponentViewModel {
   KeyValueComponentViewModel({this.key, this.value});
 }
 
-class KeyValueRowComponent<KeyValueComponentViewModel>
+class KeyValueComponent<KeyValueComponentViewModel>
     extends ComposableStatelessWidget {
-  KeyValueRowComponent({KeyValueComponentViewModel componentModel, Key key})
+  KeyValueComponent({KeyValueComponentViewModel componentModel, Key key})
       : super(componentModel, key: key);
 
   @override

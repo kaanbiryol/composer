@@ -45,6 +45,7 @@ abstract class ComposedWidgetState extends State<ComposedWidget>
     );
   }
 
+  //TODO: class or const
   Widget _buildBottomComposables() {
     switch (bottomComposableAxis) {
       case BottomComposableAxis.horizontal:
