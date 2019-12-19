@@ -33,7 +33,7 @@ class ExamplePageState extends ComposedWidgetState {
   KeyValueComponent keyValueRowComponent;
 
   @override
-  List<Composable> prepareCompose(BuildContext context) {
+  List<Section> prepareCompose(BuildContext context) {
     flatButtonComponent = (ButtonComposer()
           ..handler(onPressed)
           ..title("Title"))
@@ -49,7 +49,12 @@ class ExamplePageState extends ComposedWidgetState {
         .compose();
 
     headerView = (SectionComposer()..withTitle("Section Title")).compose();
-    return [flatButtonComponent, keyValueComponent, textFieldComponent];
+
+    List<Section> sections = [];
+    sections.add(Section(headerView,
+        [flatButtonComponent, keyValueComponent, textFieldComponent]));
+
+    return [sections.first];
   }
 
   Composable makeTextField() {

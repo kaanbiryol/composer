@@ -8,8 +8,9 @@ abstract class ComposedWidget extends StatefulWidget {}
 
 abstract class ComposedWidgetState extends State<ComposedWidget>
     with ComposedWidgetTraits {
-  List<Composable> _composedWidgets = [];
+  List<Section> _composedWidgets = [];
   List<Composable> _bottomWidgets = [];
+  //TODO:
   Composable headerView;
 
   @override
@@ -19,9 +20,7 @@ abstract class ComposedWidgetState extends State<ComposedWidget>
     var traits = setupTraits();
     assert(traits != false, "must setupTraits()");
     assert(_composedWidgets != null, "prepareCompose must not return null");
-    List<Section> sections = [];
-    sections.add(Section(headerView, _composedWidgets));
-    return SliverComposableList(sections);
+    return SliverComposableList(_composedWidgets);
     // return Column(
     //   children: <Widget>[
     //     Expanded(
@@ -67,13 +66,13 @@ abstract class ComposedWidgetState extends State<ComposedWidget>
 
   //TODO:
   bool setupTraits();
-  List<Composable> prepareCompose(BuildContext context);
+  List<Section> prepareCompose(BuildContext context);
   List<Composable> prepareBottom(BuildContext context) => [];
 
   bool validate() {
-    var validateableComposables = _composedWidgets
-        .where((widget) => widget.validators.isNotEmpty)
-        .toList();
+    var composables = getComposables();
+    var validateableComposables =
+        composables.where((widget) => widget.validators.isNotEmpty).toList();
     for (final composedWidget in validateableComposables) {
       if (composedWidget.validate() == false) {
         return false;
@@ -82,8 +81,11 @@ abstract class ComposedWidgetState extends State<ComposedWidget>
     return true;
   }
 
+  List<Composable> getComposables() =>
+      _composedWidgets.expand((section) => section.composables).toList();
+
   Composable componentWith(Key key) {
-    return _composedWidgets.firstWhere((component) => component.key == key);
+    return getComposables().firstWhere((component) => component.key == key);
   }
 }
 
