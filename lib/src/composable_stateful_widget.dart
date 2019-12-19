@@ -7,6 +7,7 @@ abstract class ComposableStatefulWidget<T> extends StatefulWidget
   final GlobalKey<ComposableState> _validationKey;
   final List<Validator> validators;
 
+  //TODO: required optional named parameters
   ComposableStatefulWidget(T componentModel, {Key key})
       : this._componentModel = ComponentModel(componentModel),
         this._validationKey = null,

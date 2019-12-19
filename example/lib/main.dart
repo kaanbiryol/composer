@@ -1,4 +1,5 @@
 import 'package:compose/compose.dart';
+import 'package:example/components/stateless/section.dart';
 import 'package:flutter/material.dart';
 import 'components/stateful/flat_button.dart';
 import 'components/stateful/text_field.dart';
@@ -47,6 +48,7 @@ class ExamplePageState extends ComposedWidgetState {
           ..withValue("VALUE"))
         .compose();
 
+    headerView = (SectionComposer()..withTitle("Section Title")).compose();
     return [flatButtonComponent, keyValueComponent, textFieldComponent];
   }
 

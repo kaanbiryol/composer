@@ -1,3 +1,4 @@
+import 'package:compose/src/sliver_composable_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'composable.dart';
@@ -9,6 +10,7 @@ abstract class ComposedWidgetState extends State<ComposedWidget>
     with ComposedWidgetTraits {
   List<Composable> _composedWidgets = [];
   List<Composable> _bottomWidgets = [];
+  Composable headerView;
 
   @override
   Widget build(BuildContext context) {
@@ -17,32 +19,35 @@ abstract class ComposedWidgetState extends State<ComposedWidget>
     var traits = setupTraits();
     assert(traits != false, "must setupTraits()");
     assert(_composedWidgets != null, "prepareCompose must not return null");
-    return Column(
-      children: <Widget>[
-        Expanded(
-          child: ListView.separated(
-              separatorBuilder: (context, index) {
-                if (seperatorStyle == SeperatorStyle.none) {
-                  return Divider(
-                    height: 0,
-                    thickness: 0.01,
-                    color: Colors.transparent,
-                  );
-                }
-                return Divider(height: 2);
-              },
-              itemCount: _composedWidgets.length,
-              itemBuilder: (context, index) {
-                Composable component = _composedWidgets[index];
-                return component;
-              }),
-        ),
-        Container(
-          color: Colors.red,
-          child: _buildBottomComposables(),
-        )
-      ],
-    );
+    List<Section> sections = [];
+    sections.add(Section(headerView, _composedWidgets));
+    return SliverComposableList(sections);
+    // return Column(
+    //   children: <Widget>[
+    //     Expanded(
+    //       child: ListView.separated(
+    //           separatorBuilder: (context, index) {
+    //             if (seperatorStyle == SeperatorStyle.none) {
+    //               return Divider(
+    //                 height: 0,
+    //                 thickness: 0.01,
+    //                 color: Colors.transparent,
+    //               );
+    //             }
+    //             return Divider(height: 2);
+    //           },
+    //           itemCount: _composedWidgets.length,
+    //           itemBuilder: (context, index) {
+    //             Composable component = _composedWidgets[index];
+    //             return component;
+    //           }),
+    //     ),
+    //     Container(
+    //       color: Colors.red,
+    //       child: _buildBottomComposables(),
+    //     )
+    //   ],
+    // );
   }
 
   //TODO: class or const
@@ -80,4 +85,51 @@ abstract class ComposedWidgetState extends State<ComposedWidget>
   Composable componentWith(Key key) {
     return _composedWidgets.firstWhere((component) => component.key == key);
   }
+}
+
+extension ComposedWidgetBottom on Widget {
+  Widget withBottomComposables(Widget bottomComposables) {
+    return Column(
+      children: <Widget>[
+        Expanded(
+          child: this,
+        ),
+        Container(
+          color: Colors.yellow,
+          child: bottomComposables,
+        )
+      ],
+    );
+  }
+
+  Widget withTraits(Widget bottomComposables) {
+    return Column(
+      children: <Widget>[
+        Expanded(
+          child: this,
+        ),
+        Container(
+          color: Colors.yellow,
+          child: bottomComposables,
+        )
+      ],
+    );
+  }
+
+  Widget withHeader(Widget header) {
+    return Column(
+      children: <Widget>[
+        Container(
+          height: 100,
+          color: Colors.black,
+        ),
+        this
+      ],
+    );
+  }
+}
+
+extension WidgetPadding on Widget {
+  Widget paddingAll(double padding) =>
+      Padding(padding: EdgeInsets.all(padding), child: this);
 }
