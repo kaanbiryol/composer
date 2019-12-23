@@ -25,9 +25,14 @@ class SliverComposableList extends StatelessWidget {
     for (final section in sections) {
       var headerSection = makeSection(section);
       widgets.add(headerSection);
+      var widget = SliverAnimatedList(
+          initialItemCount: section.composables.length,
+          itemBuilder: (context, index, animation) {
+            return makeAnimatedRow(section.composables[index], animation);
+          });
       var sliverList =
           SliverList(delegate: SliverChildListDelegate(section.composables));
-      widgets.add(sliverList);
+      widgets.add(widget);
     }
     return widgets;
   }
@@ -37,6 +42,31 @@ class SliverComposableList extends StatelessWidget {
     return CustomScrollView(
       slivers: makeComposables(),
     );
+  }
+
+  Widget makeAnimatedRow(Widget child, Animation animation) {
+    return _AnimatedRow(
+      child: child,
+      animation: animation,
+    );
+  }
+
+  void appendRow(BuildContext context, int index) {
+    //TODO: update data
+    SliverAnimatedList.of(context).insertItem(index);
+  }
+
+  void removeRow(BuildContext context, int index) {
+    //TODO: update data
+    SliverAnimatedList.of(context).removeItem(index, (index, animation) {
+      return SizeTransition(
+          axis: Axis.vertical,
+          sizeFactor: animation,
+          child: FlatButton(
+            onPressed: null,
+            child: Text("kaan"),
+          ));
+    });
   }
 }
 
@@ -68,5 +98,22 @@ class _SliverSectionDelegate extends SliverPersistentHeaderDelegate {
     return maxHeight != oldDelegate.maxHeight ||
         minHeight != oldDelegate.minHeight ||
         child != oldDelegate.child;
+  }
+}
+
+class _AnimatedRow extends StatelessWidget {
+  final Animation animation;
+  final Widget child;
+
+  const _AnimatedRow({@required this.child, @required this.animation, Key key})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return SizeTransition(
+      axis: Axis.vertical,
+      sizeFactor: animation,
+      child: child,
+    );
   }
 }

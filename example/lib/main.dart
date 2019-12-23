@@ -34,6 +34,7 @@ class ExamplePageState extends ComposedWidgetState {
 
   @override
   List<Section> prepareCompose(BuildContext context) {
+    List<Section> sections = [];
     flatButtonComponent = (ButtonComposer()
           ..handler(onPressed)
           ..title("Title"))
@@ -48,12 +49,11 @@ class ExamplePageState extends ComposedWidgetState {
           ..withValue("VALUE"))
         .compose();
 
-    headerView = (SectionComposer()..withTitle("Section Title")).compose();
-
-    List<Section> sections = [];
-    sections.add(Section(headerView,
-        [flatButtonComponent, keyValueComponent, textFieldComponent]));
-
+    var firstSectionWidget =
+        (SectionComposer()..withTitle("Section Title")).compose();
+    var firstSection = Section(firstSectionWidget,
+        [flatButtonComponent, keyValueComponent, textFieldComponent]);
+    sections.add(firstSection);
     return [sections.first];
   }
 
