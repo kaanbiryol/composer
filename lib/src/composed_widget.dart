@@ -12,6 +12,7 @@ abstract class ComposedWidgetState extends State<ComposedWidget>
   List<Composable> _bottomWidgets = [];
   //TODO:
   Composable headerView;
+  SliverComposableListNotifier controller;
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +21,9 @@ abstract class ComposedWidgetState extends State<ComposedWidget>
     var traits = setupTraits();
     assert(traits != false, "must setupTraits()");
     assert(_composedWidgets != null, "prepareCompose must not return null");
-    return SliverComposableList(_composedWidgets);
+    var value = SliverComposableValue(_composedWidgets);
+    controller = SliverComposableListNotifier(value);
+    return SliverComposableList(controller);
     // return Column(
     //   children: <Widget>[
     //     Expanded(
@@ -86,6 +89,15 @@ abstract class ComposedWidgetState extends State<ComposedWidget>
 
   Composable componentWith(Key key) {
     return getComposables().firstWhere((component) => component.key == key);
+  }
+
+  void appendRow(Composable composable, int sectionIndex) {
+    Section section = _composedWidgets[sectionIndex];
+    print("LIST" + section.composables.length.toString());
+    section.composables.add(_composedWidgets.first.composables[1]);
+    _composedWidgets[sectionIndex] = section;
+    print("LIST" + section.composables.length.toString());
+    controller.value = SliverComposableValue(_composedWidgets);
   }
 }
 

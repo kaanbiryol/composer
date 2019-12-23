@@ -3,11 +3,32 @@ import 'package:compose/compose.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
+class SliverComposableValue {
+  final List<Section> sectionList;
+  SliverComposableValue(this.sectionList);
+}
+
+class SliverComposableListNotifier
+    extends ValueNotifier<SliverComposableValue> {
+  final SliverComposableValue value;
+  SliverComposableListNotifier(this.value) : super(value);
+}
+
 class SliverComposableList extends StatelessWidget {
   final double sliverHeaderHeight = 40.0;
-  final List<Section> sections;
+  final SliverComposableListNotifier controller;
 
-  const SliverComposableList(this.sections, {Key key}) : super(key: key);
+  List<Section> get sections => controller.value.sectionList;
+
+  const SliverComposableList(this.controller, {Key key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    print(context);
+    return CustomScrollView(
+      slivers: makeComposables(),
+    );
+  }
 
   SliverPersistentHeader makeSection(Section section) {
     return SliverPersistentHeader(
@@ -25,48 +46,84 @@ class SliverComposableList extends StatelessWidget {
     for (final section in sections) {
       var headerSection = makeSection(section);
       widgets.add(headerSection);
-      var widget = SliverAnimatedList(
-          initialItemCount: section.composables.length,
-          itemBuilder: (context, index, animation) {
-            return makeAnimatedRow(section.composables[index], animation);
-          });
-      var sliverList =
-          SliverList(delegate: SliverChildListDelegate(section.composables));
-      widgets.add(widget);
+      widgets.add(SliverStateful(
+        composables: section.composables,
+        controller: controller,
+      ));
     }
     return widgets;
+  }
+}
+
+class SliverStateful extends StatefulWidget {
+  final List<Composable> composables;
+  final SliverComposableListNotifier controller;
+  const SliverStateful(
+      {@required this.composables, @required this.controller, Key key})
+      : super(key: key);
+
+  @override
+  _SliverStatefulState createState() => _SliverStatefulState();
+}
+
+class _SliverStatefulState extends State<SliverStateful> {
+  final GlobalKey<SliverAnimatedListState> _listKey =
+      GlobalKey<SliverAnimatedListState>();
+
+  @override
+  void initState() {
+    super.initState();
+    widget.controller.addListener(notifySectionChange);
   }
 
   @override
   Widget build(BuildContext context) {
-    return CustomScrollView(
-      slivers: makeComposables(),
-    );
+    return SliverAnimatedList(
+        key: _listKey,
+        initialItemCount: widget.composables.length,
+        itemBuilder: (context, index, animation) {
+          return _AnimatedRow(
+            child: widget.composables[index],
+            animation: animation,
+          );
+        });
   }
 
-  Widget makeAnimatedRow(Widget child, Animation animation) {
-    return _AnimatedRow(
-      child: child,
-      animation: animation,
-    );
+  void notifySectionChange() {
+    List<Composable> composables =
+        widget.controller.value.sectionList.first.composables;
+    print("CHANGE" +
+        widget.composables.length.toString() +
+        "- " +
+        composables.length.toString());
+    if (composables.length > widget.composables.length) {
+      appendRow(null, 1);
+      // _oldComposables = widget.composables;
+    }
+    //  else if (composables.length < _oldComposables.length) {
+    //   removeRow(1);
+    //   _oldComposables = widget.composables;
+    // }
   }
 
-  void appendRow(BuildContext context, int index) {
-    //TODO: update data
-    SliverAnimatedList.of(context).insertItem(index);
+  void appendRow(Composable composable, int index) {
+    widget.composables.add(widget.composables[1]);
+    _listKey.currentState.insertItem(index);
   }
 
-  void removeRow(BuildContext context, int index) {
-    //TODO: update data
+  void removeRow(int index) {
+    Composable composable = widget.composables[index];
+    widget.composables.removeAt(index);
     SliverAnimatedList.of(context).removeItem(index, (index, animation) {
       return SizeTransition(
-          axis: Axis.vertical,
-          sizeFactor: animation,
-          child: FlatButton(
-            onPressed: null,
-            child: Text("kaan"),
-          ));
+          axis: Axis.vertical, sizeFactor: animation, child: composable);
     });
+  }
+
+  @override
+  void dispose() {
+    widget.controller.dispose();
+    super.dispose();
   }
 }
 
