@@ -23,7 +23,7 @@ abstract class ComposedWidgetState extends State<ComposedWidget>
     assert(_composedWidgets != null, "prepareCompose must not return null");
     var value = SliverComposableValue(_composedWidgets);
     controller = SliverComposableListNotifier(value);
-    return SliverComposableList(controller);
+    return SliverComposableList(_composedWidgets, controller);
     // return Column(
     //   children: <Widget>[
     //     Expanded(
@@ -93,10 +93,8 @@ abstract class ComposedWidgetState extends State<ComposedWidget>
 
   void appendRow(Composable composable, int sectionIndex) {
     Section section = _composedWidgets[sectionIndex];
-    print("LIST" + section.composables.length.toString());
     section.composables.add(_composedWidgets.first.composables[1]);
-    _composedWidgets[sectionIndex] = section;
-    print("LIST" + section.composables.length.toString());
+    _composedWidgets[0] = section;
     controller.value = SliverComposableValue(_composedWidgets);
   }
 }

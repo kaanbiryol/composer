@@ -4,27 +4,31 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 class SliverComposableValue {
-  final List<Section> sectionList;
+  List<Section> sectionList;
   SliverComposableValue(this.sectionList);
 }
 
-class SliverComposableListNotifier
-    extends ValueNotifier<SliverComposableValue> {
-  final SliverComposableValue value;
-  SliverComposableListNotifier(this.value) : super(value);
+class SliverComposableListNotifier extends ValueNotifier<SliverComposableValue> {
+  final SliverComposableValue sliverValue;
+  SliverComposableListNotifier(this.sliverValue) : super(sliverValue);
 }
 
-class SliverComposableList extends StatelessWidget {
-  final double sliverHeaderHeight = 40.0;
+class SliverComposableList extends StatefulWidget {
+  final List<Section> sections;
   final SliverComposableListNotifier controller;
 
-  List<Section> get sections => controller.value.sectionList;
+  const SliverComposableList(this.sections, this.controller, {Key key})
+      : super(key: key);
 
-  const SliverComposableList(this.controller, {Key key}) : super(key: key);
+  @override
+  _SliverComposableListState createState() => _SliverComposableListState();
+}
+
+class _SliverComposableListState extends State<SliverComposableList> {
+  final double sliverHeaderHeight = 40.0;
 
   @override
   Widget build(BuildContext context) {
-    print(context);
     return CustomScrollView(
       slivers: makeComposables(),
     );
@@ -43,12 +47,12 @@ class SliverComposableList extends StatelessWidget {
 
   List<Widget> makeComposables() {
     List<Widget> widgets = [];
-    for (final section in sections) {
+    for (final section in widget.sections) {
       var headerSection = makeSection(section);
       widgets.add(headerSection);
       widgets.add(SliverStateful(
         composables: section.composables,
-        controller: controller,
+        controller: widget.controller,
       ));
     }
     return widgets;
@@ -70,9 +74,14 @@ class _SliverStatefulState extends State<SliverStateful> {
   final GlobalKey<SliverAnimatedListState> _listKey =
       GlobalKey<SliverAnimatedListState>();
 
+  List<Composable> old = [];
+  String oldString;
+
   @override
   void initState() {
     super.initState();
+    // oldString = widget.controller.value;
+    old.addAll(widget.controller.value.sectionList.first.composables);
     widget.controller.addListener(notifySectionChange);
   }
 
@@ -90,20 +99,23 @@ class _SliverStatefulState extends State<SliverStateful> {
   }
 
   void notifySectionChange() {
-    List<Composable> composables =
-        widget.controller.value.sectionList.first.composables;
-    print("CHANGE" +
-        widget.composables.length.toString() +
-        "- " +
-        composables.length.toString());
-    if (composables.length > widget.composables.length) {
-      appendRow(null, 1);
-      // _oldComposables = widget.composables;
-    }
-    //  else if (composables.length < _oldComposables.length) {
-    //   removeRow(1);
-    //   _oldComposables = widget.composables;
+    print(old.length.toString());
+    print(widget.controller.value.sectionList.first.composables.length.toString());
+    // List<Composable> composables =
+    //     widget.controller.value.sectionList.first.composables;
+    // print("CHANGE" +
+    //     old.length.toString() +
+    //     "- " +
+    //     composables.length.toString());
+    // if (composables.length > old.length) {
+    //   appendRow(null, 1);
+    //   // _oldComposables = widget.composables;
     // }
+
+    // //  else if (composables.length < _oldComposables.length) {
+    // //   removeRow(1);
+    // //   _oldComposables = widget.composables;
+    // // }
   }
 
   void appendRow(Composable composable, int index) {
