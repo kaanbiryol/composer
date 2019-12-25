@@ -65,14 +65,15 @@ abstract class ComposedWidgetState extends State<ComposedWidget>
     return getComposables().firstWhere((component) => component.key == key);
   }
 
-  void appendRow({@required Section section, @required Composable composable, int index}) {
+  void appendRow(
+      {@required Section section, @required Composable composable, int index}) {
     Section section = _composedWidgets[index];
     var rowIndex = index ?? section.composables.length;
-    section.composables.add(composable);
-    _composedWidgets[0] = section;
+    section.composables.insert(rowIndex, composable);
+    _composedWidgets[index] = section;
     controller.value = SliverComposableValue(_composedWidgets);
+    controller.notifyListeners(ActionTest(SliverComposableAction.add, rowIndex));
   }
-
 }
 
 extension ComposedWidgetBottom on Widget {

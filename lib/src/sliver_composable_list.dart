@@ -1,5 +1,6 @@
 import 'dart:math' as math;
 import 'package:compose/compose.dart';
+import 'package:compose/src/generic_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
@@ -8,8 +9,19 @@ class SliverComposableValue {
   SliverComposableValue(this.sectionList);
 }
 
-class SliverComposableListNotifier
-    extends ValueNotifier<SliverComposableValue> {
+enum SliverComposableAction { add, remove }
+
+class ActionTest {
+  int index;
+  SliverComposableAction action;
+
+  ActionTest(this.action, this.index);
+}
+
+typedef ActionCallback = void Function(ActionTest);
+
+class SliverComposableListNotifier extends CustomValueNotifier<
+    SliverComposableValue, ActionTest, ActionCallback> {
   final SliverComposableValue sliverValue;
   SliverComposableListNotifier(this.sliverValue) : super(sliverValue);
 }
@@ -76,7 +88,6 @@ class _SliverStatefulState extends State<SliverStateful> {
   final GlobalKey<SliverAnimatedListState> _listKey =
       GlobalKey<SliverAnimatedListState>();
 
-  List<Composable> _currentComposables = [];
   int get _index => widget.index;
   List<Composable> get _composables =>
       widget.controller.sliverValue.sectionList[_index].composables;
@@ -84,7 +95,6 @@ class _SliverStatefulState extends State<SliverStateful> {
   @override
   void initState() {
     super.initState();
-    _currentComposables.addAll(_composables);
     widget.controller.addListener(notifySectionChange);
   }
 
@@ -101,14 +111,16 @@ class _SliverStatefulState extends State<SliverStateful> {
         });
   }
 
-  void notifySectionChange() {
-    if (_composables.length > _currentComposables.length) {
-      _appendRow(null, 1);
-    } else if (_composables.length < _currentComposables.length) {
-      _removeRow(1);
+  void notifySectionChange(ActionTest actionType) {
+    int rowIndex = actionType.index;
+    switch (actionType.action) {
+      case SliverComposableAction.add:
+        _appendRow(null, rowIndex);
+        break;
+      case SliverComposableAction.remove:
+        _removeRow(1);
+        break;
     }
-    _currentComposables.clear();
-    _currentComposables.addAll(_composables);
   }
 
   void _appendRow(Composable composable, int index) {
