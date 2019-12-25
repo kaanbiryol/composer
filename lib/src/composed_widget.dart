@@ -23,33 +23,7 @@ abstract class ComposedWidgetState extends State<ComposedWidget>
     assert(_composedWidgets != null, "prepareCompose must not return null");
     var value = SliverComposableValue(_composedWidgets);
     controller = SliverComposableListNotifier(value);
-    return SliverComposableList(_composedWidgets, controller);
-    // return Column(
-    //   children: <Widget>[
-    //     Expanded(
-    //       child: ListView.separated(
-    //           separatorBuilder: (context, index) {
-    //             if (seperatorStyle == SeperatorStyle.none) {
-    //               return Divider(
-    //                 height: 0,
-    //                 thickness: 0.01,
-    //                 color: Colors.transparent,
-    //               );
-    //             }
-    //             return Divider(height: 2);
-    //           },
-    //           itemCount: _composedWidgets.length,
-    //           itemBuilder: (context, index) {
-    //             Composable component = _composedWidgets[index];
-    //             return component;
-    //           }),
-    //     ),
-    //     Container(
-    //       color: Colors.red,
-    //       child: _buildBottomComposables(),
-    //     )
-    //   ],
-    // );
+    return SliverComposableList(controller);
   }
 
   //TODO: class or const
@@ -91,12 +65,14 @@ abstract class ComposedWidgetState extends State<ComposedWidget>
     return getComposables().firstWhere((component) => component.key == key);
   }
 
-  void appendRow(Composable composable, int sectionIndex) {
-    Section section = _composedWidgets[sectionIndex];
-    section.composables.add(_composedWidgets.first.composables[1]);
+  void appendRow({@required Section section, @required Composable composable, int index}) {
+    Section section = _composedWidgets[index];
+    var rowIndex = index ?? section.composables.length;
+    section.composables.add(composable);
     _composedWidgets[0] = section;
     controller.value = SliverComposableValue(_composedWidgets);
   }
+
 }
 
 extension ComposedWidgetBottom on Widget {
