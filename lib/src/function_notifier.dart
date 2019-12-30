@@ -6,6 +6,21 @@ abstract class FunctionListenable<T extends Function> {
   void removeListener(T listener);
 }
 
+class FunctionNotifier<Item, V, T extends Function(V)>
+    extends GenericChangeNotifier<V, T> {
+  FunctionNotifier(this._value);
+
+  Item get value => _value;
+  Item _value;
+  set value(Item newValue) {
+    if (_value == newValue) return;
+    _value = newValue;
+  }
+
+  @override
+  String toString() => '${describeIdentity(this)}($value)';
+}
+
 class GenericChangeNotifier<V, T extends Function(V)>
     implements FunctionListenable<T> {
   ObserverList<T> _listeners = ObserverList<T>();
@@ -56,25 +71,22 @@ class GenericChangeNotifier<V, T extends Function(V)>
         try {
           if (_listeners.contains(listener)) listener(actionType);
         } catch (exception, stack) {
-          debugPrint(exception);
+          FlutterError.reportError(FlutterErrorDetails(
+            exception: exception,
+            stack: stack,
+            library: 'foundation library',
+            context: ErrorDescription(
+                'while dispatching notifications for $runtimeType'),
+            informationCollector: () sync* {
+              yield DiagnosticsProperty<GenericChangeNotifier>(
+                'The $runtimeType sending notification was',
+                this,
+                style: DiagnosticsTreeStyle.errorProperty,
+              );
+            },
+          ));
         }
       }
     }
   }
-}
-
-class CustomValueNotifier<Item, V, T extends Function(V)>
-    extends GenericChangeNotifier<V, T> {
-  CustomValueNotifier(this._value);
-
-  Item get value => _value;
-  Item _value;
-  set value(Item newValue) {
-    if (_value == newValue) return;
-    _value = newValue;
-    // notifyListeners(null);
-  }
-
-  @override
-  String toString() => '${describeIdentity(this)}($value)';
 }

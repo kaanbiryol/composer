@@ -1,33 +1,24 @@
-import 'dart:math' as math;
 import 'package:compose/compose.dart';
-import 'package:compose/src/generic_notifier.dart';
+import 'package:compose/src/function_notifier.dart';
+import 'package:compose/src/sliver_rows.dart';
+import 'package:compose/src/sliver_sections.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
-class SliverComposableValue {
+class SliverListDataSource {
   List<Section> sectionList;
-  SliverComposableValue(this.sectionList);
+  SliverListDataSource(this.sectionList);
 }
 
-enum SliverComposableAction { add, remove }
-
-class ActionTest {
-  int index;
-  SliverComposableAction action;
-
-  ActionTest(this.action, this.index);
-}
-
-typedef ActionCallback = void Function(ActionTest);
-
-class SliverComposableListNotifier extends CustomValueNotifier<
-    SliverComposableValue, ActionTest, ActionCallback> {
-  final SliverComposableValue sliverValue;
-  SliverComposableListNotifier(this.sliverValue) : super(sliverValue);
+class SliverListNotifier extends FunctionNotifier<SliverListDataSource,
+    RowActionEvent, RowActionCallback> {
+  final SliverListDataSource dataSource;
+  SliverListNotifier(this.dataSource) : super(dataSource);
 }
 
 class SliverComposableList extends StatefulWidget {
-  final SliverComposableListNotifier controller;
+  final SliverListNotifier controller;
 
   const SliverComposableList(this.controller, {Key key}) : super(key: key);
 
@@ -36,9 +27,7 @@ class SliverComposableList extends StatefulWidget {
 }
 
 class _SliverComposableListState extends State<SliverComposableList> {
-  final double sliverHeaderHeight = 40.0;
-
-  List<Section> get sections => widget.controller.sliverValue.sectionList;
+  List<Section> get sections => widget.controller.dataSource.sectionList;
 
   @override
   Widget build(BuildContext context) {
@@ -47,145 +36,18 @@ class _SliverComposableListState extends State<SliverComposableList> {
     );
   }
 
-  SliverPersistentHeader makeSection(Section section) {
-    return SliverPersistentHeader(
-      pinned: section.pinned,
-      delegate: _SliverSectionDelegate(
-        minHeight: section.height ?? sliverHeaderHeight,
-        maxHeight: section.height ?? sliverHeaderHeight,
-        child: section.section,
-      ),
-    );
-  }
-
   List<Widget> makeComposables() {
     List<Widget> widgets = [];
     for (var index = 0; index < sections.length; index++) {
       Section section = sections[index];
-      var headerSection = makeSection(section);
+      assert(section != null, "Section cannot be null. Specify a section.");
+      var headerSection = SliverSection(section: section);
       widgets.add(headerSection);
-      widgets.add(SliverStateful(
+      widgets.add(SliverRow(
         index: index,
         controller: widget.controller,
       ));
     }
     return widgets;
-  }
-}
-
-class SliverStateful extends StatefulWidget {
-  final int index;
-  final SliverComposableListNotifier controller;
-  const SliverStateful(
-      {@required this.index, @required this.controller, Key key})
-      : super(key: key);
-
-  @override
-  _SliverStatefulState createState() => _SliverStatefulState();
-}
-
-class _SliverStatefulState extends State<SliverStateful> {
-  final GlobalKey<SliverAnimatedListState> _listKey =
-      GlobalKey<SliverAnimatedListState>();
-
-  int get _index => widget.index;
-  List<Composable> get _composables =>
-      widget.controller.sliverValue.sectionList[_index].composables;
-
-  @override
-  void initState() {
-    super.initState();
-    widget.controller.addListener(notifySectionChange);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return SliverAnimatedList(
-        key: _listKey,
-        initialItemCount: _composables.length,
-        itemBuilder: (context, index, animation) {
-          return _AnimatedRow(
-            child: _composables[index],
-            animation: animation,
-          );
-        });
-  }
-
-  void notifySectionChange(ActionTest actionType) {
-    int rowIndex = actionType.index;
-    switch (actionType.action) {
-      case SliverComposableAction.add:
-        _appendRow(null, rowIndex);
-        break;
-      case SliverComposableAction.remove:
-        _removeRow(1);
-        break;
-    }
-  }
-
-  void _appendRow(Composable composable, int index) {
-    _listKey.currentState.insertItem(index);
-  }
-
-  void _removeRow(int index) {
-    Composable composable = _composables[index];
-    SliverAnimatedList.of(context).removeItem(index, (index, animation) {
-      return SizeTransition(
-          axis: Axis.vertical, sizeFactor: animation, child: composable);
-    });
-  }
-
-  @override
-  void dispose() {
-    widget.controller.dispose();
-    super.dispose();
-  }
-}
-
-class _SliverSectionDelegate extends SliverPersistentHeaderDelegate {
-  final double minHeight;
-  final double maxHeight;
-  final Widget child;
-
-  _SliverSectionDelegate({
-    @required this.minHeight,
-    @required this.maxHeight,
-    @required this.child,
-  });
-
-  @override
-  double get minExtent => minHeight;
-
-  @override
-  double get maxExtent => math.max(maxHeight, minHeight);
-
-  @override
-  Widget build(
-      BuildContext context, double shrinkOffset, bool overlapsContent) {
-    return new SizedBox.expand(child: child);
-  }
-
-  @override
-  bool shouldRebuild(_SliverSectionDelegate oldDelegate) {
-    return maxHeight != oldDelegate.maxHeight ||
-        minHeight != oldDelegate.minHeight ||
-        child != oldDelegate.child;
-  }
-}
-
-class _AnimatedRow extends StatelessWidget {
-  final Animation animation;
-  final Widget child;
-
-  const _AnimatedRow({@required this.child, @required this.animation, Key key})
-      : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return SizeTransition(
-      axis: Axis.vertical,
-      sizeFactor: animation,
-      child: child,
-    );
   }
 }
