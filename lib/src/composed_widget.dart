@@ -75,7 +75,7 @@ abstract class ComposedWidgetState extends State<ComposedWidget>
 
   void appendSection({@required Section section, int index}) {
     if (index != null) {
-      assert(index > 0 && index < section.composables.length,
+      assert(index >= 0 && index < _composedWidgets.length,
           "If you are providing an index, it must be less than the current item size, otherwise just ignore index.");
       _composedWidgets.insert(index, section);
     } else {

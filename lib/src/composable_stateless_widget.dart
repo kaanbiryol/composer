@@ -1,3 +1,4 @@
+import 'package:compose/src/exceptions.dart';
 import 'package:flutter/widgets.dart';
 import '../compose.dart';
 
@@ -15,11 +16,13 @@ abstract class ComposableStatelessWidget<T> extends StatelessWidget
 
   @override
   set componentModel(T componentModel) {
-    throw "can't notify component model. use ComposableStatefulWidget instead!";
+    throw StatelessActingException(
+        "can't notify component model. use ComposableStatefulWidget instead!");
   }
 
   @override
   bool validate() {
-    throw "can't validate statelesswidget use stateful instead!";
+    throw StatelessActingException(
+        "can't validate statelesswidget use stateful instead!");
   }
 }
