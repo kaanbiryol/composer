@@ -1,23 +1,24 @@
-import 'package:compose/src/exceptions.dart';
+import 'package:compose/src/utils/exceptions.dart';
+import 'package:compose/src/utils/validateable.dart';
 import 'package:flutter/widgets.dart';
 import '../compose.dart';
 
 abstract class ComposableStatelessWidget<T> extends StatelessWidget
     implements Composable<T> {
-  final ComponentModel<T> _componentModel;
+  final ComposableModel<T> _composableModel;
   final List<Validator> validators = [];
 
-  ComposableStatelessWidget(T componentModel, {Key key})
-      : this._componentModel = ComponentModel(componentModel),
+  ComposableStatelessWidget(T composableModel, {Key key})
+      : this._composableModel = ComposableModel(composableModel),
         super(key: key);
 
   @override
-  T get componentModel => _componentModel.value;
+  T get composableModel => _composableModel.value;
 
   @override
-  set componentModel(T componentModel) {
+  set composableModel(T composableModel) {
     throw StatelessActingException(
-        "can't notify component model. use ComposableStatefulWidget instead!");
+        "can't notify composable model. use ComposableStatefulWidget instead!");
   }
 
   @override

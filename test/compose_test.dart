@@ -1,7 +1,7 @@
 import 'package:compose/compose.dart';
-import 'package:compose/src/exceptions.dart';
 import 'package:compose/src/sliver_composable_list.dart';
 import 'package:compose/src/sliver_rows.dart';
+import 'package:compose/src/utils/exceptions.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'compose_test_mocks.dart';
@@ -136,18 +136,18 @@ void main() {
     state.appendRow(section: mockSection, composable: composable);
 
     var updatedViewModel = MockStatefulComposableViewModel("new");
-    composable.componentModel = updatedViewModel;
+    composable.composableModel = updatedViewModel;
 
     await tester.pump();
 
-    expect(composable.componentModel.text, "new");
+    expect(composable.composableModel.text, "new");
   });
 
   test('identical viewmodel', () async {
     var viewModel = MockComposableViewModel("old");
     var composable = MockComposable(viewModel);
 
-    expect(composable.componentModel, viewModel);
+    expect(composable.composableModel, viewModel);
   });
 
   test('statelesswidget re-set viewModel error', () async {
@@ -155,7 +155,7 @@ void main() {
     var composable = MockComposable(viewModel);
 
     try {
-      composable.componentModel = viewModel;
+      composable.composableModel = viewModel;
     } catch (e) {
       expect(e, isInstanceOf<StatelessActingException>());
     }
@@ -223,14 +223,15 @@ void main() {
     expect(state.controller.hasListeners, true);
   });
 
-  testWidgets('function notifier clear listeners', (WidgetTester tester) async {
+  testWidgets('function notifier dispose listeners',
+      (WidgetTester tester) async {
     await tester.pumpWidget(mockWidget);
     var state = getState(tester);
     state.controller.dispose();
     expect(state.controller.hasListeners, false);
   });
 
-  test('Counter value should be incremented', () {
+  test('function notifier remove listeners', () {
     var dataSource = SliverListDataSource([]);
     var controller = SliverListNotifier(dataSource);
 

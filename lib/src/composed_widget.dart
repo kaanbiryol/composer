@@ -1,9 +1,9 @@
 import 'package:compose/src/sliver_composable_list.dart';
 import 'package:compose/src/sliver_rows.dart';
+import 'package:compose/src/utils/composed_widget_traits.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'composable.dart';
-import 'composed_widget_traits.dart';
 
 abstract class ComposedWidget extends StatefulWidget {}
 
@@ -94,8 +94,8 @@ abstract class ComposedWidgetState extends State<ComposedWidget>
   List<Composable> getComposables() =>
       _composedWidgets.expand((section) => section.composables).toList();
 
-  Composable componentWith(Key key) {
-    return getComposables().firstWhere((component) => component.key == key);
+  Composable composableWith(Key key) {
+    return getComposables().firstWhere((composable) => composable.key == key);
   }
 
   @mustCallSuper

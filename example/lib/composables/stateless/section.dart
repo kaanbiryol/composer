@@ -35,7 +35,7 @@ class SectionComponent<SectionComponentViewModel>
     return Container(
       color: Colors.grey,
       height: 30,
-      child: Text(componentModel.title),
+      child: Text(composableModel.title),
     );
   }
 }

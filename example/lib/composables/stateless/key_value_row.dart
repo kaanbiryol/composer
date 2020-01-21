@@ -51,8 +51,8 @@ class KeyValueComponent<KeyValueComponentViewModel>
     return Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
-          Text(componentModel.key, style: ThemeManager.theme().textTheme.body1),
-          Text(componentModel.value),
+          Text(composableModel.key, style: ThemeManager.theme().textTheme.body1),
+          Text(composableModel.value),
         ]);
   }
 }

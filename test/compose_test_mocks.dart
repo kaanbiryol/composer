@@ -9,8 +9,8 @@ class MockComposableViewModel {
 
 class MockComposable
     extends ComposableStatelessWidget<MockComposableViewModel> {
-  MockComposable(MockComposableViewModel componentModel)
-      : super(componentModel);
+  MockComposable(MockComposableViewModel composableModel)
+      : super(composableModel);
 
   @override
   Widget build(BuildContext context) {
@@ -25,8 +25,8 @@ class MockStatefulComposableViewModel {
 
 class MockStatefulComposable
     extends ComposableStatefulWidget<MockStatefulComposableViewModel> {
-  MockStatefulComposable(MockStatefulComposableViewModel componentModel)
-      : super(componentModel);
+  MockStatefulComposable(MockStatefulComposableViewModel composableModel)
+      : super(composableModel);
 
   @override
   State<StatefulWidget> createState() {

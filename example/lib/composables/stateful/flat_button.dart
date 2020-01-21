@@ -48,7 +48,7 @@ class _ButtonComponentState
     extends ComposableState<ButtonComponent, ButtonComponentViewModel> {
   @override
   Widget build(BuildContext context) {
-    final viewModel = widget.componentModel;
+    final viewModel = widget.composableModel;
     return FlatButton(
       onPressed: viewModel.onPressed,
       child: Text(viewModel.text),

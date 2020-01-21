@@ -1,5 +1,5 @@
-import 'package:compose/src/exceptions.dart';
 import 'package:flutter/foundation.dart';
+import 'exceptions.dart';
 
 abstract class FunctionListenable<T extends Function> {
   const FunctionListenable();

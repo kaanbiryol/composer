@@ -1,9 +1,9 @@
-import 'package:compose/compose.dart';
+import 'package:compose/src/utils/validateable.dart';
 import 'package:flutter/widgets.dart';
 
 abstract class ComposableSection {
+  Composable sectionComposable;
   List<Composable> composables;
-  Composable section;
   bool pinned = true;
   double height;
 }
@@ -16,22 +16,22 @@ class Section implements ComposableSection {
   bool pinned = false;
 
   @override
-  Composable section;
+  Composable sectionComposable;
 
-  Section(this.section, this.composables);
+  Section(this.sectionComposable, this.composables);
 
   @override
   double height;
 }
 
 abstract class Composable<T> extends Widget implements Validateable {
-  T get componentModel;
-  set componentModel(T componentModel);
+  T get composableModel;
+  set composableModel(T composableModel);
   final List<Validator> validators = [];
 }
 
-class ComponentModel<T> extends ValueNotifier {
-  ComponentModel(value) : super(value);
+class ComposableModel<T> extends ValueNotifier {
+  ComposableModel(value) : super(value);
 }
 
 abstract class Composer<T> {
