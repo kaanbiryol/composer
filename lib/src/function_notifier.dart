@@ -1,3 +1,4 @@
+import 'package:compose/src/exceptions.dart';
 import 'package:flutter/foundation.dart';
 
 abstract class FunctionListenable<T extends Function> {
@@ -25,66 +26,40 @@ class GenericChangeNotifier<V, T extends Function(V)>
     implements FunctionListenable<T> {
   ObserverList<T> _listeners = ObserverList<T>();
 
-  bool _debugAssertNotDisposed() {
-    assert(() {
-      if (_listeners == null) {
-        throw FlutterError.fromParts(<DiagnosticsNode>[
-          ErrorSummary('A $runtimeType was used after being disposed.'),
-          ErrorDescription(
-              'Once you have called dispose() on a $runtimeType, it can no longer be used.')
-        ]);
-      }
-      return true;
-    }());
-    return true;
-  }
-
   @protected
   bool get hasListeners {
-    assert(_debugAssertNotDisposed());
+    if (_listeners == null) return false;
     return _listeners.isNotEmpty;
   }
 
   @override
   void addListener(T listener) {
-    assert(_debugAssertNotDisposed());
-    _listeners.add(listener);
+    if (_listeners != null) {
+      _listeners.add(listener);
+    }
   }
 
   @override
   void removeListener(T listener) {
-    assert(_debugAssertNotDisposed());
-    _listeners.remove(listener);
+    if (_listeners != null) {
+      _listeners.remove(listener);
+    }
   }
 
   @mustCallSuper
   void dispose() {
-    assert(_debugAssertNotDisposed());
     _listeners = null;
   }
 
   void notifyListeners(V actionType) {
-    assert(_debugAssertNotDisposed());
     if (_listeners != null) {
       final List<T> localListeners = List<T>.from(_listeners);
       for (T listener in localListeners) {
         try {
           if (_listeners.contains(listener)) listener(actionType);
         } catch (exception, stack) {
-          FlutterError.reportError(FlutterErrorDetails(
-            exception: exception,
-            stack: stack,
-            library: 'foundation library',
-            context: ErrorDescription(
-                'while dispatching notifications for $runtimeType'),
-            informationCollector: () sync* {
-              yield DiagnosticsProperty<GenericChangeNotifier>(
-                'The $runtimeType sending notification was',
-                this,
-                style: DiagnosticsTreeStyle.errorProperty,
-              );
-            },
-          ));
+          throw EmptyFunctionNotifier(
+              "tried to notify listener $runtimeType while it is being deleted");
         }
       }
     }

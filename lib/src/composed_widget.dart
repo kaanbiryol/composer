@@ -97,6 +97,13 @@ abstract class ComposedWidgetState extends State<ComposedWidget>
   Composable componentWith(Key key) {
     return getComposables().firstWhere((component) => component.key == key);
   }
+
+  @mustCallSuper
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
 }
 
 extension ComposedWidgetBottom on Widget {

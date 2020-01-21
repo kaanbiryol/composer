@@ -1,5 +1,7 @@
 import 'package:compose/compose.dart';
 import 'package:compose/src/exceptions.dart';
+import 'package:compose/src/sliver_composable_list.dart';
+import 'package:compose/src/sliver_rows.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'compose_test_mocks.dart';
@@ -141,19 +143,14 @@ void main() {
     expect(composable.componentModel.text, "new");
   });
 
-  testWidgets('identical viewmodel', (WidgetTester tester) async {
-    await tester.pumpWidget(mockWidget);
-
+  test('identical viewmodel', () async {
     var viewModel = MockComposableViewModel("old");
     var composable = MockComposable(viewModel);
 
     expect(composable.componentModel, viewModel);
   });
 
-  testWidgets('statelesswidget re-set viewModel error',
-      (WidgetTester tester) async {
-    await tester.pumpWidget(mockWidget);
-
+  test('statelesswidget re-set viewModel error', () async {
     var viewModel = MockComposableViewModel("old");
     var composable = MockComposable(viewModel);
 
@@ -164,10 +161,7 @@ void main() {
     }
   });
 
-  testWidgets('statelesswidget validate viewModel error',
-      (WidgetTester tester) async {
-    await tester.pumpWidget(mockWidget);
-
+  test('statelesswidget validate viewModel error', () async {
     var viewModel = MockComposableViewModel("old");
     var composable = MockComposable(viewModel);
 
@@ -176,5 +170,75 @@ void main() {
     } catch (e) {
       expect(e, isInstanceOf<StatelessActingException>());
     }
+  });
+
+  testWidgets('statefulwidget validateable error', (WidgetTester tester) async {
+    await tester.pumpWidget(mockWidget);
+
+    var viewModel = MockStatefulComposableViewModel("old");
+    var composable = MockStatefulComposable(viewModel);
+
+    try {
+      composable.validate();
+    } catch (e) {
+      expect(e, isInstanceOf<NonValidateableStatefulWidget>());
+    }
+  });
+
+  test('function notifier get value', () async {
+    var value = SliverListDataSource([]);
+    var controller = SliverListNotifier(value);
+    expect(controller.value, value);
+  });
+
+  testWidgets('function notifier set value', (WidgetTester tester) async {
+    await tester.pumpWidget(mockWidget);
+    var value = SliverListDataSource([]);
+    var controller = SliverListNotifier(value);
+
+    var mockComposable = MockComposable(MockComposableViewModel("Text"));
+
+    var section = Section(mockComposable, [mockComposable]);
+
+    var newValue = SliverListDataSource([section]);
+    controller.value = newValue;
+
+    expect(controller.value, newValue);
+  });
+
+  testWidgets('function notifier notify after dispose error',
+      (WidgetTester tester) async {
+    await tester.pumpWidget(mockWidget);
+    var state = getState(tester);
+    try {
+      state.controller.notifyListeners(null);
+    } catch (e) {
+      expect(e, isInstanceOf<EmptyFunctionNotifier>());
+    }
+  });
+
+  testWidgets('function notifier has listeners', (WidgetTester tester) async {
+    await tester.pumpWidget(mockWidget);
+    var state = getState(tester);
+    expect(state.controller.hasListeners, true);
+  });
+
+  testWidgets('function notifier clear listeners', (WidgetTester tester) async {
+    await tester.pumpWidget(mockWidget);
+    var state = getState(tester);
+    state.controller.dispose();
+    expect(state.controller.hasListeners, false);
+  });
+
+  test('Counter value should be incremented', () {
+    var dataSource = SliverListDataSource([]);
+    var controller = SliverListNotifier(dataSource);
+
+    void listener(RowActionEvent event) {}
+
+    controller.addListener(listener);
+    controller.removeListener(listener);
+
+    expect(controller.hasListeners, false);
   });
 }

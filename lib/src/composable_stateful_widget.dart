@@ -1,5 +1,6 @@
 import 'package:flutter/widgets.dart';
 import '../compose.dart';
+import 'exceptions.dart';
 
 abstract class ComposableStatefulWidget<T> extends StatefulWidget
     implements Composable<T> {
@@ -29,9 +30,10 @@ abstract class ComposableStatefulWidget<T> extends StatefulWidget
 
   @override
   bool validate() {
-    assert(_validationKey != null,
-        "use ComposableStatefulWidget.validateable() if you wish to validate your component");
-    return _validationKey.currentState.validate();
+    return _validationKey == null
+        ? throw NonValidateableStatefulWidget(
+            "use ComposableStatefulWidget.validateable() if you wish to validate your component")
+        : _validationKey.currentState.validate();
   }
 }
 
@@ -58,8 +60,10 @@ abstract class ComposableState<T extends ComposableStatefulWidget, V>
   V get widgetModel => widget._componentModel.value;
 
   bool validate() {
-    assert(widgetModel is ViewModelValidateable,
-        "ComponentModel must implement ViewModelValidateable!");
+    if (widgetModel is! ViewModelValidateable) {
+      throw NonValidateableStatefulWidget(
+          "ComponentModel must implement ViewModelValidateable!");
+    }
     final validationModel = widgetModel as ViewModelValidateable;
     bool isValid = validationModel.validate(widget.validators);
     setState(() {});
