@@ -1,13 +1,13 @@
 import 'package:compose/compose.dart';
 import 'package:flutter/material.dart';
 
-abstract class ButtonComposable {
+abstract class ButtonModelable implements ComposableModel {
   String text;
   VoidCallback onPressed;
 }
 
-class ButtonComposer extends Composer<ButtonComponent>
-    implements ButtonComposable {
+class ButtonComposer extends Composer<ButtonComposable>
+    implements ButtonModelable {
   @override
   var onPressed;
 
@@ -18,14 +18,18 @@ class ButtonComposer extends Composer<ButtonComponent>
   void handler(VoidCallback callback) => onPressed = callback;
 
   @override
-  ButtonComponent compose() {
-    var viewModel = ButtonComponentViewModel(text: text, onPressed: onPressed);
-    //TODO: add key to Composer
-    return ButtonComponent(viewModel, key: ValueKey("kaan"));
+  ButtonComposable compose() {
+    var composableModel =
+        ButtonComponentViewModel(text: text, onPressed: onPressed);
+    composableModel.key = key;
+    return ButtonComposable(composableModel, key: ValueKey("kaan"));
   }
+
+  @override
+  ThemeData themeData;
 }
 
-class ButtonComponentViewModel implements ButtonComposable {
+class ButtonComponentViewModel implements ButtonModelable {
   String text;
   VoidCallback onPressed;
 
@@ -33,19 +37,24 @@ class ButtonComponentViewModel implements ButtonComposable {
     this.onPressed = onPressed;
     this.text = text;
   }
-}
-
-class ButtonComponent
-    extends ComposableStatefulWidget<ButtonComponentViewModel> {
-  ButtonComponent(ButtonComponentViewModel componentModel, {Key key})
-      : super(componentModel, key: key);
 
   @override
-  _ButtonComponentState createState() => _ButtonComponentState();
+  Key key;
+
+  @override
+  ThemeData themeData;
 }
 
-class _ButtonComponentState
-    extends ComposableState<ButtonComponent, ButtonComponentViewModel> {
+class ButtonComposable extends StatefulComposable<ButtonModelable> {
+  ButtonComposable(ButtonModelable componentModel, {Key key})
+      : super(componentModel);
+
+  @override
+  _ButtonComposableState createState() => _ButtonComposableState();
+}
+
+class _ButtonComposableState
+    extends ComposableState<ButtonComposable, ButtonComponentViewModel> {
   @override
   Widget build(BuildContext context) {
     final viewModel = widget.composableModel;

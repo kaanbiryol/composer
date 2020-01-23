@@ -2,18 +2,18 @@ import 'package:compose/compose.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
-abstract class TextFieldComposable {
+abstract class TextFieldModelable implements ComposableModel {
   int maximumLength;
   String text;
   String errorText;
 }
 
-class TextFieldComposer extends Composer<TextFieldComponent>
-    implements TextFieldComposable {
+class TextFieldComposer extends Composer<TextFieldComposable>
+    implements TextFieldModelable {
   @override
-  TextFieldComponent compose() {
-    var textFieldComponentViewModel = TextFieldComponentModel(maximumLength);
-    return TextFieldComponent(textFieldComponentViewModel, validators);
+  TextFieldComposable compose() {
+    var composableModel = TextFieldComposableModel(maximumLength);
+    return TextFieldComposable(composableModel, validators);
   }
 
   void maxLength(int length) {
@@ -28,11 +28,14 @@ class TextFieldComposer extends Composer<TextFieldComponent>
 
   @override
   String text;
+
+  @override
+  ThemeData themeData;
 }
 
-class TextFieldComponentModel
-    implements TextFieldComposable, ViewModelValidateable {
-  TextFieldComponentModel(int maximumLength) {
+class TextFieldComposableModel
+    implements TextFieldModelable, ViewModelValidateable {
+  TextFieldComposableModel(int maximumLength) {
     this.maximumLength = maximumLength;
   }
 
@@ -56,22 +59,28 @@ class TextFieldComponentModel
     errorText = null;
     return true;
   }
+
+  @override
+  Key key;
+
+  @override
+  ThemeData themeData;
 }
 
-class TextFieldComponent extends ComposableStatefulWidget<TextFieldComposable> {
-  TextFieldComponent(
-      TextFieldComposable componentModel, List<Validator> validators)
-      : super.validateable(
-            componentModel, validators, GlobalKey<_TextFieldComponentState>());
+class TextFieldComposable extends StatefulComposable<TextFieldModelable> {
+  TextFieldComposable(
+      TextFieldModelable composableModel, List<Validator> validators)
+      : super.validateable(composableModel, validators,
+            GlobalKey<_TextFieldComposableState>());
 
   @override
   State<StatefulWidget> createState() {
-    return _TextFieldComponentState();
+    return _TextFieldComposableState();
   }
 }
 
-class _TextFieldComponentState
-    extends ComposableState<TextFieldComponent, TextFieldComposable> {
+class _TextFieldComposableState
+    extends ComposableState<TextFieldComposable, TextFieldModelable> {
   final textController = TextEditingController();
 
   @override

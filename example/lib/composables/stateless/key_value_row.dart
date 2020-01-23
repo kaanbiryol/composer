@@ -1,21 +1,18 @@
 import 'package:compose/compose.dart';
 import 'package:flutter/material.dart';
 
-abstract class KeyValueComposable {
-  String key;
+abstract class KeyValueModelable implements ComposableModel {
+  String keyValue;
   String value;
 }
 
-class KeyValueComposer extends Composer<KeyValueComponent>
-    implements KeyValueComposable {
-  @override
-  String key;
-
-  @override
+class KeyValueComposer extends Composer<KeyValueComposable>
+    implements KeyValueModelable {
+  String keyValue;
   String value;
 
-  void withKey(String key) {
-    this.key = key;
+  void withKeyValue(String key) {
+    this.keyValue = key;
   }
 
   void withValue(String value) {
@@ -23,35 +20,42 @@ class KeyValueComposer extends Composer<KeyValueComponent>
   }
 
   @override
-  KeyValueComponent compose() {
-    var keyValueViewModel = KeyValueComponentViewModel(key: key, value: value);
-    var keyValueComponent =
-        KeyValueComponent(componentModel: keyValueViewModel);
+  KeyValueComposable compose() {
+    var composableModel =
+        KeyValueComposableModel(keyValue: keyValue, value: value);
+    //TODO: find a better way
+    composableModel.key = key;
+    var keyValueComponent = KeyValueComposable(composableModel);
     return keyValueComponent;
   }
+
+  @override
+  ThemeData themeData;
 }
 
-class KeyValueComponentViewModel {
-  String key;
+class KeyValueComposableModel implements KeyValueModelable {
+  String keyValue;
   String value;
+  KeyValueComposableModel({this.keyValue, this.value});
 
-  KeyValueComponentViewModel({this.key, this.value});
+  @override
+  Key key;
+
+  @override
+  ThemeData themeData;
 }
 
-class KeyValueComponent<KeyValueComponentViewModel>
-    extends ComposableStatelessWidget {
-  KeyValueComponent({KeyValueComponentViewModel componentModel, Key key})
-      : super(componentModel, key: key);
+class KeyValueComposable extends StatelessComposable<KeyValueModelable> {
+  KeyValueComposable(KeyValueModelable composableModel)
+      : super(composableModel);
 
   @override
   Widget build(BuildContext context) {
-    //TODO: move to viewModel?
-    var data = ThemeData(
-        textTheme: TextTheme(body1: TextStyle(backgroundColor: Colors.red)));
     return Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
-          Text(composableModel.key, style: ThemeManager.theme().textTheme.body1),
+          Text(composableModel.keyValue,
+              style: composableModel.themeData.textTheme.body1),
           Text(composableModel.value),
         ]);
   }

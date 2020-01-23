@@ -1,34 +1,41 @@
 import 'package:compose/compose.dart';
 import 'package:flutter/material.dart';
 
-abstract class SectionComposable {
+abstract class SectionModelable implements ComposableModel {
   String title;
 }
 
-class SectionComposer extends Composer<SectionComponent>
-    implements SectionComposable {
+class SectionComposer extends Composer<SectionComposable>
+    implements SectionModelable {
   @override
   String title;
 
   void withTitle(String title) => this.title = title;
 
   @override
-  SectionComponent compose() {
-    var viewModel = SectionComponentViewModel(title: title);
-    return SectionComponent(componentModel: viewModel);
+  SectionComposable compose() {
+    var composableModel = SectionComposableModel(title: title);
+    return SectionComposable(composableModel);
   }
+
+  @override
+  ThemeData themeData;
 }
 
-class SectionComponentViewModel {
+class SectionComposableModel implements SectionModelable {
   String title;
 
-  SectionComponentViewModel({this.title});
+  SectionComposableModel({this.title});
+
+  @override
+  ThemeData themeData;
+
+  @override
+  Key key;
 }
 
-class SectionComponent<SectionComponentViewModel>
-    extends ComposableStatelessWidget {
-  SectionComponent({SectionComponentViewModel componentModel, Key key})
-      : super(componentModel, key: key);
+class SectionComposable extends StatelessComposable<SectionModelable> {
+  SectionComposable(SectionModelable composableModel) : super(composableModel);
 
   @override
   Widget build(BuildContext context) {

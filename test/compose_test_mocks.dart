@@ -2,13 +2,18 @@ import 'package:compose/compose.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
-class MockComposableViewModel {
+class MockComposableViewModel implements ComposableModel {
   String text;
   MockComposableViewModel(this.text);
+
+  @override
+  Key key;
+
+  @override
+  ThemeData themeData;
 }
 
-class MockComposable
-    extends ComposableStatelessWidget<MockComposableViewModel> {
+class MockComposable extends StatelessComposable<MockComposableViewModel> {
   MockComposable(MockComposableViewModel composableModel)
       : super(composableModel);
 
@@ -18,13 +23,19 @@ class MockComposable
   }
 }
 
-class MockStatefulComposableViewModel {
+class MockStatefulComposableViewModel implements ComposableModel {
   String text;
   MockStatefulComposableViewModel(this.text);
+
+  @override
+  Key key;
+
+  @override
+  ThemeData themeData;
 }
 
 class MockStatefulComposable
-    extends ComposableStatefulWidget<MockStatefulComposableViewModel> {
+    extends StatefulComposable<MockStatefulComposableViewModel> {
   MockStatefulComposable(MockStatefulComposableViewModel composableModel)
       : super(composableModel);
 
@@ -42,7 +53,8 @@ class MockStatefulComposableState extends ComposableState<
   }
 }
 
-class MockValidateableComposableViewModel implements ViewModelValidateable {
+class MockValidateableComposableViewModel
+    implements ComposableModel, ViewModelValidateable {
   String text;
   String errorText;
   MockValidateableComposableViewModel(this.text);
@@ -58,10 +70,16 @@ class MockValidateableComposableViewModel implements ViewModelValidateable {
     errorText = null;
     return true;
   }
+
+  @override
+  Key key;
+
+  @override
+  ThemeData themeData;
 }
 
 class MockValidateableComposable
-    extends ComposableStatefulWidget<MockValidateableComposableViewModel> {
+    extends StatefulComposable<MockValidateableComposableViewModel> {
   MockValidateableComposable(
       MockValidateableComposableViewModel composableModel,
       List<Validator> validators)

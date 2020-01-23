@@ -3,22 +3,21 @@ import 'package:compose/src/utils/validateable.dart';
 import 'package:flutter/widgets.dart';
 import '../compose.dart';
 
-abstract class ComposableStatefulWidget<T> extends StatefulWidget
-    implements Composable<T> {
-  final ComposableModel<T> _composableModel;
+abstract class StatefulComposable<T extends ComposableModel>
+    extends StatefulWidget implements Composable<T> {
+  final ComposableNotifier<T> _composableModel;
   final GlobalKey<ComposableState> _validationKey;
   final List<Validator> validators;
 
-  //TODO: required optional named parameters
-  ComposableStatefulWidget(T composableModel, {Key key})
-      : this._composableModel = ComposableModel(composableModel),
+  StatefulComposable(T composableModel)
+      : this._composableModel = ComposableNotifier(composableModel),
         this._validationKey = null,
         this.validators = [],
-        super(key: key);
+        super(key: composableModel.key);
 
-  ComposableStatefulWidget.validateable(T composableModel,
-      List<Validator> validators, GlobalKey<ComposableState> key)
-      : this._composableModel = ComposableModel(composableModel),
+  StatefulComposable.validateable(T composableModel, List<Validator> validators,
+      GlobalKey<ComposableState> key)
+      : this._composableModel = ComposableNotifier(composableModel),
         this._validationKey = key,
         this.validators = validators,
         super(key: key);
@@ -38,7 +37,7 @@ abstract class ComposableStatefulWidget<T> extends StatefulWidget
   }
 }
 
-abstract class ComposableState<T extends ComposableStatefulWidget, V>
+abstract class ComposableState<T extends StatefulComposable, V>
     extends State<T> {
   @override
   @mustCallSuper
