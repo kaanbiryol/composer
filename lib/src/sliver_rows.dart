@@ -43,7 +43,6 @@ class _SliverRowState extends State<SliverRow> {
 
   @override
   Widget build(BuildContext context) {
-    //TODO:
     _listKey = GlobalKey<SliverAnimatedListState>();
     return SliverAnimatedList(
         key: _listKey,

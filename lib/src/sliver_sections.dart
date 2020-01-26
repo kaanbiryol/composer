@@ -15,7 +15,7 @@ class SliverSection extends StatelessWidget {
       delegate: SliverSectionDelegate(
         minHeight: section.height ?? sliverHeaderHeight,
         maxHeight: section.height ?? sliverHeaderHeight,
-        child: section.section,
+        child: section.sectionComposable,
       ),
     );
   }

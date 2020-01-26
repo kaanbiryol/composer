@@ -1,15 +1,4 @@
-abstract class Validateable {
-  bool validate();
-}
-
-abstract class ViewModelValidateable {
-  bool validate(List<Validator> validators);
-}
-
-abstract class Validator<T> {
-  String errorText;
-  bool validate(T value);
-}
+import 'package:compose/compose.dart';
 
 class EmptyValidator implements Validator<String> {
   EmptyValidator({String errorText}) {

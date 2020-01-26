@@ -1,9 +1,10 @@
 import 'package:compose/compose.dart';
-import 'package:example/components/stateless/section.dart';
+import 'package:example/composables/stateless/section.dart';
+import 'package:example/validators/validators.dart';
 import 'package:flutter/material.dart';
-import 'components/stateful/flat_button.dart';
-import 'components/stateful/text_field.dart';
-import 'components/stateless/key_value_row.dart';
+import 'composables/stateful/flat_button.dart';
+import 'composables/stateful/text_field.dart';
+import 'composables/stateless/key_value_row.dart';
 
 void main() => runApp(MyApp());
 
@@ -30,12 +31,12 @@ class ExamplePage extends ComposedWidget {
 
 class ExamplePageState extends ComposedWidgetState {
   Section firstSection;
-  ButtonComponent appendRowButton;
-  ButtonComponent removeRowButton;
+  ButtonComposable appendRowButton;
+  ButtonComposable removeRowButton;
 
-  ButtonComponent appendSectionButton;
-  ButtonComponent removeSectionButton;
-  KeyValueComponent keyValueRowComponent;
+  ButtonComposable appendSectionButton;
+  ButtonComposable removeSectionButton;
+  KeyValueComposable keyValueRowComponent;
 
   Section secondSection;
 
@@ -56,18 +57,20 @@ class ExamplePageState extends ComposedWidgetState {
         .compose();
 
     removeSectionButton = (ButtonComposer()
+          ..withKey(ValueKey("KAAN"))
           ..handler(removeSectionHandler)
           ..title("Remove Section"))
         .compose();
 
     keyValueRowComponent = (KeyValueComposer()
-          ..withKey("KEY")
+          ..withKeyValue("KEY")
           ..withValue("VALUE"))
         .compose();
 
     var firstSectionWidget =
         (SectionComposer()..withTitle("Section Title")).compose();
     firstSection = Section(firstSectionWidget, [
+      keyValueRowComponent,
       appendRowButton,
       removeRowButton,
       makeTextField(),
@@ -79,24 +82,23 @@ class ExamplePageState extends ComposedWidgetState {
   }
 
   Composable makeTextField() {
-    var textFieldComponentViewModel = TextFieldComponentModel(2);
+    var textFieldComponentViewModel = TextFieldComposableModel(2);
     var textFieldComponent =
-        TextFieldComponent(textFieldComponentViewModel, [EmptyValidator()]);
+        TextFieldComposable(textFieldComponentViewModel, [EmptyValidator()]);
     return textFieldComponent;
   }
 
   Composable makeKeyValue() {
     var keyValueViewModel =
-        KeyValueComponentViewModel(key: "Key", value: "Value");
-    keyValueRowComponent = KeyValueComponent(componentModel: keyValueViewModel);
+        KeyValueComposableModel(keyValue: "Key", value: "Value");
+    keyValueRowComponent = KeyValueComposable(keyValueViewModel);
     return keyValueRowComponent;
   }
 
   void appendSectionHandler() {
     var secondSectionWidget =
         (SectionComposer()..withTitle("New Section")).compose();
-    secondSection = Section(secondSectionWidget,
-        [makeTextField()]);
+    secondSection = Section(secondSectionWidget, [makeTextField()]);
     appendSection(section: secondSection);
   }
 
@@ -109,27 +111,27 @@ class ExamplePageState extends ComposedWidgetState {
     //     ButtonComponentViewModel(text: "onPressed", onPressed: onPressed);
     // Composable composable = componentWith(ValueKey("kaan"));
     // composable.componentModel = viewModel;
-    appendRow(
+    /*appendRow(
         section: firstSection, composable: keyValueRowComponent, index: 0);
-    validate();
+    validate();*/
+
+    print(composableWith(ValueKey("KAAN")));
+
+    var secondSectionWidget =
+        (SectionComposer()..withTitle("New Section")).compose();
+    secondSection = Section(secondSectionWidget, [makeTextField()]);
+
+    composables = [secondSection];
     // or we can : flatButtonComponent.componentModel = viewModel;
   }
 
   void removeButtonHandler() {
-    removeRow(section: firstSection, composable: keyValueRowComponent);
+    var removeRowButton = (ButtonComposer()
+          ..handler(removeButtonHandler)
+          ..title("Remove Row"))
+        .compose();
+    bottomComposable = removeRowButton;
+
     // or we can : flatButtonComponent.componentModel = viewModel;
-  }
-
-  // @override
-  // List<Composable> prepareBottom(BuildContext context) {
-  //   var viewModel = ButtonComponentViewModel(text: "NO", onPressed: onPressed);
-  //   flatButtonComponent = ButtonComponent(viewModel, key: ValueKey("kaan"));
-  //   return [flatButtonComponent];
-  // }
-
-  @override
-  bool setupTraits() {
-    seperatorStyle = SeperatorStyle.none;
-    return true;
   }
 }
