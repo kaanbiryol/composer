@@ -99,6 +99,10 @@ abstract class ComposedWidgetState extends State<ComposedWidget>
     setState(() {});
   }
 
+  get topComposable => _topComposable;
+  get bottomComposable => _bottomComposable;
+  get composables => _composables;
+
   @mustCallSuper
   @override
   void dispose() {

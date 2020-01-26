@@ -137,11 +137,6 @@ class MockPageState extends ComposedWidgetState {
     mockSection = Section(mockComposable, [mockComposable]);
     return [mockSection];
   }
-
-  @override
-  bool setupTraits() {
-    return true;
-  }
 }
 
 class MockValidator implements Validator<String> {

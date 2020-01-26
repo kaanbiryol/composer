@@ -57,7 +57,7 @@ class GenericChangeNotifier<V, T extends Function(V)>
       for (T listener in localListeners) {
         try {
           if (_listeners.contains(listener)) listener(actionType);
-        } catch (exception, stack) {
+        } catch (exception) {
           throw EmptyFunctionNotifier(
               "tried to notify listener $runtimeType while it is being deleted");
         }

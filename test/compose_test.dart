@@ -242,4 +242,63 @@ void main() {
 
     expect(controller.hasListeners, false);
   });
+
+  testWidgets('get composable with key', (WidgetTester tester) async {
+    await tester.pumpWidget(mockWidget);
+    var state = getState(tester);
+    var mockSection = state.mockSection;
+
+    var key = ValueKey("MockKey");
+    var mockComposableViewModel = MockComposableViewModel("Mock Text");
+    mockComposableViewModel.key = key;
+    var mockComposable = MockComposable(mockComposableViewModel);
+    state.appendRow(section: mockSection, composable: mockComposable);
+
+    var composable = state.composableWith(key);
+    var isIdentical = identical(composable, mockComposable);
+    expect(isIdentical, true);
+  });
+
+  testWidgets('update composables list', (WidgetTester tester) async {
+    await tester.pumpWidget(mockWidget);
+    var state = getState(tester);
+    var mockSection = state.mockSection;
+
+    var mockComposable =
+        MockComposable(MockComposableViewModel("new composable"));
+    mockSection = Section(mockComposable, [mockComposable]);
+    var sectionList = [mockSection];
+    state.composables = sectionList;
+
+    await tester.pump();
+
+    expect(state.controller.dataSource.sectionList, sectionList);
+    expect(state.composables, sectionList);
+  });
+
+  testWidgets('set topcomposable', (WidgetTester tester) async {
+    await tester.pumpWidget(mockWidget);
+    var state = getState(tester);
+
+    var mockComposable =
+        MockComposable(MockComposableViewModel("new composable"));
+    state.topComposable = mockComposable;
+
+    await tester.pump();
+
+    expect(state.topComposable, mockComposable);
+  });
+
+  testWidgets('set bottom composable', (WidgetTester tester) async {
+    await tester.pumpWidget(mockWidget);
+    var state = getState(tester);
+
+    var mockComposable =
+        MockComposable(MockComposableViewModel("new composable"));
+    state.bottomComposable = mockComposable;
+
+    await tester.pump();
+
+    expect(state.bottomComposable, mockComposable);
+  });
 }

@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:compose/compose.dart';
 import 'package:example/composables/stateless/section.dart';
 import 'package:example/validators/validators.dart';
@@ -72,6 +70,7 @@ class ExamplePageState extends ComposedWidgetState {
     var firstSectionWidget =
         (SectionComposer()..withTitle("Section Title")).compose();
     firstSection = Section(firstSectionWidget, [
+      keyValueRowComponent,
       appendRowButton,
       removeRowButton,
       makeTextField(),
