@@ -10,8 +10,8 @@ before_script:
   - flutter doctor
 script:
   - set -e # abort CI if an error happens
-  - ./scripts/flutter_test.sh .
-  - bash <(curl -s https://codecov.io/bash);
+  - flutter test --no-pub --coverage
+  - bash <(curl -s https://codecov.io/bash)
 matrix:
   fast_finish: true
 cache:
