@@ -282,11 +282,11 @@ void main() {
 
     var mockComposable =
         MockComposable(MockComposableViewModel("new composable"));
-    state.topComposable = mockComposable;
+    state.topComposables = [mockComposable];
 
     await tester.pump();
 
-    expect(state.topComposable, mockComposable);
+    expect(state.topComposables, [mockComposable]);
   });
 
   testWidgets('set bottom composable', (WidgetTester tester) async {
@@ -295,10 +295,10 @@ void main() {
 
     var mockComposable =
         MockComposable(MockComposableViewModel("new composable"));
-    state.bottomComposable = mockComposable;
+    state.bottomComposables = [mockComposable];
 
     await tester.pump();
 
-    expect(state.bottomComposable, mockComposable);
+    expect(state.bottomComposables, [mockComposable]);
   });
 }

@@ -2,11 +2,14 @@ import 'package:compose/src/utils/validateable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
+import 'animated_composable.dart';
+
 abstract class ComposableSection {
   Composable sectionComposable;
   List<Composable> composables;
-  bool pinned = true;
+  bool pinned;
   double height;
+  SliverAnimation animation;
 }
 
 class Section implements ComposableSection {
@@ -23,6 +26,9 @@ class Section implements ComposableSection {
 
   @override
   double height;
+
+  @override
+  SliverAnimation animation;
 }
 
 abstract class Composable<T> extends Widget implements Validateable {
@@ -33,8 +39,7 @@ abstract class Composable<T> extends Widget implements Validateable {
 
 abstract class ComposableModel {
   Key key;
-  ThemeData themeData;
-  ComposableModel({this.key, this.themeData});
+  ComposableModel({this.key});
 }
 
 class ComposableNotifier<T extends ComposableModel> extends ValueNotifier {

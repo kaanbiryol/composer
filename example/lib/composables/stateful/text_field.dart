@@ -28,9 +28,6 @@ class TextFieldComposer extends Composer<TextFieldComposable>
 
   @override
   String text;
-
-  @override
-  ThemeData themeData;
 }
 
 class TextFieldComposableModel
@@ -62,9 +59,6 @@ class TextFieldComposableModel
 
   @override
   Key key;
-
-  @override
-  ThemeData themeData;
 }
 
 class TextFieldComposable extends StatefulComposable<TextFieldModelable> {
@@ -92,7 +86,8 @@ class _TextFieldComposableState
   @override
   Widget build(BuildContext context) {
     return TextField(
-      decoration: InputDecoration(errorText: widgetModel.errorText),
+      decoration: InputDecoration(
+          errorText: widgetModel.errorText, hintText: "Placeholder"),
       controller: textController,
     );
   }

@@ -1,21 +1,32 @@
 import 'dart:math';
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 import '../compose.dart';
+import 'animated_composable.dart';
 
-class SliverSection extends StatelessWidget {
+class SliverSection extends StatefulWidget {
   final Section section;
-  final double sliverHeaderHeight = 40.0;
+
   const SliverSection({@required this.section, Key key}) : super(key: key);
+
+  @override
+  _SliverSectionState createState() => _SliverSectionState();
+}
+
+class _SliverSectionState extends State<SliverSection>
+    with SingleTickerProviderStateMixin {
+  final double sliverHeaderHeight = 40.0;
 
   @override
   Widget build(BuildContext context) {
     return SliverPersistentHeader(
-      pinned: section.pinned,
+      pinned: true,
       delegate: SliverSectionDelegate(
-        minHeight: section.height ?? sliverHeaderHeight,
-        maxHeight: section.height ?? sliverHeaderHeight,
-        child: section.sectionComposable,
+        minHeight: widget.section.height ?? sliverHeaderHeight,
+        maxHeight: widget.section.height ?? sliverHeaderHeight,
+        child: widget.section.sectionComposable,
+        animation: widget.section.animation,
       ),
     );
   }
@@ -25,12 +36,13 @@ class SliverSectionDelegate extends SliverPersistentHeaderDelegate {
   final double minHeight;
   final double maxHeight;
   final Widget child;
+  final SliverAnimation animation;
 
-  SliverSectionDelegate({
-    @required this.minHeight,
-    @required this.maxHeight,
-    @required this.child,
-  });
+  SliverSectionDelegate(
+      {@required this.minHeight,
+      @required this.maxHeight,
+      @required this.child,
+      @required this.animation});
 
   @override
   double get minExtent => minHeight;
@@ -41,7 +53,10 @@ class SliverSectionDelegate extends SliverPersistentHeaderDelegate {
   @override
   Widget build(
       BuildContext context, double shrinkOffset, bool overlapsContent) {
-    return new SizedBox.expand(child: child);
+    return AnimatedComposable(
+      child: child,
+      animation: animation,
+    );
   }
 
   @override

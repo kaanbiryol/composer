@@ -22,11 +22,8 @@ class ButtonComposer extends Composer<ButtonComposable>
     var composableModel =
         ButtonComponentViewModel(text: text, onPressed: onPressed);
     composableModel.key = key;
-    return ButtonComposable(composableModel, key: ValueKey("kaan"));
+    return ButtonComposable(composableModel, key: ValueKey("KEY"));
   }
-
-  @override
-  ThemeData themeData;
 }
 
 class ButtonComponentViewModel implements ButtonModelable {
@@ -40,9 +37,6 @@ class ButtonComponentViewModel implements ButtonModelable {
 
   @override
   Key key;
-
-  @override
-  ThemeData themeData;
 }
 
 class ButtonComposable extends StatefulComposable<ButtonModelable> {
@@ -59,6 +53,7 @@ class _ButtonComposableState
   Widget build(BuildContext context) {
     final viewModel = widget.composableModel;
     return FlatButton(
+      color: Colors.red,
       onPressed: viewModel.onPressed,
       child: Text(viewModel.text),
     );

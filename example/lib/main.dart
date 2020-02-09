@@ -36,9 +36,122 @@ class ExamplePageState extends ComposedWidgetState {
 
   ButtonComposable appendSectionButton;
   ButtonComposable removeSectionButton;
-  KeyValueComposable keyValueRowComponent;
+
+  ButtonComposable headerSectionButton;
+  ButtonComposable footerSectionButton;
+
+  KeyValueComposable rowToAppend;
+
+  final firstRowKey = ValueKey("FirstRow");
 
   Section secondSection;
+
+  var future;
+  @override
+  void initState() {
+    super.initState();
+    future = Future.delayed(const Duration(milliseconds: 1000), () {
+      Scaffold.of(context).showSnackBar(SnackBar(
+        duration: Duration(milliseconds: 300),
+        content: Text("FutureBuilder completed!"),
+      ));
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder(
+        future: future,
+        builder: (context, snapshot) {
+          switch (snapshot.connectionState) {
+            case ConnectionState.none:
+            case ConnectionState.waiting:
+              return Center(child: CircularProgressIndicator());
+            case ConnectionState.done:
+              return super.build(context);
+            default:
+              return Center(child: Text(snapshot.data));
+          }
+        });
+  }
+
+  Composable makeTextField() {
+    var textFieldComponentViewModel = TextFieldComposableModel(2);
+    var textFieldComponent =
+        TextFieldComposable(textFieldComponentViewModel, [EmptyValidator()]);
+    return textFieldComponent;
+  }
+
+  Composable makeKeyValue() {
+    var rowToAppend = (KeyValueComposer()
+          ..withKey(firstRowKey)
+          ..withKeyValue("KEY")
+          ..withValue("VALUE"))
+        .compose();
+    return rowToAppend;
+  }
+
+  void appendSectionHandler() {
+    var secondSectionWidget =
+        (SectionComposer()..withTitle("Second Section")).compose();
+    secondSection = Section(secondSectionWidget, [makeTextField()]);
+    appendSection(section: secondSection);
+  }
+
+  void removeSectionHandler() {
+    removeSection(secondSection);
+  }
+
+  void appendButtonHandler() {
+    // var viewModel =
+    //     ButtonComponentViewModel(text: "onPressed", onPressed: onPressed);
+    // Composable composable = componentWith(ValueKey("kaan"));
+    // composable.componentModel = viewModel;
+
+    var composable = makeKeyValue();
+    appendRow(section: firstSection, composable: composable, index: 0);
+
+    /*var secondSectionWidget =
+        (SectionComposer()..withTitle("New Section")).compose();
+    secondSection = Section(secondSectionWidget, [makeTextField()]);
+
+    composables = [secondSection];*/
+    // or we can : flatButtonComponent.componentModel = viewModel;
+  }
+
+  void removeButtonHandler() {
+    removeRow(composable: composableWith(firstRowKey), section: firstSection);
+
+    // or we can : flatButtonComponent.componentModel = viewModel;
+  }
+
+  void footerHandler() {
+    var footerbutton = (ButtonComposer()
+          ..title("Footer Button")
+          ..handler(test))
+        .compose();
+    bottomComposables = [footerbutton];
+  }
+
+  void test() {
+    print("tapped");
+  }
+
+  void headerHandler() {
+    var headerButton = (ButtonComposer()
+          ..title("Header Button")
+          ..handler(test))
+        .compose();
+    topComposables = [headerButton, headerButton];
+  }
+
+  void removeHeaderHandler() {
+    topComposables = [];
+  }
+
+  void removeFooterHandler() {
+    bottomComposables = [];
+  }
 
   @override
   List<Section> prepareCompose(BuildContext context) {
@@ -62,76 +175,40 @@ class ExamplePageState extends ComposedWidgetState {
           ..title("Remove Section"))
         .compose();
 
-    keyValueRowComponent = (KeyValueComposer()
-          ..withKeyValue("KEY")
-          ..withValue("VALUE"))
+    footerSectionButton = (ButtonComposer()
+          ..handler(footerHandler)
+          ..title("Footer Composable"))
+        .compose();
+
+    headerSectionButton = (ButtonComposer()
+          ..handler(headerHandler)
+          ..title("Header Composable"))
+        .compose();
+
+    var removeHeader = (ButtonComposer()
+          ..handler(removeHeaderHandler)
+          ..title("Remove Header"))
+        .compose();
+
+    var removeFooter = (ButtonComposer()
+          ..handler(removeFooterHandler)
+          ..title("Remove Footer"))
         .compose();
 
     var firstSectionWidget =
-        (SectionComposer()..withTitle("Section Title")).compose();
+        (SectionComposer()..withTitle("First Section")).compose();
     firstSection = Section(firstSectionWidget, [
-      keyValueRowComponent,
       appendRowButton,
       removeRowButton,
-      makeTextField(),
       appendSectionButton,
-      removeSectionButton
+      removeSectionButton,
+      headerSectionButton,
+      footerSectionButton,
+      removeHeader,
+      removeFooter,
+      makeTextField(),
     ]);
 
     return [firstSection];
-  }
-
-  Composable makeTextField() {
-    var textFieldComponentViewModel = TextFieldComposableModel(2);
-    var textFieldComponent =
-        TextFieldComposable(textFieldComponentViewModel, [EmptyValidator()]);
-    return textFieldComponent;
-  }
-
-  Composable makeKeyValue() {
-    var keyValueViewModel =
-        KeyValueComposableModel(keyValue: "Key", value: "Value");
-    keyValueRowComponent = KeyValueComposable(keyValueViewModel);
-    return keyValueRowComponent;
-  }
-
-  void appendSectionHandler() {
-    var secondSectionWidget =
-        (SectionComposer()..withTitle("New Section")).compose();
-    secondSection = Section(secondSectionWidget, [makeTextField()]);
-    appendSection(section: secondSection);
-  }
-
-  void removeSectionHandler() {
-    removeSection(secondSection);
-  }
-
-  void appendButtonHandler() {
-    // var viewModel =
-    //     ButtonComponentViewModel(text: "onPressed", onPressed: onPressed);
-    // Composable composable = componentWith(ValueKey("kaan"));
-    // composable.componentModel = viewModel;
-    /*appendRow(
-        section: firstSection, composable: keyValueRowComponent, index: 0);
-    validate();*/
-
-    print(composableWith(ValueKey("KAAN")));
-
-    var secondSectionWidget =
-        (SectionComposer()..withTitle("New Section")).compose();
-    secondSection = Section(secondSectionWidget, [makeTextField()]);
-
-    composables = [secondSection];
-    // or we can : flatButtonComponent.componentModel = viewModel;
-  }
-
-  void removeButtonHandler() {
-    var removeRowButton = (ButtonComposer()
-          ..handler(removeButtonHandler)
-          ..title("Remove Row"))
-        .compose();
-    bottomComposable = removeRowButton;
-
-    // or we can : flatButtonComponent.componentModel = viewModel;
   }
 }

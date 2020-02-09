@@ -3,5 +3,4 @@ enum BottomComposableAxis { horizontal, vertical }
 
 class ComposedWidgetTraits {
   SeperatorStyle seperatorStyle = SeperatorStyle.singleLine;
-  BottomComposableAxis bottomComposableAxis = BottomComposableAxis.vertical;
 }

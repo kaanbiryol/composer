@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 
 import '../compose.dart';
+import 'animated_composable.dart';
 
 typedef RowActionCallback = void Function(RowActionEvent);
 
@@ -44,13 +45,14 @@ class _SliverRowState extends State<SliverRow> {
   @override
   Widget build(BuildContext context) {
     _listKey = GlobalKey<SliverAnimatedListState>();
+    //TODO: handle anim
     return SliverAnimatedList(
         key: _listKey,
         initialItemCount: _composables.length,
         itemBuilder: (context, index, animation) {
           return AnimatedRow(
-            child: _composables[index],
             animation: animation,
+            child: _composables[index],
           );
         });
   }

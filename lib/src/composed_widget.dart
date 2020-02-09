@@ -2,7 +2,9 @@ import 'package:compose/src/sliver_composable_list.dart';
 import 'package:compose/src/sliver_rows.dart';
 import 'package:compose/src/utils/composed_widget_traits.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter/widgets.dart';
+import 'animated_composable.dart';
 import 'composable.dart';
 
 abstract class ComposedWidget extends StatefulWidget {}
@@ -10,8 +12,8 @@ abstract class ComposedWidget extends StatefulWidget {}
 abstract class ComposedWidgetState extends State<ComposedWidget>
     with ComposedWidgetTraits {
   List<Section> _composables = [];
-  Composable _bottomComposable;
-  Composable _topComposable;
+  List<Composable> _bottomComposables;
+  List<Composable> _topComposables;
   SliverListNotifier controller;
 
   @mustCallSuper
@@ -27,8 +29,8 @@ abstract class ComposedWidgetState extends State<ComposedWidget>
     var value = SliverListDataSource(_composables);
     controller = SliverListNotifier(value);
     return SliverComposableList(controller)
-        .withBottom(_bottomComposable)
-        .withTop(_topComposable);
+        .withBottom(_bottomComposables)
+        .withTop(_topComposables);
   }
 
   List<Section> prepareCompose(BuildContext context);
@@ -37,6 +39,10 @@ abstract class ComposedWidgetState extends State<ComposedWidget>
     var composableList = allComposables();
     var validateableComposables =
         composableList.where((widget) => widget.validators.isNotEmpty).toList();
+
+    /*return validateableComposables.fold(
+        true, (result, type) => result = type.validate());*/
+
     for (final composedWidget in validateableComposables) {
       if (composedWidget.validate() == false) {
         return false;
@@ -59,13 +65,15 @@ abstract class ComposedWidgetState extends State<ComposedWidget>
         action: RowAction.remove, composable: composable, index: rowIndex));
   }
 
-  void appendSection({@required Section section, int index}) {
+  void appendSection(
+      {@required Section section, int index, SliverAnimation animation}) {
+    section.animation = animation;
     if (index != null) {
       assert(index >= 0 && index < _composables.length,
           "If you are providing an index, it must be less than the current item size, otherwise just ignore index.");
       _composables.insert(index, section);
     } else {
-      _composables..add(section);
+      _composables.add(section);
     }
     setState(() {});
   }
@@ -86,21 +94,21 @@ abstract class ComposedWidgetState extends State<ComposedWidget>
 
   set composables(List<Section> composables) {
     _composables = composables;
-    setState(() {});
+    SchedulerBinding.instance.addPostFrameCallback((_) => setState(() {}));
   }
 
-  set bottomComposable(Composable composable) {
-    _bottomComposable = composable;
-    setState(() {});
+  set bottomComposables(List<Composable> composables) {
+    _bottomComposables = composables;
+    SchedulerBinding.instance.addPostFrameCallback((_) => setState(() {}));
   }
 
-  set topComposable(Composable composable) {
-    _topComposable = composable;
-    setState(() {});
+  set topComposables(List<Composable> composables) {
+    _topComposables = composables;
+    SchedulerBinding.instance.addPostFrameCallback((_) => setState(() {}));
   }
 
-  get topComposable => _topComposable;
-  get bottomComposable => _bottomComposable;
+  get topComposables => _topComposables;
+  get bottomComposables => _bottomComposables;
   get composables => _composables;
 
   @mustCallSuper
@@ -112,26 +120,38 @@ abstract class ComposedWidgetState extends State<ComposedWidget>
 }
 
 extension ComposedWidgetBottom on Widget {
-  Widget withBottom(Composable bottom) {
+  Widget withBottom(List<Composable> bottom) {
+    if (bottom == null) {
+      return this;
+    }
+    var bottomComposables = bottom.where((x) => x != null).toList();
     return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisSize: MainAxisSize.max,
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: <Widget>[
         Expanded(
           child: this,
         ),
-        Container(
-          child: bottom,
-        )
+        Column(
+          children: bottomComposables,
+        ),
       ],
     );
   }
 
-  Widget withTop(Composable top) {
+  Widget withTop(List<Composable> top) {
+    if (top == null) {
+      return this;
+    }
+    var topComposables = top.where((x) => x != null).toList();
     return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisSize: MainAxisSize.max,
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: <Widget>[
-        Container(
-          child: top,
+        Column(
+          children: topComposables,
         ),
         Expanded(
           child: this,

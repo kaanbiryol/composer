@@ -19,7 +19,6 @@ class SliverListNotifier extends FunctionNotifier<SliverListDataSource,
 
 class SliverComposableList extends StatefulWidget {
   final SliverListNotifier controller;
-
   const SliverComposableList(this.controller, {Key key}) : super(key: key);
 
   @override
@@ -41,12 +40,11 @@ class _SliverComposableListState extends State<SliverComposableList> {
     for (var index = 0; index < sections.length; index++) {
       Section section = sections[index];
       assert(section != null, "Section cannot be null. Specify a section.");
-      var headerSection = SliverSection(section: section);
+      var headerSection = SliverSection(
+        section: section,
+      );
       widgets.add(headerSection);
-      widgets.add(SliverRow(
-        index: index,
-        controller: widget.controller,
-      ));
+      widgets.add(SliverRow(index: index, controller: widget.controller));
     }
     return widgets;
   }

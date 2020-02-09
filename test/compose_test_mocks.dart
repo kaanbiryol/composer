@@ -8,9 +8,6 @@ class MockComposableViewModel implements ComposableModel {
 
   @override
   Key key;
-
-  @override
-  ThemeData themeData;
 }
 
 class MockComposable extends StatelessComposable<MockComposableViewModel> {
@@ -29,9 +26,6 @@ class MockStatefulComposableViewModel implements ComposableModel {
 
   @override
   Key key;
-
-  @override
-  ThemeData themeData;
 }
 
 class MockStatefulComposable
@@ -73,9 +67,6 @@ class MockValidateableComposableViewModel
 
   @override
   Key key;
-
-  @override
-  ThemeData themeData;
 }
 
 class MockValidateableComposable

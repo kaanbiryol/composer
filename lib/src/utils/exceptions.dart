@@ -5,7 +5,7 @@ abstract class BaseException implements Exception {
 }
 
 /*
- * Thrown when Stateless widget tries to act like Stateful widget.
+ * Thrown when Stateless widget tries to act like a Stateful widget.
  */
 
 class StatelessActingException implements BaseException {

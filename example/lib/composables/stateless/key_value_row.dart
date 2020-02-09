@@ -28,9 +28,6 @@ class KeyValueComposer extends Composer<KeyValueComposable>
     var keyValueComponent = KeyValueComposable(composableModel);
     return keyValueComponent;
   }
-
-  @override
-  ThemeData themeData;
 }
 
 class KeyValueComposableModel implements KeyValueModelable {
@@ -40,9 +37,6 @@ class KeyValueComposableModel implements KeyValueModelable {
 
   @override
   Key key;
-
-  @override
-  ThemeData themeData;
 }
 
 class KeyValueComposable extends StatelessComposable<KeyValueModelable> {
@@ -54,8 +48,7 @@ class KeyValueComposable extends StatelessComposable<KeyValueModelable> {
     return Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
-          Text(composableModel.keyValue,
-              style: composableModel.themeData.textTheme.body1),
+          Text(composableModel.keyValue),
           Text(composableModel.value),
         ]);
   }
