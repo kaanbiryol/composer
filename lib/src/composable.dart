@@ -1,8 +1,7 @@
+import 'package:compose/src/utils/sliver_animations.dart';
 import 'package:compose/src/utils/validateable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-
-import 'animated_composable.dart';
 
 abstract class ComposableSection {
   Composable sectionComposable;
@@ -13,6 +12,8 @@ abstract class ComposableSection {
 }
 
 class Section implements ComposableSection {
+  Section(this.sectionComposable, this.composables);
+
   @override
   List<Composable> composables;
 
@@ -22,13 +23,11 @@ class Section implements ComposableSection {
   @override
   Composable sectionComposable;
 
-  Section(this.sectionComposable, this.composables);
-
   @override
   double height;
 
   @override
-  SliverAnimation animation;
+  SliverAnimation animation = SliverAnimation.none;
 }
 
 abstract class Composable<T> extends Widget implements Validateable {

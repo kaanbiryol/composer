@@ -1,7 +1,7 @@
 import 'dart:math';
+import 'package:compose/src/utils/sliver_animations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-
 import '../compose.dart';
 import 'animated_composable.dart';
 
@@ -16,15 +16,15 @@ class SliverSection extends StatefulWidget {
 
 class _SliverSectionState extends State<SliverSection>
     with SingleTickerProviderStateMixin {
-  final double sliverHeaderHeight = 40.0;
+  final double _sliverHeaderHeight = 40.0;
 
   @override
   Widget build(BuildContext context) {
     return SliverPersistentHeader(
-      pinned: true,
-      delegate: SliverSectionDelegate(
-        minHeight: widget.section.height ?? sliverHeaderHeight,
-        maxHeight: widget.section.height ?? sliverHeaderHeight,
+      pinned: widget.section.pinned,
+      delegate: _SliverSectionDelegate(
+        minHeight: widget.section.height ?? _sliverHeaderHeight,
+        maxHeight: widget.section.height ?? _sliverHeaderHeight,
         child: widget.section.sectionComposable,
         animation: widget.section.animation,
       ),
@@ -32,13 +32,13 @@ class _SliverSectionState extends State<SliverSection>
   }
 }
 
-class SliverSectionDelegate extends SliverPersistentHeaderDelegate {
+class _SliverSectionDelegate extends SliverPersistentHeaderDelegate {
   final double minHeight;
   final double maxHeight;
   final Widget child;
   final SliverAnimation animation;
 
-  SliverSectionDelegate(
+  _SliverSectionDelegate(
       {@required this.minHeight,
       @required this.maxHeight,
       @required this.child,
@@ -60,7 +60,7 @@ class SliverSectionDelegate extends SliverPersistentHeaderDelegate {
   }
 
   @override
-  bool shouldRebuild(SliverSectionDelegate oldDelegate) {
+  bool shouldRebuild(_SliverSectionDelegate oldDelegate) {
     return maxHeight != oldDelegate.maxHeight ||
         minHeight != oldDelegate.minHeight ||
         child != oldDelegate.child;

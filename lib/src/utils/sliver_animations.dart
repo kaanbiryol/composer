@@ -1,4 +1,7 @@
 import 'package:flutter/animation.dart';
+import 'package:flutter/widgets.dart';
+
+enum SliverAnimation { none, automatic }
 
 class SliverAnimations {
   static Animation<double> height(AnimationController controller) {

@@ -1,10 +1,10 @@
 import 'package:compose/src/sliver_composable_list.dart';
 import 'package:compose/src/sliver_rows.dart';
 import 'package:compose/src/utils/composed_widget_traits.dart';
+import 'package:compose/src/utils/sliver_animations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/widgets.dart';
-import 'animated_composable.dart';
 import 'composable.dart';
 
 abstract class ComposedWidget extends StatefulWidget {}
@@ -67,7 +67,7 @@ abstract class ComposedWidgetState extends State<ComposedWidget>
 
   void appendSection(
       {@required Section section, int index, SliverAnimation animation}) {
-    section.animation = animation;
+    section.animation = SliverAnimation.automatic;
     if (index != null) {
       assert(index >= 0 && index < _composables.length,
           "If you are providing an index, it must be less than the current item size, otherwise just ignore index.");

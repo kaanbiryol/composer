@@ -26,6 +26,20 @@ class GenericChangeNotifier<V, T extends Function(V)>
     implements FunctionListenable<T> {
   ObserverList<T> _listeners = ObserverList<T>();
 
+  void notifyListeners(V actionType) {
+    if (_listeners != null) {
+      final List<T> localListeners = List<T>.from(_listeners);
+      for (T listener in localListeners) {
+        try {
+          if (_listeners.contains(listener)) listener(actionType);
+        } catch (exception) {
+          throw EmptyFunctionNotifier(
+              "tried to notify listener $runtimeType while it is being deleted");
+        }
+      }
+    }
+  }
+
   @protected
   bool get hasListeners {
     if (_listeners == null) return false;
@@ -49,19 +63,5 @@ class GenericChangeNotifier<V, T extends Function(V)>
   @mustCallSuper
   void dispose() {
     _listeners = null;
-  }
-
-  void notifyListeners(V actionType) {
-    if (_listeners != null) {
-      final List<T> localListeners = List<T>.from(_listeners);
-      for (T listener in localListeners) {
-        try {
-          if (_listeners.contains(listener)) listener(actionType);
-        } catch (exception) {
-          throw EmptyFunctionNotifier(
-              "tried to notify listener $runtimeType while it is being deleted");
-        }
-      }
-    }
   }
 }

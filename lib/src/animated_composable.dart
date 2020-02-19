@@ -1,8 +1,6 @@
 import 'package:compose/src/utils/sliver_animations.dart';
 import 'package:flutter/widgets.dart';
 
-enum SliverAnimation { none, normal }
-
 class AnimatedComposable extends StatefulWidget {
   final Widget child;
   final SliverAnimation animation;
@@ -34,7 +32,6 @@ class _AnimatedComposableState extends State<AnimatedComposable>
     switch (widget.animation) {
       case SliverAnimation.none:
         return SizedBox.expand(child: widget.child);
-        break;
       default:
         return AnimatedBuilder(
             animation: _animationController,
@@ -57,5 +54,11 @@ class _AnimatedComposableState extends State<AnimatedComposable>
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
   }
 }

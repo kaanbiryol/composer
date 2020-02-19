@@ -44,7 +44,7 @@ class _SliverComposableListState extends State<SliverComposableList> {
         section: section,
       );
       widgets.add(headerSection);
-      widgets.add(SliverRow(index: index, controller: widget.controller));
+      widgets.add(SliverRow(sectionIndex: index, controller: widget.controller));
     }
     return widgets;
   }

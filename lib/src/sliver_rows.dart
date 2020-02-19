@@ -1,9 +1,10 @@
+import 'package:compose/src/animated_composable.dart';
 import 'package:compose/src/sliver_composable_list.dart';
+import 'package:compose/src/utils/sliver_animations.dart';
+import 'package:compose/src/utils/widget_state_listener.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
-
 import '../compose.dart';
-import 'animated_composable.dart';
 
 typedef RowActionCallback = void Function(RowActionEvent);
 
@@ -19,22 +20,24 @@ class RowActionEvent {
 }
 
 class SliverRow extends StatefulWidget {
-  final int index;
+  final int sectionIndex;
   final SliverListNotifier controller;
-  const SliverRow({@required this.index, @required this.controller, Key key})
+  const SliverRow(
+      {@required this.sectionIndex, @required this.controller, Key key})
       : super(key: key);
 
   @override
   _SliverRowState createState() => _SliverRowState();
 }
 
-class _SliverRowState extends State<SliverRow> {
+class _SliverRowState extends State<SliverRow> with WidgetStateListener {
   GlobalKey<SliverAnimatedListState> _listKey =
       GlobalKey<SliverAnimatedListState>();
 
-  int get _index => widget.index;
-  List<Composable> get _composables =>
-      widget.controller.dataSource.sectionList[_index].composables;
+  int get _sectionIndex => widget.sectionIndex;
+  Section get _section =>
+      widget.controller.dataSource.sectionList[_sectionIndex];
+  List<Composable> get _composables => _section.composables;
 
   @override
   void initState() {
@@ -45,15 +48,21 @@ class _SliverRowState extends State<SliverRow> {
   @override
   Widget build(BuildContext context) {
     _listKey = GlobalKey<SliverAnimatedListState>();
-    //TODO: handle anim
+
     return SliverAnimatedList(
         key: _listKey,
         initialItemCount: _composables.length,
         itemBuilder: (context, index, animation) {
-          return AnimatedRow(
-            animation: animation,
-            child: _composables[index],
-          );
+          var customAnimation = _section.animation;
+          if (customAnimation == SliverAnimation.none) {
+            return AnimatedRow(
+                child: _composables[index], animation: animation);
+          } else {
+            return AnimatedComposable(
+              animation: customAnimation,
+              child: _composables[index],
+            );
+          }
         });
   }
 
@@ -89,6 +98,11 @@ class _SliverRowState extends State<SliverRow> {
   void dispose() {
     widget.controller.dispose();
     super.dispose();
+  }
+
+  @override
+  void widgetDidAppear(BuildContext context) {
+    _section.animation = SliverAnimation.none;
   }
 }
 
