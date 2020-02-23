@@ -112,6 +112,25 @@ class MockValidateableComposableState extends ComposableState<
   }
 }
 
+class StatelessMockComposer extends Composer {
+  @override
+  compose() {
+    var viewModel = MockComposableViewModel("A very long text");
+    viewModel.key = key;
+    var composable = MockComposable(viewModel);
+    return composable;
+  }
+}
+
+class ValidateableMockComposer extends Composer {
+  @override
+  compose() {
+    var viewModel = MockValidateableComposableViewModel("A very long text");
+    var composable = MockValidateableComposable(viewModel, validators);
+    return composable;
+  }
+}
+
 class MockPage extends ComposedWidget {
   @override
   State<StatefulWidget> createState() {

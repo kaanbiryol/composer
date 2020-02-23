@@ -2,6 +2,7 @@ import 'package:compose/compose.dart';
 import 'package:compose/src/sliver_composable_list.dart';
 import 'package:compose/src/sliver_rows.dart';
 import 'package:compose/src/utils/exceptions.dart';
+import 'package:compose/src/utils/sliver_animations.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'compose_test_mocks.dart';
@@ -67,6 +68,8 @@ void main() {
 
     state.appendSection(section: mockSection);
 
+    await tester.pumpAndSettle();
+
     expect(sections.length, 2);
   });
 
@@ -91,6 +94,8 @@ void main() {
     var mockSection = state.mockSection;
 
     state.removeSection(mockSection);
+
+    await tester.pumpAndSettle();
 
     expect(sections.length, 0);
   });
@@ -270,7 +275,7 @@ void main() {
     var sectionList = [mockSection];
     state.composables = sectionList;
 
-    await tester.pump();
+    await tester.pumpAndSettle();
 
     expect(state.controller.dataSource.sectionList, sectionList);
     expect(state.composables, sectionList);
@@ -300,5 +305,32 @@ void main() {
     await tester.pump();
 
     expect(state.bottomComposables, [mockComposable]);
+  });
+
+  testWidgets('add section animation', (WidgetTester tester) async {
+    await tester.pumpWidget(mockWidget);
+    var state = getState(tester);
+    var mockSection = state.mockSection;
+    var mockComposable = MockComposable(MockComposableViewModel("Mock Text"));
+    mockSection = Section(mockComposable, [mockComposable]);
+
+    state.appendSection(
+        section: mockSection, animation: SliverAnimation.automatic);
+    expect(mockSection.animation, SliverAnimation.automatic);
+  });
+
+  test('composer validator', () {
+    Composable composable = (ValidateableMockComposer()
+          ..withValidators([MockValidator(2)]))
+        .compose();
+
+    expect(composable.validators.length, 1);
+  });
+
+  test('composer key', () {
+    ValueKey key = ValueKey(0);
+    Composable composable = (StatelessMockComposer()..withKey(key)).compose();
+
+    expect(composable.key, key);
   });
 }

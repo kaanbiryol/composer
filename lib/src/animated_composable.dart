@@ -14,15 +14,13 @@ class AnimatedComposable extends StatefulWidget {
 class _AnimatedComposableState extends State<AnimatedComposable>
     with SingleTickerProviderStateMixin {
   AnimationController _animationController;
+  final Duration animationDuration = Duration(milliseconds: 280);
 
   @override
   void initState() {
     super.initState();
     _animationController = AnimationController(
-        vsync: this,
-        duration: Duration(milliseconds: 280),
-        lowerBound: 0,
-        upperBound: 1);
+        vsync: this, duration: animationDuration, lowerBound: 0, upperBound: 1);
     _animationController.addListener(() => setState(() {}));
     _animationController.forward();
   }
@@ -50,7 +48,7 @@ class _AnimatedComposableState extends State<AnimatedComposable>
         opacity: opacity.value,
         child: Container(
           height: height.value,
-          child: SingleChildScrollView(child: child),
+          child: SizedBox.expand(child: child),
         ),
       ),
     );

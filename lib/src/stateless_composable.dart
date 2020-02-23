@@ -8,7 +8,7 @@ abstract class StatelessComposable<T extends ComposableModel>
   final ComposableNotifier<T> _composableModel;
   final List<Validator> validators = [];
 
-  StatelessComposable(T composableModel, {Key key})
+  StatelessComposable(T composableModel)
       : this._composableModel = ComposableNotifier(composableModel),
         super(key: composableModel.key);
 

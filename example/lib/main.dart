@@ -76,19 +76,18 @@ class ExamplePageState extends ComposedWidgetState {
   }
 
   Composable makeTextField() {
-    var textFieldComponentViewModel = TextFieldComposableModel(2);
-    var textFieldComponent =
-        TextFieldComposable(textFieldComponentViewModel, [EmptyValidator()]);
-    return textFieldComponent;
+    return (TextFieldComposer()
+          ..maxLength(2)
+          ..withValidators([EmptyValidator()]))
+        .compose();
   }
 
   Composable makeKeyValue() {
-    var rowToAppend = (KeyValueComposer()
+    return (KeyValueComposer()
           ..withKey(firstRowKey)
           ..withKeyValue("KEY")
           ..withValue("VALUE"))
         .compose();
-    return rowToAppend;
   }
 
   void appendSectionHandler() {

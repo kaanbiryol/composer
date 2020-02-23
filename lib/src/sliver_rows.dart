@@ -11,12 +11,12 @@ typedef RowActionCallback = void Function(RowActionEvent);
 enum RowAction { add, remove }
 
 class RowActionEvent {
-  int index;
+  int desiredIndex;
   Composable composable;
   RowAction action;
 
   RowActionEvent(
-      {@required this.action, @required this.composable, this.index});
+      {@required this.action, @required this.composable, this.desiredIndex});
 }
 
 class SliverRow extends StatefulWidget {
@@ -54,20 +54,21 @@ class _SliverRowState extends State<SliverRow> with WidgetStateListener {
         initialItemCount: _composables.length,
         itemBuilder: (context, index, animation) {
           var customAnimation = _section.animation;
-          if (customAnimation == SliverAnimation.none) {
-            return AnimatedRow(
-                child: _composables[index], animation: animation);
-          } else {
-            return AnimatedComposable(
-              animation: customAnimation,
-              child: _composables[index],
-            );
+          switch (customAnimation) {
+            case SliverAnimation.none:
+              return AnimatedRow(
+                  child: _composables[index], animation: animation);
+            default:
+              return AnimatedComposable(
+                animation: customAnimation,
+                child: _composables[index],
+              );
           }
         });
   }
 
   void notifySectionChange(RowActionEvent event) {
-    int rowIndex = event.index;
+    int rowIndex = event.desiredIndex;
     assert(rowIndex >= 0 && rowIndex <= _composables.length,
         "You are trying to remove an non-existing Widget.");
     switch (event.action) {

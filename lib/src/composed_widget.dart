@@ -39,35 +39,27 @@ abstract class ComposedWidgetState extends State<ComposedWidget>
     var composableList = allComposables();
     var validateableComposables =
         composableList.where((widget) => widget.validators.isNotEmpty).toList();
-
-    /*return validateableComposables.fold(
-        true, (result, type) => result = type.validate());*/
-
-    for (final composedWidget in validateableComposables) {
-      if (composedWidget.validate() == false) {
-        return false;
-      }
-    }
-    return true;
+    return validateableComposables.fold(
+        true, (result, type) => result = type.validate());
   }
 
   void appendRow(
       {@required Section section, @required Composable composable, int index}) {
     var rowIndex = index ?? section.composables.length;
     controller.notifyListeners(RowActionEvent(
-        action: RowAction.add, composable: composable, index: rowIndex));
+        action: RowAction.add, composable: composable, desiredIndex: rowIndex));
   }
 
   void removeRow({@required Section section, @required Composable composable}) {
     int rowIndex =
         section.composables.indexWhere((item) => identical(item, composable));
     controller.notifyListeners(RowActionEvent(
-        action: RowAction.remove, composable: composable, index: rowIndex));
+        action: RowAction.remove, composable: composable, desiredIndex: rowIndex));
   }
 
   void appendSection(
       {@required Section section, int index, SliverAnimation animation}) {
-    section.animation = SliverAnimation.automatic;
+    section.animation = animation;
     if (index != null) {
       assert(index >= 0 && index < _composables.length,
           "If you are providing an index, it must be less than the current item size, otherwise just ignore index.");
