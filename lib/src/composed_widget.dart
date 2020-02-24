@@ -14,20 +14,19 @@ abstract class ComposedWidgetState extends State<ComposedWidget>
   List<Section> _composables = [];
   List<Composable> _bottomComposables;
   List<Composable> _topComposables;
-  SliverListNotifier controller;
+  SliverListNotifier controller = SliverListNotifier(SliverListDataSource([]));
 
   @mustCallSuper
   @override
   void initState() {
     super.initState();
     _composables = prepareCompose(context);
+    controller.dataSource = SliverListDataSource(_composables);
   }
 
   @mustCallSuper
   @override
   Widget build(BuildContext context) {
-    var value = SliverListDataSource(_composables);
-    controller = SliverListNotifier(value);
     return SliverComposableList(controller)
         .withBottom(_bottomComposables)
         .withTop(_topComposables);
@@ -46,15 +45,17 @@ abstract class ComposedWidgetState extends State<ComposedWidget>
   void appendRow(
       {@required Section section, @required Composable composable, int index}) {
     var rowIndex = index ?? section.composables.length;
-    controller.notifyListeners(RowActionEvent(
+    controller.notifyListeners(section, RowActionEvent(
         action: RowAction.add, composable: composable, desiredIndex: rowIndex));
   }
 
   void removeRow({@required Section section, @required Composable composable}) {
     int rowIndex =
         section.composables.indexWhere((item) => identical(item, composable));
-    controller.notifyListeners(RowActionEvent(
-        action: RowAction.remove, composable: composable, desiredIndex: rowIndex));
+    controller.notifyListeners(section, RowActionEvent(
+        action: RowAction.remove,
+        composable: composable,
+        desiredIndex: rowIndex));
   }
 
   void appendSection(

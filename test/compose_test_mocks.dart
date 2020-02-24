@@ -140,11 +140,15 @@ class MockPage extends ComposedWidget {
 
 class MockPageState extends ComposedWidgetState {
   Section mockSection;
-  var mockComposable = MockComposable(MockComposableViewModel("Mock Text"));
+  var mockComposable =
+      MockComposable(MockComposableViewModel("Stateless Mock"));
+  var statefulMockComposable =
+      MockStatefulComposable(MockStatefulComposableViewModel("Stateful Mock"));
 
   @override
   List<Section> prepareCompose(BuildContext context) {
-    mockSection = Section(mockComposable, [mockComposable]);
+    mockSection =
+        Section(mockComposable, [mockComposable, statefulMockComposable]);
     return [mockSection];
   }
 }

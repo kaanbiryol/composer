@@ -42,13 +42,13 @@ class _SliverRowState extends State<SliverRow> with WidgetStateListener {
   @override
   void initState() {
     super.initState();
-    widget.controller.addListener(notifySectionChange);
+    widget.controller
+        .addListener(section: _section, listener: notifySectionChange);
   }
 
   @override
   Widget build(BuildContext context) {
     _listKey = GlobalKey<SliverAnimatedListState>();
-
     return SliverAnimatedList(
         key: _listKey,
         initialItemCount: _composables.length,

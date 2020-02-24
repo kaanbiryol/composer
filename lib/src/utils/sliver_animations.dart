@@ -5,7 +5,7 @@ enum SliverAnimation { none, automatic }
 
 class SliverAnimations {
   static Animation<double> height(AnimationController controller) {
-    return Tween<double>(begin: 0, end: 40.0).animate(
+    return Tween<double>(begin: 0, end: 40).animate(
       CurvedAnimation(parent: controller, curve: Curves.easeOutSine),
     );
   }

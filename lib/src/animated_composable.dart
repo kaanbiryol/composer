@@ -1,8 +1,10 @@
 import 'package:compose/src/utils/sliver_animations.dart';
+import 'package:compose/src/utils/widget_state_listener.dart';
 import 'package:flutter/widgets.dart';
+import '../compose.dart';
 
 class AnimatedComposable extends StatefulWidget {
-  final Widget child;
+  final Composable child;
   final SliverAnimation animation;
   AnimatedComposable({@required this.child, @required this.animation, Key key})
       : super(key: key);
@@ -48,7 +50,8 @@ class _AnimatedComposableState extends State<AnimatedComposable>
         opacity: opacity.value,
         child: Container(
           height: height.value,
-          child: SizedBox.expand(child: child),
+          child: SingleChildScrollView(
+              physics: NeverScrollableScrollPhysics(), child: child),
         ),
       ),
     );

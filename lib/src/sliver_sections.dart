@@ -20,11 +20,12 @@ class _SliverSectionState extends State<SliverSection>
 
   @override
   Widget build(BuildContext context) {
+    double determinedHeight = widget.section.height ?? _sliverHeaderHeight;
     return SliverPersistentHeader(
       pinned: widget.section.pinned,
       delegate: _SliverSectionDelegate(
-        minHeight: widget.section.height ?? _sliverHeaderHeight,
-        maxHeight: widget.section.height ?? _sliverHeaderHeight,
+        minHeight: determinedHeight,
+        maxHeight: determinedHeight,
         child: widget.section.sectionComposable,
         animation: widget.section.animation,
       ),

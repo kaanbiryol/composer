@@ -20,17 +20,17 @@ class ButtonComposer extends Composer<ButtonComposable>
   @override
   ButtonComposable compose() {
     var composableModel =
-        ButtonComponentViewModel(text: text, onPressed: onPressed);
+        ButtonComposableModel(text: text, onPressed: onPressed);
     composableModel.key = key;
     return ButtonComposable(composableModel, key: ValueKey("KEY"));
   }
 }
 
-class ButtonComponentViewModel implements ButtonModelable {
+class ButtonComposableModel implements ButtonModelable {
   String text;
   VoidCallback onPressed;
 
-  ButtonComponentViewModel({String text, VoidCallback onPressed}) {
+  ButtonComposableModel({String text, VoidCallback onPressed}) {
     this.onPressed = onPressed;
     this.text = text;
   }
@@ -48,7 +48,7 @@ class ButtonComposable extends StatefulComposable<ButtonModelable> {
 }
 
 class _ButtonComposableState
-    extends ComposableState<ButtonComposable, ButtonComponentViewModel> {
+    extends ComposableState<ButtonComposable, ButtonComposableModel> {
   @override
   Widget build(BuildContext context) {
     final viewModel = widget.composableModel;

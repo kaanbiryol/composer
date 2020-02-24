@@ -13,7 +13,7 @@ class SliverListDataSource {
 
 class SliverListNotifier extends FunctionNotifier<SliverListDataSource,
     RowActionEvent, RowActionCallback> {
-  final SliverListDataSource dataSource;
+  SliverListDataSource dataSource;
   SliverListNotifier(this.dataSource) : super(dataSource);
 }
 
@@ -39,12 +39,13 @@ class _SliverComposableListState extends State<SliverComposableList> {
     List<Widget> widgets = [];
     for (var index = 0; index < sections.length; index++) {
       Section section = sections[index];
-      assert(section != null, "Section cannot be null. Specify a section.");
+      assert(section != null, "Section cannot be null.");
       var headerSection = SliverSection(
         section: section,
       );
       widgets.add(headerSection);
-      widgets.add(SliverRow(sectionIndex: index, controller: widget.controller));
+      widgets
+          .add(SliverRow(sectionIndex: index, controller: widget.controller));
     }
     return widgets;
   }

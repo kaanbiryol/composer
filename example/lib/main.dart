@@ -31,20 +31,19 @@ class ExamplePage extends ComposedWidget {
 
 class ExamplePageState extends ComposedWidgetState {
   Section firstSection;
+  Section secondSection;
+
   ButtonComposable appendRowButton;
   ButtonComposable removeRowButton;
-
   ButtonComposable appendSectionButton;
   ButtonComposable removeSectionButton;
-
   ButtonComposable headerSectionButton;
   ButtonComposable footerSectionButton;
+  ButtonComposable updateKeyValueButton;
+  KeyValueComposable keyValueComposable;
 
-  KeyValueComposable rowToAppend;
-
-  final firstRowKey = ValueKey("FirstRow");
-
-  Section secondSection;
+  final updateComposableKey = ValueKey("updateComposableModel");
+  final keyValueKey = ValueKey("FirstRow");
 
   var future;
   @override
@@ -84,7 +83,7 @@ class ExamplePageState extends ComposedWidgetState {
 
   Composable makeKeyValue() {
     return (KeyValueComposer()
-          ..withKey(firstRowKey)
+          ..withKey(keyValueKey)
           ..withKeyValue("KEY")
           ..withValue("VALUE"))
         .compose();
@@ -102,44 +101,36 @@ class ExamplePageState extends ComposedWidgetState {
   }
 
   void appendButtonHandler() {
-    // var viewModel =
-    //     ButtonComponentViewModel(text: "onPressed", onPressed: onPressed);
-    // Composable composable = componentWith(ValueKey("kaan"));
-    // composable.componentModel = viewModel;
-
-    var composable = makeKeyValue();
+    Composable composable = makeKeyValue();
     appendRow(section: firstSection, composable: composable, index: 0);
-
-    /*var secondSectionWidget =
-        (SectionComposer()..withTitle("New Section")).compose();
-    secondSection = Section(secondSectionWidget, [makeTextField()]);
-
-    composables = [secondSection];*/
-    // or we can : flatButtonComponent.componentModel = viewModel;
   }
 
   void removeButtonHandler() {
-    removeRow(composable: composableWith(firstRowKey), section: firstSection);
-
-    // or we can : flatButtonComponent.componentModel = viewModel;
+    removeRow(composable: composableWith(keyValueKey), section: firstSection);
   }
 
   void footerHandler() {
-    var footerbutton = (ButtonComposer()
+    Composable footerbutton = (ButtonComposer()
           ..title("Footer Button")
-          ..handler(test))
+          ..handler(() {
+            Scaffold.of(context).showSnackBar(SnackBar(
+              duration: Duration(milliseconds: 300),
+              content: Text("Footer Button Tapped!"),
+            ));
+          }))
         .compose();
     bottomComposables = [footerbutton];
   }
 
-  void test() {
-    print("tapped");
-  }
-
   void headerHandler() {
-    var headerButton = (ButtonComposer()
+    Composable headerButton = (ButtonComposer()
           ..title("Header Button")
-          ..handler(test))
+          ..handler(() {
+            Scaffold.of(context).showSnackBar(SnackBar(
+              duration: Duration(milliseconds: 300),
+              content: Text("Header Button Tapped!"),
+            ));
+          }))
         .compose();
     topComposables = [headerButton, headerButton];
   }
@@ -158,6 +149,7 @@ class ExamplePageState extends ComposedWidgetState {
           ..handler(appendButtonHandler)
           ..title("Append Row"))
         .compose();
+
     removeRowButton = (ButtonComposer()
           ..handler(removeButtonHandler)
           ..title("Remove Row"))
@@ -194,6 +186,16 @@ class ExamplePageState extends ComposedWidgetState {
           ..title("Remove Footer"))
         .compose();
 
+    var updateKeyValueButton = (ButtonComposer()
+          ..handler(() {
+            Composable keyValueComposable = composableWith(updateComposableKey);
+            keyValueComposable.composableModel =
+                ButtonComposableModel(text: "Updated Text", onPressed: () {});
+          })
+          ..title("Update Button Text")
+          ..withKey(updateComposableKey))
+        .compose();
+
     var firstSectionWidget =
         (SectionComposer()..withTitle("First Section")).compose();
     firstSection = Section(firstSectionWidget, [
@@ -205,6 +207,7 @@ class ExamplePageState extends ComposedWidgetState {
       footerSectionButton,
       removeHeader,
       removeFooter,
+      updateKeyValueButton,
       makeTextField(),
     ]);
 
