@@ -196,6 +196,19 @@ class ExamplePageState extends ComposedWidgetState {
           ..withKey(updateComposableKey))
         .compose();
 
+    var resetComposables = (ButtonComposer()
+          ..handler(() {
+            var firstSectionWidget =
+                (SectionComposer()..withTitle("NEW Section!")).compose();
+            var newSection = Section(firstSectionWidget, [
+              updateKeyValueButton,
+              makeTextField(),
+            ]);
+            composables = [newSection];
+          })
+          ..title("Reset Composables"))
+        .compose();
+
     var firstSectionWidget =
         (SectionComposer()..withTitle("First Section")).compose();
     firstSection = Section(firstSectionWidget, [
@@ -208,6 +221,7 @@ class ExamplePageState extends ComposedWidgetState {
       removeHeader,
       removeFooter,
       updateKeyValueButton,
+      resetComposables,
       makeTextField(),
     ]);
 

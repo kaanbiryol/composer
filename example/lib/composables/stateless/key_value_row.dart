@@ -8,9 +8,7 @@ abstract class KeyValueModelable implements ComposableModel {
 
 class KeyValueComposer extends Composer<KeyValueComposable>
     implements KeyValueModelable {
-  String keyValue;
-  String value;
-
+  
   void withKeyValue(String key) {
     this.keyValue = key;
   }
@@ -28,6 +26,12 @@ class KeyValueComposer extends Composer<KeyValueComposable>
     var keyValueComponent = KeyValueComposable(composableModel);
     return keyValueComponent;
   }
+
+  @override
+  String keyValue;
+
+  @override
+  String value;
 }
 
 class KeyValueComposableModel implements KeyValueModelable {
@@ -37,6 +41,9 @@ class KeyValueComposableModel implements KeyValueModelable {
 
   @override
   Key key;
+
+  @override
+  List<Validator> validators;
 }
 
 class KeyValueComposable extends StatelessComposable<KeyValueModelable> {

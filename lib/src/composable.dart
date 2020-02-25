@@ -30,14 +30,14 @@ class Section implements ComposableSection {
   SliverAnimation animation = SliverAnimation.none;
 }
 
-abstract class Composable<T> extends Widget implements Validateable {
+abstract class Composable<T extends ComposableModel> extends Widget {
   T get composableModel;
   set composableModel(T composableModel);
-  final List<Validator> validators = [];
 }
 
 abstract class ComposableModel {
   Key key;
+  List<Validator> validators = [];
   ComposableModel({this.key});
 }
 

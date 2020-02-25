@@ -13,7 +13,7 @@ MockPageState getState(WidgetTester tester) {
 }
 
 void main() {
-  testWidgets('append row', (WidgetTester tester) async {
+  testWidgets('composedwidget: append row', (WidgetTester tester) async {
     await tester.pumpWidget(mockWidget);
     var state = getState(tester);
     var sections = state.controller.dataSource.sectionList;
@@ -27,7 +27,8 @@ void main() {
     expect(currentSection.composables.length, 3);
   });
 
-  testWidgets('append row to index', (WidgetTester tester) async {
+  testWidgets('composedwidget: append row to index',
+      (WidgetTester tester) async {
     await tester.pumpWidget(mockWidget);
     var state = getState(tester);
     var sections = state.controller.dataSource.sectionList;
@@ -43,7 +44,7 @@ void main() {
     expect(currentSection.composables.first, mockComposable);
   });
 
-  testWidgets('remove row', (WidgetTester tester) async {
+  testWidgets('composedwidget: remove row', (WidgetTester tester) async {
     await tester.pumpWidget(mockWidget);
     var state = getState(tester);
     var sections = state.controller.dataSource.sectionList;
@@ -57,7 +58,7 @@ void main() {
     expect(currentSection.composables.length, 1);
   });
 
-  testWidgets('append section', (WidgetTester tester) async {
+  testWidgets('composedwidget: append section', (WidgetTester tester) async {
     await tester.pumpWidget(mockWidget);
     var state = getState(tester);
     var sections = state.controller.dataSource.sectionList;
@@ -73,7 +74,8 @@ void main() {
     expect(sections.length, 2);
   });
 
-  testWidgets('append section to index', (WidgetTester tester) async {
+  testWidgets('composedwidget: append section to index',
+      (WidgetTester tester) async {
     await tester.pumpWidget(mockWidget);
     var state = getState(tester);
     var sections = state.controller.dataSource.sectionList;
@@ -87,7 +89,7 @@ void main() {
     expect(sections.first, mockSection);
   });
 
-  testWidgets('remove section', (WidgetTester tester) async {
+  testWidgets('composedwidget: remove section', (WidgetTester tester) async {
     await tester.pumpWidget(mockWidget);
     var state = getState(tester);
     var sections = state.controller.dataSource.sectionList;
@@ -100,14 +102,14 @@ void main() {
     expect(sections.length, 0);
   });
 
-  testWidgets('validate false', (WidgetTester tester) async {
+  testWidgets('validation: validate false', (WidgetTester tester) async {
     await tester.pumpWidget(mockWidget);
     var state = getState(tester);
     var mockSection = state.mockSection;
 
     var viewModel = MockValidateableComposableViewModel("A very long text");
-    var composable = MockValidateableComposable(viewModel, [MockValidator(5)]);
-
+    var composable = MockValidateableComposable(
+        viewModel, [MockCharacterLengthValidator(5)]);
     state.appendRow(section: mockSection, composable: composable);
 
     await tester.pump();
@@ -115,14 +117,14 @@ void main() {
     expect(state.validate(), false);
   });
 
-  testWidgets('validate true', (WidgetTester tester) async {
+  testWidgets('validation: validate true', (WidgetTester tester) async {
     await tester.pumpWidget(mockWidget);
     var state = getState(tester);
     var mockSection = state.mockSection;
 
     var viewModel = MockValidateableComposableViewModel("true");
-    var composable = MockValidateableComposable(viewModel, [MockValidator(5)]);
-
+    var composable = MockValidateableComposable(
+        viewModel, [MockCharacterLengthValidator(5)]);
     state.appendRow(section: mockSection, composable: composable);
 
     await tester.pump();
@@ -130,54 +132,8 @@ void main() {
     expect(state.validate(), true);
   });
 
-  testWidgets('set viewmodel', (WidgetTester tester) async {
-    await tester.pumpWidget(mockWidget);
-    var state = getState(tester);
-    var mockSection = state.mockSection;
-
-    var viewModel = MockStatefulComposableViewModel("old");
-    var composable = MockStatefulComposable(viewModel);
-
-    state.appendRow(section: mockSection, composable: composable);
-
-    var updatedViewModel = MockStatefulComposableViewModel("new");
-    composable.composableModel = updatedViewModel;
-
-    await tester.pump();
-
-    expect(composable.composableModel.text, "new");
-  });
-
-  test('identical viewmodel', () async {
-    var viewModel = MockComposableViewModel("old");
-    var composable = MockComposable(viewModel);
-
-    expect(composable.composableModel, viewModel);
-  });
-
-  test('statelesswidget re-set viewModel error', () async {
-    var viewModel = MockComposableViewModel("old");
-    var composable = MockComposable(viewModel);
-
-    try {
-      composable.composableModel = viewModel;
-    } catch (e) {
-      expect(e, isInstanceOf<StatelessActingException>());
-    }
-  });
-
-  test('statelesswidget validate viewModel error', () async {
-    var viewModel = MockComposableViewModel("old");
-    var composable = MockComposable(viewModel);
-
-    try {
-      composable.validate();
-    } catch (e) {
-      expect(e, isInstanceOf<StatelessActingException>());
-    }
-  });
-
-  testWidgets('statefulwidget validateable error', (WidgetTester tester) async {
+  testWidgets('statefulcomposable: validateable error',
+      (WidgetTester tester) async {
     await tester.pumpWidget(mockWidget);
 
     var viewModel = MockStatefulComposableViewModel("old");
@@ -190,13 +146,31 @@ void main() {
     }
   });
 
-  test('function notifier get value', () async {
+  test('statefulcomposable: identical viewmodel', () async {
+    var viewModel = MockComposableViewModel("old");
+    var composable = MockComposable(viewModel);
+
+    expect(composable.composableModel, viewModel);
+  });
+
+  test('statelesswidget: re-set viewModel error', () async {
+    var viewModel = MockComposableViewModel("old");
+    var composable = MockComposable(viewModel);
+
+    try {
+      composable.composableModel = viewModel;
+    } catch (e) {
+      expect(e, isInstanceOf<StatelessActingException>());
+    }
+  });
+
+  test('function notifier: get value', () async {
     var value = SliverListDataSource([]);
     var controller = SliverListNotifier(value);
     expect(controller.value, value);
   });
 
-  testWidgets('function notifier set value', (WidgetTester tester) async {
+  testWidgets('function notifier: set value', (WidgetTester tester) async {
     await tester.pumpWidget(mockWidget);
     var value = SliverListDataSource([]);
     var controller = SliverListNotifier(value);
@@ -211,7 +185,7 @@ void main() {
     expect(controller.value, newValue);
   });
 
-  testWidgets('function notifier notify after dispose error',
+  testWidgets('function notifier: notify after dispose error',
       (WidgetTester tester) async {
     await tester.pumpWidget(mockWidget);
     var state = getState(tester);
@@ -222,13 +196,13 @@ void main() {
     }
   });
 
-  testWidgets('function notifier has listeners', (WidgetTester tester) async {
+  testWidgets('function notifier: has listeners', (WidgetTester tester) async {
     await tester.pumpWidget(mockWidget);
     var state = getState(tester);
     expect(state.controller.hasListeners, true);
   });
 
-  testWidgets('function notifier dispose listeners',
+  testWidgets('function notifier: dispose listeners',
       (WidgetTester tester) async {
     await tester.pumpWidget(mockWidget);
     var state = getState(tester);
@@ -236,28 +210,8 @@ void main() {
     expect(state.controller.hasListeners, false);
   });
 
-  test('function notifier remove listeners', () {
-    var dataSource = SliverListDataSource([]);
-    var controller = SliverListNotifier(dataSource);
-  });
-
-  testWidgets('get composable with key', (WidgetTester tester) async {
-    await tester.pumpWidget(mockWidget);
-    var state = getState(tester);
-    var mockSection = state.mockSection;
-
-    var dataSource = SliverListDataSource([]);
-    var controller = SliverListNotifier(dataSource);
-
-    void listener(RowActionEvent event) {}
-
-    controller.addListener(section: mockSection, listener: listener);
-    controller.removeListener(section: mockSection);
-
-    expect(controller.hasListeners, false);
-  });
-
-  testWidgets('get composable with key', (WidgetTester tester) async {
+  testWidgets('composedwidget: get composable with key',
+      (WidgetTester tester) async {
     await tester.pumpWidget(mockWidget);
     var state = getState(tester);
     var mockSection = state.mockSection;
@@ -273,7 +227,8 @@ void main() {
     expect(isIdentical, true);
   });
 
-  testWidgets('update composables list', (WidgetTester tester) async {
+  testWidgets('composedwidget: update composables list',
+      (WidgetTester tester) async {
     await tester.pumpWidget(mockWidget);
     var state = getState(tester);
     var mockSection = state.mockSection;
@@ -289,7 +244,7 @@ void main() {
     expect(state.composables, sectionList);
   });
 
-  testWidgets('set topcomposable', (WidgetTester tester) async {
+  testWidgets('composedwidget: set topcomposable', (WidgetTester tester) async {
     await tester.pumpWidget(mockWidget);
     var state = getState(tester);
 
@@ -302,7 +257,8 @@ void main() {
     expect(state.topComposables, [mockComposable]);
   });
 
-  testWidgets('set bottom composable', (WidgetTester tester) async {
+  testWidgets('composedwidget: set bottom composable',
+      (WidgetTester tester) async {
     await tester.pumpWidget(mockWidget);
     var state = getState(tester);
 
@@ -315,7 +271,8 @@ void main() {
     expect(state.bottomComposables, [mockComposable]);
   });
 
-  testWidgets('add section animation', (WidgetTester tester) async {
+  testWidgets('composedwidget: add section animation',
+      (WidgetTester tester) async {
     await tester.pumpWidget(mockWidget);
     var state = getState(tester);
     var mockSection = state.mockSection;
@@ -327,22 +284,22 @@ void main() {
     expect(mockSection.animation, SliverAnimation.automatic);
   });
 
-  test('composer validator', () {
-    Composable composable = (ValidateableMockComposer()
-          ..withValidators([MockValidator(2)]))
+  test('composer: assign widget validator', () {
+    StatefulComposable composable = (ValidateableMockComposer()
+          ..withValidators([MockCharacterLengthValidator(2)]))
         .compose();
 
     expect(composable.validators.length, 1);
   });
 
-  test('composer key', () {
+  test('composer: assign widget key', () {
     ValueKey key = ValueKey(0);
     Composable composable = (StatelessMockComposer()..withKey(key)).compose();
-
     expect(composable.key, key);
   });
 
-  testWidgets('composablemodel update', (WidgetTester tester) async {
+  testWidgets('statefulcomposable: update composablemodel',
+      (WidgetTester tester) async {
     await tester.pumpWidget(mockWidget);
     var state = getState(tester);
 
@@ -356,5 +313,24 @@ void main() {
     state.statefulMockComposable.composableModel = updatedModel;
 
     expectSync(state.statefulMockComposable.composableModel, updatedModel);
+  });
+
+  testWidgets("composedwidget: remove section listener",
+      (WidgetTester tester) async {
+    await tester.pumpWidget(mockWidget);
+    var state = getState(tester);
+
+    state.removeSection(state.mockSection);
+
+    await tester.pumpAndSettle();
+    expect(state.controller.hasListeners, false);
+  });
+
+  testWidgets("composedwidget: widget did appear", (WidgetTester tester) async {
+    await tester.pumpWidget(mockWidget);
+    var state = getState(tester);
+
+    await tester.pumpAndSettle();
+    expect(state.widgetAppeared, true);
   });
 }

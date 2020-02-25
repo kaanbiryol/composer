@@ -26,6 +26,9 @@ class SectionComposableModel implements SectionModelable {
 
   @override
   Key key;
+
+  @override
+  List<Validator> validators;
 }
 
 class SectionComposable extends StatelessComposable<SectionModelable> {
@@ -35,7 +38,7 @@ class SectionComposable extends StatelessComposable<SectionModelable> {
   Widget build(BuildContext context) {
     return Container(
       color: Colors.blue,
-      height: 30,
+      height: 40,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,

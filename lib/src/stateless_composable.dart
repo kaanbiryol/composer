@@ -20,10 +20,4 @@ abstract class StatelessComposable<T extends ComposableModel>
     throw StatelessActingException(
         "can't notify composable model. use ComposableStatefulWidget instead!");
   }
-
-  @override
-  bool validate() {
-    throw StatelessActingException(
-        "can't validate statelesswidget use stateful instead!");
-  }
 }

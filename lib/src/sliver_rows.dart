@@ -96,12 +96,6 @@ class _SliverRowState extends State<SliverRow> with WidgetStateListener {
   }
 
   @override
-  void dispose() {
-    widget.controller.dispose();
-    super.dispose();
-  }
-
-  @override
   void widgetDidAppear(BuildContext context) {
     _section.animation = SliverAnimation.none;
   }

@@ -4,7 +4,7 @@ import 'package:flutter/widgets.dart';
 import '../compose.dart';
 
 abstract class StatefulComposable<T extends ComposableModel>
-    extends StatefulWidget implements Composable<T> {
+    extends StatefulWidget implements Composable<T>, Validateable {
   final ComposableNotifier<T> _composableModel;
   final GlobalKey<ComposableState> _validationKey;
   final List<Validator> validators;

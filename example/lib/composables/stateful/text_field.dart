@@ -2,7 +2,7 @@ import 'package:compose/compose.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
-abstract class TextFieldModelable implements ComposableModel {
+abstract class TextFieldModelable extends ComposableModel {
   int maximumLength;
   String text;
   String errorText;
@@ -30,20 +30,11 @@ class TextFieldComposer extends Composer<TextFieldComposable>
   String text;
 }
 
-class TextFieldComposableModel
-    implements TextFieldModelable, ViewModelValidateable {
+class TextFieldComposableModel extends TextFieldModelable
+    implements ViewModelValidateable {
   TextFieldComposableModel(int maximumLength) {
     this.maximumLength = maximumLength;
   }
-
-  @override
-  int maximumLength;
-
-  @override
-  String errorText;
-
-  @override
-  String text;
 
   @override
   bool validate(List<Validator> validators) {
@@ -56,9 +47,6 @@ class TextFieldComposableModel
     errorText = null;
     return true;
   }
-
-  @override
-  Key key;
 }
 
 class TextFieldComposable extends StatefulComposable<TextFieldModelable> {

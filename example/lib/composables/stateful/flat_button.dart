@@ -1,7 +1,7 @@
 import 'package:compose/compose.dart';
 import 'package:flutter/material.dart';
 
-abstract class ButtonModelable implements ComposableModel {
+abstract class ButtonModelable extends ComposableModel {
   String text;
   VoidCallback onPressed;
 }
@@ -26,7 +26,7 @@ class ButtonComposer extends Composer<ButtonComposable>
   }
 }
 
-class ButtonComposableModel implements ButtonModelable {
+class ButtonComposableModel extends ButtonModelable {
   String text;
   VoidCallback onPressed;
 
@@ -34,9 +34,6 @@ class ButtonComposableModel implements ButtonModelable {
     this.onPressed = onPressed;
     this.text = text;
   }
-
-  @override
-  Key key;
 }
 
 class ButtonComposable extends StatefulComposable<ButtonModelable> {
@@ -59,3 +56,4 @@ class _ButtonComposableState
     );
   }
 }
+

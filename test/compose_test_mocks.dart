@@ -1,13 +1,11 @@
 import 'package:compose/compose.dart';
+import 'package:compose/src/utils/widget_state_listener.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
-class MockComposableViewModel implements ComposableModel {
+class MockComposableViewModel extends ComposableModel {
   String text;
   MockComposableViewModel(this.text);
-
-  @override
-  Key key;
 }
 
 class MockComposable extends StatelessComposable<MockComposableViewModel> {
@@ -20,12 +18,9 @@ class MockComposable extends StatelessComposable<MockComposableViewModel> {
   }
 }
 
-class MockStatefulComposableViewModel implements ComposableModel {
+class MockStatefulComposableViewModel extends ComposableModel {
   String text;
   MockStatefulComposableViewModel(this.text);
-
-  @override
-  Key key;
 }
 
 class MockStatefulComposable
@@ -47,8 +42,8 @@ class MockStatefulComposableState extends ComposableState<
   }
 }
 
-class MockValidateableComposableViewModel
-    implements ComposableModel, ViewModelValidateable {
+class MockValidateableComposableViewModel extends ComposableModel
+    implements ViewModelValidateable {
   String text;
   String errorText;
   MockValidateableComposableViewModel(this.text);
@@ -64,9 +59,6 @@ class MockValidateableComposableViewModel
     errorText = null;
     return true;
   }
-
-  @override
-  Key key;
 }
 
 class MockValidateableComposable
@@ -138,7 +130,8 @@ class MockPage extends ComposedWidget {
   }
 }
 
-class MockPageState extends ComposedWidgetState {
+class MockPageState extends ComposedWidgetState with WidgetStateListener {
+  bool widgetAppeared = false;
   Section mockSection;
   var mockComposable =
       MockComposable(MockComposableViewModel("Stateless Mock"));
@@ -151,11 +144,16 @@ class MockPageState extends ComposedWidgetState {
         Section(mockComposable, [mockComposable, statefulMockComposable]);
     return [mockSection];
   }
+
+  @override
+  void widgetDidAppear(BuildContext context) {
+    widgetAppeared = true;
+  }
 }
 
-class MockValidator implements Validator<String> {
+class MockCharacterLengthValidator implements Validator<String> {
   int maxLength;
-  MockValidator(this.maxLength, {String errorText}) {
+  MockCharacterLengthValidator(this.maxLength, {String errorText}) {
     this.errorText = errorText ?? "This field cannot be left empty.";
   }
 
