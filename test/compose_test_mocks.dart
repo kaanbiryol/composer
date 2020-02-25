@@ -3,7 +3,7 @@ import 'package:compose/src/utils/widget_state_listener.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
-class MockComposableViewModel extends ComposableModel {
+class MockComposableViewModel extends StatelessComposableModel {
   String text;
   MockComposableViewModel(this.text);
 }
@@ -18,7 +18,7 @@ class MockComposable extends StatelessComposable<MockComposableViewModel> {
   }
 }
 
-class MockStatefulComposableViewModel extends ComposableModel {
+class MockStatefulComposableViewModel extends StatefulComposableModel {
   String text;
   MockStatefulComposableViewModel(this.text);
 }
@@ -42,7 +42,7 @@ class MockStatefulComposableState extends ComposableState<
   }
 }
 
-class MockValidateableComposableViewModel extends ComposableModel
+class MockValidateableComposableViewModel extends StatefulComposableModel
     implements ViewModelValidateable {
   String text;
   String errorText;
@@ -64,10 +64,9 @@ class MockValidateableComposableViewModel extends ComposableModel
 class MockValidateableComposable
     extends StatefulComposable<MockValidateableComposableViewModel> {
   MockValidateableComposable(
-      MockValidateableComposableViewModel composableModel,
-      List<Validator> validators)
-      : super.validateable(composableModel, validators,
-            GlobalKey<MockValidateableComposableState>());
+      MockValidateableComposableViewModel composableModel)
+      : super.validateable(
+            composableModel, GlobalKey<MockValidateableComposableState>());
 
   @override
   State<StatefulWidget> createState() {
@@ -118,7 +117,8 @@ class ValidateableMockComposer extends Composer {
   @override
   compose() {
     var viewModel = MockValidateableComposableViewModel("A very long text");
-    var composable = MockValidateableComposable(viewModel, validators);
+    viewModel.validators = validators;
+    var composable = MockValidateableComposable(viewModel);
     return composable;
   }
 }

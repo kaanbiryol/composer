@@ -15,7 +15,7 @@ class AnimatedComposable extends StatefulWidget {
 class _AnimatedComposableState extends State<AnimatedComposable>
     with SingleTickerProviderStateMixin {
   AnimationController _animationController;
-  final Duration animationDuration = Duration(milliseconds: 280);
+  final Duration animationDuration = Duration(milliseconds: 3380);
 
   @override
   void initState() {

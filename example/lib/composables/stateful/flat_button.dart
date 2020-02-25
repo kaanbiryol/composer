@@ -1,7 +1,7 @@
 import 'package:compose/compose.dart';
 import 'package:flutter/material.dart';
 
-abstract class ButtonModelable extends ComposableModel {
+abstract class ButtonModelable extends StatefulComposableModel {
   String text;
   VoidCallback onPressed;
 }

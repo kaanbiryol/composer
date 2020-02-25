@@ -39,7 +39,9 @@ abstract class ComposedWidgetState extends State<ComposedWidget>
     List<Composable> composableList = allComposables();
     List<Composable<ComposableModel>> statefulComposables = composableList
         .where((widget) =>
-            widget is StatefulComposable && widget.validators.isNotEmpty)
+            widget is StatefulComposable &&
+            widget.composableModel is StatefulComposableModel &&
+            widget.composableModel.validators.isNotEmpty)
         .toList();
     var validateableComposables =
         List<StatefulComposable>.from(statefulComposables);

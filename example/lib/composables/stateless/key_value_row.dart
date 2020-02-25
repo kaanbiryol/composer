@@ -1,7 +1,7 @@
 import 'package:compose/compose.dart';
 import 'package:flutter/material.dart';
 
-abstract class KeyValueModelable implements ComposableModel {
+abstract class KeyValueModelable implements StatelessComposableModel {
   String keyValue;
   String value;
 }

@@ -1,7 +1,7 @@
 import 'package:compose/compose.dart';
 import 'package:flutter/material.dart';
 
-abstract class SectionModelable implements ComposableModel {
+abstract class SectionModelable implements StatelessComposableModel {
   String title;
 }
 

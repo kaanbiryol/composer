@@ -37,8 +37,14 @@ abstract class Composable<T extends ComposableModel> extends Widget {
 
 abstract class ComposableModel {
   Key key;
-  List<Validator> validators = [];
+
   ComposableModel({this.key});
+}
+
+abstract class StatelessComposableModel extends ComposableModel {}
+
+abstract class StatefulComposableModel extends ComposableModel {
+  List<Validator> validators = [];
 }
 
 class ComposableNotifier<T extends ComposableModel> extends ValueNotifier {

@@ -108,8 +108,8 @@ void main() {
     var mockSection = state.mockSection;
 
     var viewModel = MockValidateableComposableViewModel("A very long text");
-    var composable = MockValidateableComposable(
-        viewModel, [MockCharacterLengthValidator(5)]);
+    viewModel.validators = [MockCharacterLengthValidator(5)];
+    var composable = MockValidateableComposable(viewModel);
     state.appendRow(section: mockSection, composable: composable);
 
     await tester.pump();
@@ -123,8 +123,7 @@ void main() {
     var mockSection = state.mockSection;
 
     var viewModel = MockValidateableComposableViewModel("true");
-    var composable = MockValidateableComposable(
-        viewModel, [MockCharacterLengthValidator(5)]);
+    var composable = MockValidateableComposable(viewModel);
     state.appendRow(section: mockSection, composable: composable);
 
     await tester.pump();
@@ -289,7 +288,7 @@ void main() {
           ..withValidators([MockCharacterLengthValidator(2)]))
         .compose();
 
-    expect(composable.validators.length, 1);
+    expect(composable.composableModel.validators.length, 1);
   });
 
   test('composer: assign widget key', () {
