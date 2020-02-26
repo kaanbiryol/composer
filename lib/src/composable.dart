@@ -3,6 +3,26 @@ import 'package:compose/src/utils/validateable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
+abstract class Composable<T extends ComposableModel> extends Widget {
+  T get composableModel;
+  set composableModel(T composableModel);
+}
+
+class ComposableNotifier<T extends ComposableModel> extends ValueNotifier {
+  ComposableNotifier(value) : super(value);
+}
+
+abstract class ComposableModel {
+  Key key;
+  ComposableModel({this.key});
+}
+
+abstract class StatelessComposableModel extends ComposableModel {}
+
+abstract class StatefulComposableModel extends ComposableModel {
+  List<Validator> validators = [];
+}
+
 abstract class ComposableSection {
   Composable sectionComposable;
   List<Composable> rows;
@@ -28,26 +48,6 @@ class Section implements ComposableSection {
 
   @override
   SliverAnimation animation = SliverAnimation.none;
-}
-
-abstract class Composable<T extends ComposableModel> extends Widget {
-  T get composableModel;
-  set composableModel(T composableModel);
-}
-
-abstract class ComposableModel {
-  Key key;
-  ComposableModel({this.key});
-}
-
-abstract class StatelessComposableModel extends ComposableModel {}
-
-abstract class StatefulComposableModel extends ComposableModel {
-  List<Validator> validators = [];
-}
-
-class ComposableNotifier<T extends ComposableModel> extends ValueNotifier {
-  ComposableNotifier(value) : super(value);
 }
 
 abstract class Composer<T> {

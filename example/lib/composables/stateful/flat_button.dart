@@ -1,4 +1,5 @@
 import 'package:compose/compose.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 abstract class ButtonModelable extends StatefulComposableModel {
@@ -48,12 +49,9 @@ class _ButtonComposableState
     extends ComposableState<ButtonComposable, ButtonComposableModel> {
   @override
   Widget build(BuildContext context) {
-    final viewModel = widget.composableModel;
-    return FlatButton(
-      color: Colors.red,
-      onPressed: viewModel.onPressed,
-      child: Text(viewModel.text),
+    return CupertinoButton(
+      onPressed: composableModel.onPressed,
+      child: Text(composableModel.text),
     );
   }
 }
-

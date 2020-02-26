@@ -95,9 +95,9 @@ class FirstPageState extends ComposedWidgetState {
           ..handler(() {
             Composable keyValueComposable = composableWith(updateComposableKey);
             keyValueComposable.composableModel =
-                ButtonComposableModel(text: "Updated Text", onPressed: () {});
+                ButtonComposableModel(text: "State set", onPressed: () {});
           })
-          ..title("Update Button Text")
+          ..title("Reset state")
           ..withKey(updateComposableKey))
         .compose();
 
@@ -133,8 +133,8 @@ class FirstPageState extends ComposedWidgetState {
       appendSectionButton,
       removeSectionButton,
       updateKeyValueButton,
-      resetComposables,
       secondPageButton,
+      resetComposables,
     ]);
 
     return [firstSection];
