@@ -1,11 +1,12 @@
 
-# compose
-[![Build Status](https://travis-ci.com/kaanbiryol/compose.svg?token=xws52V8r1gzMpJMj8tiG&branch=master)](https://travis-ci.com/kaanbiryol/compose)
+# composer
+[![Build Status](https://travis-ci.com/kaanbiryol/composer.svg?token=xws52V8r1gzMpJMj8tiG&branch=master)](https://travis-ci.com/kaanbiryol/composer)
 [![codecov](https://codecov.io/gh/kaanbiryol/compose/branch/master/graph/badge.svg?token=cBtY4b5VfY)](https://codecov.io/gh/kaanbiryol/compose)
+[![pub package](https://img.shields.io/pub/v/composer.svg)](https://pub.dev/packages/composer)
  
    <img src="example.gif" width="300">
  
-**Compose** is a Flutter library for building component-based form like user interfaces.
+**Composer** is a Flutter library for building component-based form like user interfaces.
 
 It simply uses a [SliverList](https://api.flutter.dev/flutter/widgets/SliverList-class.html) with sections and rows similar to [UITableView](https://developer.apple.com/documentation/uikit/uitableview) in iOS.
 
