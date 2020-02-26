@@ -24,7 +24,7 @@ void main() {
 
     var currentSection =
         sections.firstWhere((section) => identical(section, mockSection));
-    expect(currentSection.composables.length, 3);
+    expect(currentSection.rows.length, 3);
   });
 
   testWidgets('composedwidget: append row to index',
@@ -41,7 +41,7 @@ void main() {
     var currentSection =
         sections.firstWhere((section) => identical(section, mockSection));
 
-    expect(currentSection.composables.first, mockComposable);
+    expect(currentSection.rows.first, mockComposable);
   });
 
   testWidgets('composedwidget: remove row', (WidgetTester tester) async {
@@ -55,7 +55,7 @@ void main() {
 
     var currentSection =
         sections.firstWhere((section) => identical(section, mockSection));
-    expect(currentSection.composables.length, 1);
+    expect(currentSection.rows.length, 1);
   });
 
   testWidgets('composedwidget: append section', (WidgetTester tester) async {
@@ -65,7 +65,8 @@ void main() {
     var mockSection = state.mockSection;
 
     var mockComposable = MockComposable(MockComposableViewModel("Mock Text"));
-    mockSection = Section(mockComposable, [mockComposable]);
+    mockSection = Section(
+        sectionComposable: mockComposable, rows: [mockComposable]);
 
     state.appendSection(section: mockSection);
 
@@ -82,7 +83,8 @@ void main() {
     var mockSection = state.mockSection;
 
     var mockComposable = MockComposable(MockComposableViewModel("Mock Text"));
-    mockSection = Section(mockComposable, [mockComposable]);
+    mockSection = Section(
+        sectionComposable: mockComposable, rows: [mockComposable]);
 
     state.appendSection(section: mockSection, index: 0);
 
@@ -176,7 +178,8 @@ void main() {
 
     var mockComposable = MockComposable(MockComposableViewModel("Text"));
 
-    var section = Section(mockComposable, [mockComposable]);
+    var section = Section(
+        sectionComposable: mockComposable, rows: [mockComposable]);
 
     var newValue = SliverListDataSource([section]);
     controller.value = newValue;
@@ -234,7 +237,8 @@ void main() {
 
     var mockComposable =
         MockComposable(MockComposableViewModel("new composable"));
-    mockSection = Section(mockComposable, [mockComposable]);
+    mockSection = Section(
+        sectionComposable: mockComposable, rows: [mockComposable]);
     var sectionList = [mockSection];
     state.composables = sectionList;
 
@@ -276,7 +280,8 @@ void main() {
     var state = getState(tester);
     var mockSection = state.mockSection;
     var mockComposable = MockComposable(MockComposableViewModel("Mock Text"));
-    mockSection = Section(mockComposable, [mockComposable]);
+    mockSection = Section(
+        sectionComposable: mockComposable, rows: [mockComposable]);
 
     state.appendSection(
         section: mockSection, animation: SliverAnimation.automatic);

@@ -15,7 +15,7 @@ class AnimatedComposable extends StatefulWidget {
 class _AnimatedComposableState extends State<AnimatedComposable>
     with SingleTickerProviderStateMixin {
   AnimationController _animationController;
-  final Duration animationDuration = Duration(milliseconds: 3380);
+  final Duration animationDuration = Duration(milliseconds: 380);
 
   @override
   void initState() {
@@ -40,15 +40,11 @@ class _AnimatedComposableState extends State<AnimatedComposable>
   }
 
   Widget _buildAnimation(BuildContext context, Widget child) {
-    var height = SliverAnimations.height(_animationController);
     var opacity = SliverAnimations.opacity(_animationController);
     return Opacity(
       opacity: opacity.value,
-      child: Container(
-        height: height.value,
-        child: SingleChildScrollView(
-            physics: NeverScrollableScrollPhysics(), child: child),
-      ),
+      child: SingleChildScrollView(
+          physics: NeverScrollableScrollPhysics(), child: child),
     );
   }
 

@@ -1,7 +1,6 @@
 import 'package:compose/src/sliver_composable_list.dart';
 import 'package:compose/src/sliver_rows.dart';
 import 'package:compose/src/stateful_composable.dart';
-import 'package:compose/src/utils/composed_widget_traits.dart';
 import 'package:compose/src/utils/sliver_animations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -9,8 +8,7 @@ import 'composable.dart';
 
 abstract class ComposedWidget extends StatefulWidget {}
 
-abstract class ComposedWidgetState extends State<ComposedWidget>
-    with ComposedWidgetTraits {
+abstract class ComposedWidgetState extends State<ComposedWidget> {
   List<Section> _composables = [];
   List<Composable> _bottomComposables;
   List<Composable> _topComposables;
@@ -33,7 +31,9 @@ abstract class ComposedWidgetState extends State<ComposedWidget>
         .withTop(_topComposables);
   }
 
-  List<Section> prepareCompose(BuildContext context);
+  List<Section> prepareCompose(BuildContext context) {
+    return null;
+  }
 
   bool validate() {
     List<Composable> composableList = allComposables();
@@ -51,7 +51,7 @@ abstract class ComposedWidgetState extends State<ComposedWidget>
 
   void appendRow(
       {@required Section section, @required Composable composable, int index}) {
-    int rowIndex = index ?? section.composables.length;
+    int rowIndex = index ?? section.rows.length;
     controller.notifyListeners(
         section,
         RowActionEvent(
@@ -62,7 +62,7 @@ abstract class ComposedWidgetState extends State<ComposedWidget>
 
   void removeRow({@required Section section, @required Composable composable}) {
     int rowIndex =
-        section.composables.indexWhere((item) => identical(item, composable));
+        section.rows.indexWhere((item) => identical(item, composable));
     controller.notifyListeners(
         section,
         RowActionEvent(
@@ -94,7 +94,7 @@ abstract class ComposedWidgetState extends State<ComposedWidget>
   }
 
   List<Composable> allComposables() =>
-      _composables.expand((section) => section.composables).toList();
+      _composables.expand((section) => section.rows).toList();
 
   Composable composableWith(Key key) {
     return allComposables().firstWhere((composable) => composable.key == key);

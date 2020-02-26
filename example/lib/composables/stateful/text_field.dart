@@ -75,6 +75,7 @@ class _TextFieldComposableState
   @override
   Widget build(BuildContext context) {
     return TextField(
+      maxLength: widgetModel.maximumLength,
       decoration: InputDecoration(
           errorText: widgetModel.errorText, hintText: "Placeholder"),
       controller: textController,

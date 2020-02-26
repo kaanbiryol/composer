@@ -26,9 +26,6 @@ class SectionComposableModel implements SectionModelable {
 
   @override
   Key key;
-
-  @override
-  List<Validator> validators;
 }
 
 class SectionComposable extends StatelessComposable<SectionModelable> {

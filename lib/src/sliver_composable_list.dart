@@ -37,6 +37,9 @@ class _SliverComposableListState extends State<SliverComposableList> {
 
   List<Widget> makeComposables() {
     List<Widget> widgets = [];
+    if (sections == null) {
+      return widgets;
+    }
     for (var index = 0; index < sections.length; index++) {
       Section section = sections[index];
       assert(section != null, "Section cannot be null.");

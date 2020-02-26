@@ -1,14 +1,13 @@
 import 'package:compose/compose.dart';
 import 'package:flutter/material.dart';
 
-abstract class KeyValueModelable implements StatelessComposableModel {
+abstract class KeyValueModelable extends StatelessComposableModel {
   String keyValue;
   String value;
 }
 
 class KeyValueComposer extends Composer<KeyValueComposable>
     implements KeyValueModelable {
-  
   void withKeyValue(String key) {
     this.keyValue = key;
   }
@@ -41,9 +40,6 @@ class KeyValueComposableModel implements KeyValueModelable {
 
   @override
   Key key;
-
-  @override
-  List<Validator> validators;
 }
 
 class KeyValueComposable extends StatelessComposable<KeyValueModelable> {

@@ -140,8 +140,9 @@ class MockPageState extends ComposedWidgetState with WidgetStateListener {
 
   @override
   List<Section> prepareCompose(BuildContext context) {
-    mockSection =
-        Section(mockComposable, [mockComposable, statefulMockComposable]);
+    mockSection = Section(
+        sectionComposable: mockComposable,
+        rows: [mockComposable, statefulMockComposable]);
     return [mockSection];
   }
 

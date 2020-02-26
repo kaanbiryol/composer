@@ -5,17 +5,17 @@ import 'package:flutter/widgets.dart';
 
 abstract class ComposableSection {
   Composable sectionComposable;
-  List<Composable> composables;
+  List<Composable> rows;
   bool pinned;
   double height;
   SliverAnimation animation;
 }
 
 class Section implements ComposableSection {
-  Section(this.sectionComposable, this.composables);
+  Section({@required this.sectionComposable, this.rows});
 
   @override
-  List<Composable> composables;
+  List<Composable> rows;
 
   @override
   bool pinned = false;
@@ -37,7 +37,6 @@ abstract class Composable<T extends ComposableModel> extends Widget {
 
 abstract class ComposableModel {
   Key key;
-
   ComposableModel({this.key});
 }
 

@@ -3,6 +3,7 @@ import 'package:compose/src/sliver_composable_list.dart';
 import 'package:compose/src/utils/sliver_animations.dart';
 import 'package:compose/src/utils/widget_state_listener.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import '../compose.dart';
 
@@ -37,45 +38,48 @@ class _SliverRowState extends State<SliverRow> with WidgetStateListener {
   int get _sectionIndex => widget.sectionIndex;
   Section get _section =>
       widget.controller.dataSource.sectionList[_sectionIndex];
-  List<Composable> get _composables => _section.composables;
+  List<Composable> get _composables => _section.rows;
 
   @override
   void initState() {
     super.initState();
     widget.controller
-        .addListener(section: _section, listener: notifySectionChange);
+        .addListener(section: _section, listener: _notifySectionChange);
   }
 
   @override
   Widget build(BuildContext context) {
     _listKey = GlobalKey<SliverAnimatedListState>();
+    int itemSize = _composables?.length ?? 0;
     return SliverAnimatedList(
         key: _listKey,
-        initialItemCount: _composables.length,
+        initialItemCount: itemSize,
         itemBuilder: (context, index, animation) {
-          var customAnimation = _section.animation;
+          bool dividerVisible = index != itemSize - 1;
+          SliverAnimation customAnimation = _section.animation;
+          Composable currentComposable = _composables[index];
           switch (customAnimation) {
             case SliverAnimation.none:
-              return AnimatedRow(
-                  child: _composables[index], animation: animation);
+              return AnimatedRow(child: currentComposable, animation: animation)
+                  .withDivider(dividerVisible);
             default:
               return AnimatedComposable(
                 animation: customAnimation,
-                child: _composables[index],
-              );
+                child: currentComposable,
+              ).withDivider(dividerVisible);
           }
         });
   }
 
-  void notifySectionChange(RowActionEvent event) {
+  void _notifySectionChange(RowActionEvent event) {
     int rowIndex = event.desiredIndex;
-    assert(rowIndex >= 0 && rowIndex <= _composables.length,
-        "You are trying to remove an non-existing Widget.");
     switch (event.action) {
       case RowAction.add:
         _appendRow(event.composable, rowIndex);
         break;
       case RowAction.remove:
+        assert(rowIndex >= 0 && rowIndex <= _composables.length,
+            "You are trying to remove an non-existing Widget.");
         _removeRow(rowIndex);
         break;
     }
@@ -114,6 +118,25 @@ class AnimatedRow extends StatelessWidget {
       axis: Axis.vertical,
       sizeFactor: animation,
       child: child,
+    );
+  }
+}
+
+extension DividerExtension on Widget {
+  withDivider(bool visible) {
+    return Column(
+      mainAxisSize: MainAxisSize.max,
+      children: <Widget>[
+        this,
+        Visibility(
+          visible: visible,
+          child: Divider(
+            height: 0,
+            thickness: 0,
+            color: Colors.grey,
+          ),
+        )
+      ],
     );
   }
 }
