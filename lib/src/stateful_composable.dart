@@ -5,25 +5,25 @@ import '../compose.dart';
 
 abstract class StatefulComposable<T extends StatefulComposableModel>
     extends StatefulWidget implements Composable<T>, Validateable {
-  final ComposableNotifier<T> _composableModel;
+  final ComposableNotifier<T> _composableModelNotifier;
   final GlobalKey<ComposableState> _validationKey;
 
   StatefulComposable(T composableModel)
-      : this._composableModel = ComposableNotifier(composableModel),
+      : this._composableModelNotifier = ComposableNotifier(composableModel),
         this._validationKey = null,
         super(key: composableModel.key);
 
   StatefulComposable.validateable(
       T composableModel, GlobalKey<ComposableState> key)
-      : this._composableModel = ComposableNotifier(composableModel),
+      : this._composableModelNotifier = ComposableNotifier(composableModel),
         this._validationKey = key,
         super(key: key);
 
   @override
-  T get composableModel => _composableModel.value;
+  T get composableModel => _composableModelNotifier.value;
   @override
   set composableModel(T composableModel) =>
-      _composableModel.value = composableModel;
+      _composableModelNotifier.value = composableModel;
 
   @override
   bool validate() {
@@ -39,7 +39,7 @@ abstract class ComposableState<T extends StatefulComposable, V>
   @override
   @mustCallSuper
   void initState() {
-    widget._composableModel.addListener(_composableModelNotifier);
+    widget._composableModelNotifier.addListener(_composableModelNotifier);
     super.initState();
   }
 
@@ -50,19 +50,20 @@ abstract class ComposableState<T extends StatefulComposable, V>
   @override
   @mustCallSuper
   void dispose() {
-    widget._composableModel.removeListener(_composableModelNotifier);
+    widget._composableModelNotifier.removeListener(_composableModelNotifier);
     super.dispose();
   }
 
-  V get widgetModel => widget._composableModel.value;
-  List<Validator> get validators => widget._composableModel.value.validators;
+  V get composableModel => widget._composableModelNotifier.value;
+  List<Validator> get validators =>
+      widget._composableModelNotifier.value.validators;
 
   bool validate() {
-    if (widgetModel is! ViewModelValidateable) {
+    if (composableModel is! ViewModelValidateable) {
       throw NonValidateableStatefulWidget(
           "ComposableModel must implement ViewModelValidateable!");
     }
-    final validationModel = widgetModel as ViewModelValidateable;
+    final validationModel = composableModel as ViewModelValidateable;
     bool isValid = validationModel.validate(validators);
     setState(() {});
     return isValid;

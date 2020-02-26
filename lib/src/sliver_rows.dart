@@ -53,6 +53,7 @@ class _SliverRowState extends State<SliverRow> with WidgetStateListener {
     int itemSize = _composables?.length ?? 0;
     return SliverAnimatedList(
         key: _listKey,
+        
         initialItemCount: itemSize,
         itemBuilder: (context, index, animation) {
           bool dividerVisible = index != itemSize - 1;

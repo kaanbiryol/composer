@@ -34,12 +34,15 @@ class SectionComposable extends StatelessComposable<SectionModelable> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.blue,
+      color: Color(0xffE0E0E0),
       height: 40,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[Text(composableModel.title)],
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(16.0, 0, 0, 0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[Text(composableModel.title)],
+        ),
       ),
     );
   }
