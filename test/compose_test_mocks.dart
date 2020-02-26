@@ -38,7 +38,7 @@ class MockStatefulComposableState extends ComposableState<
     MockStatefulComposable, MockStatefulComposableViewModel> {
   @override
   Widget build(BuildContext context) {
-    return Text(widgetModel.text);
+    return Text(composableModel.text);
   }
 }
 
@@ -92,7 +92,7 @@ class MockValidateableComposableState extends ComposableState<
   }
 
   void _textChangedListener() {
-    widgetModel.text = textController.text;
+    composableModel.text = textController.text;
     validate();
   }
 
