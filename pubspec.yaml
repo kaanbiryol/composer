@@ -1,8 +1,7 @@
-name: compose
-description: A new Flutter package project.
+name: composer
+description: flutter library for building component-based form like user interfaces.
 version: 0.0.1
-author:
-homepage:
+homepage: https://github.com/kaanbiryol/composer
 
 environment:
   sdk: ">=2.6.0 <3.0.0"

@@ -1,7 +1,7 @@
-import 'package:compose/src/sliver_composable_list.dart';
-import 'package:compose/src/sliver_rows.dart';
-import 'package:compose/src/stateful_composable.dart';
-import 'package:compose/src/utils/sliver_animations.dart';
+import 'package:composer/src/sliver_composable_list.dart';
+import 'package:composer/src/sliver_rows.dart';
+import 'package:composer/src/stateful_composable.dart';
+import 'package:composer/src/utils/sliver_animations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'composable.dart';

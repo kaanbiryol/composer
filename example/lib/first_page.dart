@@ -1,4 +1,4 @@
-import 'package:compose/compose.dart';
+import 'package:composer/composer.dart';
 import 'package:example/composables/stateful/flat_button.dart';
 import 'package:example/second_page.dart';
 import 'package:example/validators/validators.dart';

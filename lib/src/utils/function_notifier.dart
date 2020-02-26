@@ -1,5 +1,5 @@
 import 'package:flutter/foundation.dart';
-import '../../compose.dart';
+import '../../composer.dart';
 
 abstract class FunctionListenable<T extends Function> {
   const FunctionListenable();

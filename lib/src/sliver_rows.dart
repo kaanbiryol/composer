@@ -1,11 +1,11 @@
-import 'package:compose/src/animated_composable.dart';
-import 'package:compose/src/sliver_composable_list.dart';
-import 'package:compose/src/utils/sliver_animations.dart';
-import 'package:compose/src/utils/widget_state_listener.dart';
+import 'package:composer/src/animated_composable.dart';
+import 'package:composer/src/sliver_composable_list.dart';
+import 'package:composer/src/utils/sliver_animations.dart';
+import 'package:composer/src/utils/widget_state_listener.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import '../compose.dart';
+import '../composer.dart';
 
 typedef RowActionCallback = void Function(RowActionEvent);
 

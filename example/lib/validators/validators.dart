@@ -1,4 +1,4 @@
-import 'package:compose/compose.dart';
+import 'package:composer/composer.dart';
 
 class EmptyValidator implements Validator<String> {
   EmptyValidator({String errorText}) {

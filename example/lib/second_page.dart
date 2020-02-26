@@ -1,4 +1,4 @@
-import 'package:compose/compose.dart';
+import 'package:composer/composer.dart';
 import 'package:example/composables/stateful/text_field.dart';
 import 'package:example/composables/stateless/section.dart';
 import 'package:example/validators/validators.dart';

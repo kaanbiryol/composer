@@ -1,7 +1,7 @@
-import 'package:compose/src/utils/exceptions.dart';
-import 'package:compose/src/utils/validateable.dart';
+import 'package:composer/src/utils/exceptions.dart';
+import 'package:composer/src/utils/validateable.dart';
 import 'package:flutter/widgets.dart';
-import '../compose.dart';
+import '../composer.dart';
 
 abstract class StatefulComposable<T extends StatefulComposableModel>
     extends StatefulWidget implements Composable<T>, Validateable {

@@ -1,6 +1,6 @@
-import 'package:compose/src/utils/exceptions.dart';
+import 'package:composer/src/utils/exceptions.dart';
 import 'package:flutter/widgets.dart';
-import '../compose.dart';
+import '../composer.dart';
 
 abstract class StatelessComposable<T extends ComposableModel>
     extends StatelessWidget implements Composable<T> {

@@ -1,5 +1,5 @@
-import 'package:compose/src/utils/sliver_animations.dart';
-import 'package:compose/src/utils/validateable.dart';
+import 'package:composer/src/utils/sliver_animations.dart';
+import 'package:composer/src/utils/validateable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 

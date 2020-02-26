@@ -1,5 +1,5 @@
-import 'package:compose/compose.dart';
-import 'package:compose/src/utils/widget_state_listener.dart';
+import 'package:composer/composer.dart';
+import 'package:composer/src/utils/widget_state_listener.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 

@@ -1,8 +1,8 @@
 import 'dart:math';
-import 'package:compose/src/utils/sliver_animations.dart';
+import 'package:composer/src/utils/sliver_animations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import '../compose.dart';
+import '../composer.dart';
 import 'animated_composable.dart';
 
 class SliverSection extends StatefulWidget {

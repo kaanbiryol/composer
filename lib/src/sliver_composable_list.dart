@@ -1,10 +1,9 @@
-import 'package:compose/compose.dart';
-import 'package:compose/src/sliver_rows.dart';
-import 'package:compose/src/sliver_sections.dart';
-import 'package:compose/src/utils/function_notifier.dart';
-
+import 'package:composer/src/sliver_rows.dart';
+import 'package:composer/src/sliver_sections.dart';
+import 'package:composer/src/utils/function_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import '../composer.dart';
 
 class SliverListDataSource {
   List<Section> sectionList;

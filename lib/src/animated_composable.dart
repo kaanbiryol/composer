@@ -1,6 +1,6 @@
-import 'package:compose/src/utils/sliver_animations.dart';
+import 'package:composer/src/utils/sliver_animations.dart';
 import 'package:flutter/widgets.dart';
-import '../compose.dart';
+import '../composer.dart';
 
 class AnimatedComposable extends StatefulWidget {
   final Composable child;
