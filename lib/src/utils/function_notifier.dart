@@ -1,10 +1,10 @@
 import 'package:flutter/foundation.dart';
-import 'exceptions.dart';
+import '../../compose.dart';
 
 abstract class FunctionListenable<T extends Function> {
   const FunctionListenable();
-  void addListener(T listener);
-  void removeListener(T listener);
+  void addListener({@required Section section, @required T listener});
+  void removeListener({@required Section section});
 }
 
 class FunctionNotifier<Item, V, T extends Function(V)>
@@ -24,7 +24,14 @@ class FunctionNotifier<Item, V, T extends Function(V)>
 
 class GenericChangeNotifier<V, T extends Function(V)>
     implements FunctionListenable<T> {
-  ObserverList<T> _listeners = ObserverList<T>();
+  Map<Section, T> _listeners = {};
+
+  void notifyListeners(Section section, V actionType) {
+    var listener = _listeners[section];
+    if (listener != null) {
+      listener(actionType);
+    }
+  }
 
   @protected
   bool get hasListeners {
@@ -33,35 +40,21 @@ class GenericChangeNotifier<V, T extends Function(V)>
   }
 
   @override
-  void addListener(T listener) {
+  void addListener({@required Section section, @required T listener}) {
     if (_listeners != null) {
-      _listeners.add(listener);
+      _listeners[section] = listener;
     }
   }
 
   @override
-  void removeListener(T listener) {
-    if (_listeners != null) {
-      _listeners.remove(listener);
+  void removeListener({@required Section section}) {
+    if (section != null) {
+      _listeners.remove(section);
     }
   }
 
   @mustCallSuper
   void dispose() {
     _listeners = null;
-  }
-
-  void notifyListeners(V actionType) {
-    if (_listeners != null) {
-      final List<T> localListeners = List<T>.from(_listeners);
-      for (T listener in localListeners) {
-        try {
-          if (_listeners.contains(listener)) listener(actionType);
-        } catch (exception) {
-          throw EmptyFunctionNotifier(
-              "tried to notify listener $runtimeType while it is being deleted");
-        }
-      }
-    }
   }
 }

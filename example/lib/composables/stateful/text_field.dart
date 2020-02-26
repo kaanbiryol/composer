@@ -2,7 +2,7 @@ import 'package:compose/compose.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
-abstract class TextFieldModelable implements ComposableModel {
+abstract class TextFieldModelable extends StatefulComposableModel {
   int maximumLength;
   String text;
   String errorText;
@@ -13,6 +13,7 @@ class TextFieldComposer extends Composer<TextFieldComposable>
   @override
   TextFieldComposable compose() {
     var composableModel = TextFieldComposableModel(maximumLength);
+    composableModel.validators = validators;
     return TextFieldComposable(composableModel, validators);
   }
 
@@ -28,25 +29,13 @@ class TextFieldComposer extends Composer<TextFieldComposable>
 
   @override
   String text;
-
-  @override
-  ThemeData themeData;
 }
 
-class TextFieldComposableModel
-    implements TextFieldModelable, ViewModelValidateable {
+class TextFieldComposableModel extends TextFieldModelable
+    implements ViewModelValidateable {
   TextFieldComposableModel(int maximumLength) {
     this.maximumLength = maximumLength;
   }
-
-  @override
-  int maximumLength;
-
-  @override
-  String errorText;
-
-  @override
-  String text;
 
   @override
   bool validate(List<Validator> validators) {
@@ -59,19 +48,13 @@ class TextFieldComposableModel
     errorText = null;
     return true;
   }
-
-  @override
-  Key key;
-
-  @override
-  ThemeData themeData;
 }
 
 class TextFieldComposable extends StatefulComposable<TextFieldModelable> {
   TextFieldComposable(
       TextFieldModelable composableModel, List<Validator> validators)
-      : super.validateable(composableModel, validators,
-            GlobalKey<_TextFieldComposableState>());
+      : super.validateable(
+            composableModel, GlobalKey<_TextFieldComposableState>());
 
   @override
   State<StatefulWidget> createState() {
@@ -92,7 +75,9 @@ class _TextFieldComposableState
   @override
   Widget build(BuildContext context) {
     return TextField(
-      decoration: InputDecoration(errorText: widgetModel.errorText),
+      maxLength: widgetModel.maximumLength,
+      decoration: InputDecoration(
+          errorText: widgetModel.errorText, hintText: "Placeholder"),
       controller: textController,
     );
   }

@@ -1,7 +1,7 @@
 import 'package:compose/compose.dart';
 import 'package:flutter/material.dart';
 
-abstract class SectionModelable implements ComposableModel {
+abstract class SectionModelable implements StatelessComposableModel {
   String title;
 }
 
@@ -17,18 +17,12 @@ class SectionComposer extends Composer<SectionComposable>
     var composableModel = SectionComposableModel(title: title);
     return SectionComposable(composableModel);
   }
-
-  @override
-  ThemeData themeData;
 }
 
 class SectionComposableModel implements SectionModelable {
   String title;
 
   SectionComposableModel({this.title});
-
-  @override
-  ThemeData themeData;
 
   @override
   Key key;
@@ -40,9 +34,13 @@ class SectionComposable extends StatelessComposable<SectionModelable> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.grey,
-      height: 30,
-      child: Text(composableModel.title),
+      color: Colors.blue,
+      height: 40,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[Text(composableModel.title)],
+      ),
     );
   }
 }

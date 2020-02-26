@@ -1,7 +1,7 @@
 import 'package:compose/compose.dart';
 import 'package:flutter/material.dart';
 
-abstract class ButtonModelable implements ComposableModel {
+abstract class ButtonModelable extends StatefulComposableModel {
   String text;
   VoidCallback onPressed;
 }
@@ -20,29 +20,20 @@ class ButtonComposer extends Composer<ButtonComposable>
   @override
   ButtonComposable compose() {
     var composableModel =
-        ButtonComponentViewModel(text: text, onPressed: onPressed);
+        ButtonComposableModel(text: text, onPressed: onPressed);
     composableModel.key = key;
-    return ButtonComposable(composableModel, key: ValueKey("kaan"));
+    return ButtonComposable(composableModel, key: ValueKey("KEY"));
   }
-
-  @override
-  ThemeData themeData;
 }
 
-class ButtonComponentViewModel implements ButtonModelable {
+class ButtonComposableModel extends ButtonModelable {
   String text;
   VoidCallback onPressed;
 
-  ButtonComponentViewModel({String text, VoidCallback onPressed}) {
+  ButtonComposableModel({String text, VoidCallback onPressed}) {
     this.onPressed = onPressed;
     this.text = text;
   }
-
-  @override
-  Key key;
-
-  @override
-  ThemeData themeData;
 }
 
 class ButtonComposable extends StatefulComposable<ButtonModelable> {
@@ -54,13 +45,15 @@ class ButtonComposable extends StatefulComposable<ButtonModelable> {
 }
 
 class _ButtonComposableState
-    extends ComposableState<ButtonComposable, ButtonComponentViewModel> {
+    extends ComposableState<ButtonComposable, ButtonComposableModel> {
   @override
   Widget build(BuildContext context) {
     final viewModel = widget.composableModel;
     return FlatButton(
+      color: Colors.red,
       onPressed: viewModel.onPressed,
       child: Text(viewModel.text),
     );
   }
 }
+

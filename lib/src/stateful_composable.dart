@@ -3,23 +3,20 @@ import 'package:compose/src/utils/validateable.dart';
 import 'package:flutter/widgets.dart';
 import '../compose.dart';
 
-abstract class StatefulComposable<T extends ComposableModel>
-    extends StatefulWidget implements Composable<T> {
+abstract class StatefulComposable<T extends StatefulComposableModel>
+    extends StatefulWidget implements Composable<T>, Validateable {
   final ComposableNotifier<T> _composableModel;
   final GlobalKey<ComposableState> _validationKey;
-  final List<Validator> validators;
 
   StatefulComposable(T composableModel)
       : this._composableModel = ComposableNotifier(composableModel),
         this._validationKey = null,
-        this.validators = [],
         super(key: composableModel.key);
 
-  StatefulComposable.validateable(T composableModel, List<Validator> validators,
-      GlobalKey<ComposableState> key)
+  StatefulComposable.validateable(
+      T composableModel, GlobalKey<ComposableState> key)
       : this._composableModel = ComposableNotifier(composableModel),
         this._validationKey = key,
-        this.validators = validators,
         super(key: key);
 
   @override
@@ -58,6 +55,7 @@ abstract class ComposableState<T extends StatefulComposable, V>
   }
 
   V get widgetModel => widget._composableModel.value;
+  List<Validator> get validators => widget._composableModel.value.validators;
 
   bool validate() {
     if (widgetModel is! ViewModelValidateable) {
@@ -65,7 +63,7 @@ abstract class ComposableState<T extends StatefulComposable, V>
           "ComposableModel must implement ViewModelValidateable!");
     }
     final validationModel = widgetModel as ViewModelValidateable;
-    bool isValid = validationModel.validate(widget.validators);
+    bool isValid = validationModel.validate(validators);
     setState(() {});
     return isValid;
   }

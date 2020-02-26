@@ -1,16 +1,13 @@
 import 'package:compose/compose.dart';
 import 'package:flutter/material.dart';
 
-abstract class KeyValueModelable implements ComposableModel {
+abstract class KeyValueModelable extends StatelessComposableModel {
   String keyValue;
   String value;
 }
 
 class KeyValueComposer extends Composer<KeyValueComposable>
     implements KeyValueModelable {
-  String keyValue;
-  String value;
-
   void withKeyValue(String key) {
     this.keyValue = key;
   }
@@ -30,7 +27,10 @@ class KeyValueComposer extends Composer<KeyValueComposable>
   }
 
   @override
-  ThemeData themeData;
+  String keyValue;
+
+  @override
+  String value;
 }
 
 class KeyValueComposableModel implements KeyValueModelable {
@@ -40,9 +40,6 @@ class KeyValueComposableModel implements KeyValueModelable {
 
   @override
   Key key;
-
-  @override
-  ThemeData themeData;
 }
 
 class KeyValueComposable extends StatelessComposable<KeyValueModelable> {
@@ -54,8 +51,7 @@ class KeyValueComposable extends StatelessComposable<KeyValueModelable> {
     return Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
-          Text(composableModel.keyValue,
-              style: composableModel.themeData.textTheme.body1),
+          Text(composableModel.keyValue),
           Text(composableModel.value),
         ]);
   }

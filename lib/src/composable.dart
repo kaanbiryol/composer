@@ -1,17 +1,21 @@
+import 'package:compose/src/utils/sliver_animations.dart';
 import 'package:compose/src/utils/validateable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 abstract class ComposableSection {
   Composable sectionComposable;
-  List<Composable> composables;
-  bool pinned = true;
+  List<Composable> rows;
+  bool pinned;
   double height;
+  SliverAnimation animation;
 }
 
 class Section implements ComposableSection {
+  Section({@required this.sectionComposable, this.rows});
+
   @override
-  List<Composable> composables;
+  List<Composable> rows;
 
   @override
   bool pinned = false;
@@ -19,22 +23,27 @@ class Section implements ComposableSection {
   @override
   Composable sectionComposable;
 
-  Section(this.sectionComposable, this.composables);
-
   @override
   double height;
+
+  @override
+  SliverAnimation animation = SliverAnimation.none;
 }
 
-abstract class Composable<T> extends Widget implements Validateable {
+abstract class Composable<T extends ComposableModel> extends Widget {
   T get composableModel;
   set composableModel(T composableModel);
-  final List<Validator> validators = [];
 }
 
 abstract class ComposableModel {
   Key key;
-  ThemeData themeData;
-  ComposableModel({this.key, this.themeData});
+  ComposableModel({this.key});
+}
+
+abstract class StatelessComposableModel extends ComposableModel {}
+
+abstract class StatefulComposableModel extends ComposableModel {
+  List<Validator> validators = [];
 }
 
 class ComposableNotifier<T extends ComposableModel> extends ValueNotifier {
