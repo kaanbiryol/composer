@@ -1,6 +1,6 @@
 name: composer
 description: flutter library for building component-based form like user interfaces.
-version: 0.0.1
+version: 0.1.0
 homepage: https://github.com/kaanbiryol/composer
 
 environment:
