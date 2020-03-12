@@ -1,7 +1,7 @@
 
 # composer
 [![Build Status](https://travis-ci.com/kaanbiryol/composer.svg?token=xws52V8r1gzMpJMj8tiG&branch=master)](https://travis-ci.com/kaanbiryol/composer)
-[![codecov](https://codecov.io/gh/kaanbiryol/compose/branch/master/graph/badge.svg?token=cBtY4b5VfY)](https://codecov.io/gh/kaanbiryol/compose)
+[![codecov](https://codecov.io/gh/kaanbiryol/compose/branch/master/graph/badge.svg?token=cBtY4b5VfY)](https://codecov.io/gh/kaanbiryol/composer)
 [![pub package](https://img.shields.io/pub/v/composer.svg)](https://pub.dev/packages/composer)
  
    <img src="example.gif" width="300">
